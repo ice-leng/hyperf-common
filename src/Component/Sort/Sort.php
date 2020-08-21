@@ -1,6 +1,6 @@
 <?php
 
-namespace EasySwoole\Skeleton\Component\Sort;
+namespace Lengbin\Hyperf\Common\Component\Sort;
 
 use Lengbin\Helper\BaseObject;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lengbin\Hyperf\Helper\Exception\Handler;
+namespace Lengbin\Hyperf\Common\Exception\Handler;
 
 use App\Exception\BusinessException;
 use Hyperf\ExceptionHandler\ExceptionHandler;

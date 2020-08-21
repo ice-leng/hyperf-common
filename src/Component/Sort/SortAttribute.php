@@ -3,6 +3,7 @@
 namespace Lengbin\Hyperf\Common\Component\Sort;
 
 use Lengbin\Helper\BaseObject;
+use Lengbin\Hyperf\Common\Component\Sort\Exception\MethodNotAllowedException;
 
 /**
  * Class Sort

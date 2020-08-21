@@ -1,6 +1,6 @@
 <?php
 
-namespace EasySwoole\Skeleton\Component\Sort\Exception;
+namespace Lengbin\Hyperf\Common\Component\Sort\Exception;
 
 use RuntimeException;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lengbin\Hyperf\Helper;
+namespace Lengbin\Hyperf\Common\Helper;
 
 use Hyperf\Constants\AbstractConstants;
 use Hyperf\Constants\Annotation\Constants;
