@@ -2,9 +2,9 @@
 
 namespace Lengbin\Hyperf\Common\Component\Sort\Exception;
 
-use RuntimeException;
+use Hyperf\Server\Exception\ServerException;
 
-class MethodNotAllowedException extends RuntimeException
+class MethodNotAllowedException extends ServerException
 {
 
 }

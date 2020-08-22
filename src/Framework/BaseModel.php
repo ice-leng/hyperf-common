@@ -4,6 +4,7 @@ namespace Lengbin\Hyperf\Common\Framework;
 
 use Hyperf\Database\Model\Builder;
 use Hyperf\Database\Model\Collection;
+use SwooleX\Constants\SoftDeleted;
 
 class BaseModel
 {
@@ -57,6 +58,8 @@ class BaseModel
     }
 
     /**
+     * 添加
+     *
      * @param array $attributes
      * @param array $options
      *
@@ -70,6 +73,9 @@ class BaseModel
     }
 
     /**
+     *
+     * 更新
+     *
      * @param array $attributes
      * @param array $options
      *
@@ -81,24 +87,23 @@ class BaseModel
         return parent::update($attributes, $options);
     }
 
-    public function disable(): bool
+    /**
+     * 删除
+     * @return bool
+     */
+    public function softDelete(array $options = []): bool
     {
         $this->enable = SoftDeleted::DISABLE;
-        return $this->save();
-    }
-
-    protected function asJson($value): string
-    {
-        return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        return $this->save($options);
     }
 
     /**
      * @param string           $key
      * @param string|int|array $value
      * @param string[]         $field
-     * @param string           $deleteFiledName
+     * @param string|null      $deleteFiledName
      *
-     * @return Builder|\EasySwoole\Skeleton\Framework\BaseModel|object|null
+     * @return Builder|object|null
      */
     public static function findOne(string $key, $value, $field = ['*'], ?string $deleteFiledName = 'enable'): ?self
     {
@@ -117,18 +122,22 @@ class BaseModel
     }
 
     /**
-     * @param array  $conditions 如果是 string 表示走 主键
-     * @param array  $field
-     * @param string $deleteFiledName
+     * 多条件
+     *
+     * @param array       $conditions 如果是 string 表示走 主键
+     * @param array       $field
+     * @param string|null $deleteFiledName
      *
      * @return Builder|static|object|null
      */
     public static function findOneCondition(array $conditions, $field = ['*'], ?string $deleteFiledName = 'enable'): ?self
     {
         $query = self::query();
+
         if (!empty($deleteFiledName)) {
             $query->where([$deleteFiledName => SoftDeleted::ENABLE]);
         }
+
         foreach ($conditions as $key => $value) {
             if (is_array($value)) {
                 $query->whereIn($key, $value);
@@ -140,9 +149,11 @@ class BaseModel
     }
 
     /**
-     * @param array  $conditions
-     * @param array  $field
-     * @param string $deleteFiledName
+     * 多查询
+     *
+     * @param array       $conditions
+     * @param array       $field
+     * @param string|null $deleteFiledName
      *
      * @return Builder|static|object|null
      */
@@ -163,10 +174,10 @@ class BaseModel
     }
 
     /**
-     * soft delete
+     * 条件删除
      *
-     * @param array  $conditions
-     * @param string $deleteFiledName
+     * @param array       $conditions
+     * @param string|null $deleteFiledName
      *
      * @return int
      */

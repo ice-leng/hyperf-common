@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Lengbin\Hyperf\Common\Exception\Handler;
+namespace Lengbin\Hyperf\Common\Framework\Exception\Handler;
 
-use App\Exception\BusinessException;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Hyperf\HttpMessage\Stream\SwooleStream;
+use Lengbin\Hyperf\Common\Framework\Exception\BusinessException;
 use Nette\Utils\Json;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;

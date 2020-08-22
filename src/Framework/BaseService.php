@@ -5,38 +5,21 @@ namespace Lengbin\Hyperf\Common\Framework;
 use Hyperf\Database\Model\Builder;
 use Hyperf\Utils\Str;
 use Lengbin\Helper\Util\RegularHelper;
+use Lengbin\Helper\YiiSoft\StringHelper;
+use Lengbin\Hyperf\Common\Component\Sort\Sort;
+use Lengbin\Hyperf\Common\Entity\PageEntity;
+use Lengbin\Hyperf\Common\Helper\CommonHelper;
 use Psr\Container\ContainerInterface;
 use Hyperf\Di\Annotation\Inject;
+use Lengbin\Hyperf\Common\Framework\Exception\MethodNotImplException;
 
 class BaseService
 {
-
     /**
      * @Inject
      * @var ContainerInterface
      */
     protected $container;
-
-    /**
-     * @param int|null $ttl 过期时间， 如果为 0 表示 不设置过期时间， null 表示redis配置的过期时间
-     *
-     * @return int|null
-     */
-    public function getRedisTtl(?int $ttl = null): ?int
-    {
-        if (is_null($ttl)) {
-            $config = Config::getInstance()->getConf("REDIS");
-            $ttl = ArrayHelper::get($config, 'ttl', '3600');
-            [$min, $max] = ArrayHelper::get($config, 'random', [1, 60]);
-            return $ttl + rand($min, $max);
-        }
-
-        if ($ttl === 0) {
-            return null;
-        }
-
-        return $ttl;
-    }
 
     /**
      * page
@@ -50,7 +33,7 @@ class BaseService
     {
         $pageSize = $pageEntity->getPageSize();
         $total = $query->count();
-        $list = $query->forPage($pageEntity->getPage(), $pageSize)->get();
+        $list = $query->forPage($pageEntity->getPage(), $pageSize)->get()->toArray();
         return [
             'list'      => $list,
             'pageSize'  => $pageSize,
@@ -133,28 +116,15 @@ class BaseService
     }
 
     /**
-     * 获得 di
-     *
-     * @param string $name
-     *
-     * @return callable|string|null
-     * @throws Throwable
-     */
-    public function getDi(string $name)
-    {
-        return Di::getInstance()->get($name);
-    }
-
-    /**
      * list
      *
-     * @param array           $columns
-     * @param array           $condition
+     * @param array           $params
+     * @param array           $field
      * @param PageEntity|null $pageEntity
      *
      * @return mixed
      */
-    public function getList(array $condition = [], array $columns = ['*'], ?PageEntity $pageEntity = null): array
+    public function getList(array $params = [], array $field = ['*'], ?PageEntity $pageEntity = null): array
     {
         throw new MethodNotImplException();
     }
@@ -188,12 +158,12 @@ class BaseService
     /**
      * detail
      *
-     * @param array $condition
+     * @param array $params
      * @param array $columns
      *
      * @return mixed
      */
-    public function detail(array $condition, array $columns = ['*']): array
+    public function detail(array $params, array $columns = ['*']): array
     {
         throw new MethodNotImplException();
     }
@@ -201,130 +171,13 @@ class BaseService
     /**
      * delete
      *
-     * @param array $condition
+     * @param array $params
      *
      * @return mixed
      */
-    public function remove(array $condition): int
+    public function remove(array $params): int
     {
         throw new MethodNotImplException();
-    }
-
-    /**
-     * @param string      $key
-     * @param string|null $prefix
-     *
-     * @return string
-     */
-    private function getCacheKey(string $key, ?string $prefix = null): string
-    {
-        $mc = Config::getInstance()->getConf("SERVER_NAME");
-        $service = Str::snake(Str::pluralStudly(class_basename(get_called_class())));
-        if (!is_null($prefix)) {
-            $key = $prefix . ':' . $key;
-        }
-        return sprintf('mc:%s:s:%s:%s', $mc, $service, $key);
-    }
-
-    /**
-     * 通过key获得缓存
-     *
-     * @param string        $key
-     * @param \Closure|null $call
-     * @param string|null   $prefix
-     * @param int|null      $ttl 过期时间， 如果为 0 表示 不设置过期时间， null 表示redis配置的过期时间
-     *
-     * @return mixed
-     * @throws Throwable
-     */
-    public function getCacheByKey(string $key, ?\Closure $call = null, ?string $prefix = null, ?int $ttl = null)
-    {
-        $redis = $this->getRedis();
-        $k = $this->getCacheKey($key, $prefix);
-        $data = $redis->get($k);
-        if (!is_null($data)) {
-            return $data;
-        }
-        if (!is_null($call)) {
-            $ttl = $this->getRedisTtl($ttl);
-            $data = call_user_func($call, $key);
-        }
-
-        if (StringHelper::isEmpty($data)) {
-            $data = [];
-            $ttl = 60;
-        }
-        $data = is_object($data) ? $data->toArray() : $data;
-        $redis->set($k, json_encode($data), $ttl);
-        return $data;
-    }
-
-    /**
-     * @param array         $keys
-     * @param \Closure|null $call
-     * @param string|null   $prefix
-     * @param int|null      $ttl
-     *
-     * @return array
-     * @throws Throwable
-     */
-    public function getCacheByKeys(array $keys, ?\Closure $call = null, ?string $prefix = null, ?int $ttl = null): array
-    {
-        if (count($keys) === 0) {
-            return [];
-        }
-
-        $redis = $this->getRedis();
-
-        $ks = [];
-        foreach ($keys as $key) {
-            $ks[] = $this->getCacheKey($key, $prefix);
-        }
-        /* @var array $data */
-        $data = $redis->mGet($ks);
-
-        $output = [];
-        $missed = [];
-        foreach ($data as $index => $item) {
-            if (is_null($item)) {
-                $key = $keys[$index];
-                $missed[$index] = $key;
-                continue;
-            }
-            $output[$index] = json_decode($item, true);
-        }
-        $models = [];
-        if (!is_null($call)) {
-            $models = call_user_func($call, $missed);
-            $models = $models ?? [];
-        }
-
-        foreach ($models as $index => $model) {
-            $model = is_object($model) ? $model->toArray() : $model;
-            $output[$index] = $model;
-            $targetIntersectKey = $this->getCacheKey($keys[$index], $prefix);
-            $redis->set($targetIntersectKey, json_encode($model), $ttl);
-        }
-        return $output;
-    }
-
-    /**
-     * @param             $keys
-     * @param string|null $prefix
-     *
-     * @return bool|string
-     * @throws Throwable
-     */
-    public function removeCacheByKey($keys, ?string $prefix = null): bool
-    {
-        if (!is_array($keys)) {
-            $keys = [$keys];
-        }
-        $ks = [];
-        foreach ($keys as $key) {
-            $ks[] = $this->getCacheKey($key, $prefix);
-        }
-        return $this->getRedis()->del(...$ks);
     }
 
     /**
@@ -336,7 +189,14 @@ class BaseService
      */
     public function imageUrl($path): string
     {
-        // todo
-        return RegularHelper::checkUrl($path) ? $path : $path;
+        if (RegularHelper::checkUrl($path)) {
+            return $path;
+        }
+        $imageUrl = CommonHelper::getConfig()->get('image_url');
+        if (StringHelper::isEmpty($imageUrl)) {
+            $uri = CommonHelper::getRequest()->getUri();
+            $imageUrl = $uri->getScheme() . '://' . $uri->getAuthority();
+        }
+        return $imageUrl . $path;
     }
 }

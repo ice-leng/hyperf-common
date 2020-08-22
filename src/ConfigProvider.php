@@ -12,12 +12,22 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common;
 
+use Lengbin\Hyperf\Common\Framework\Request;
+use Lengbin\Hyperf\Common\Framework\Response;
+
+use Hyperf\HttpServer\Request as BaseRequest;
+use Hyperf\HttpServer\Response as BaseResponse;
+
 class ConfigProvider
 {
     public function __invoke(): array
     {
         return [
-            'annotations' => [
+            'dependencies' => [
+                BaseRequest::class  => Request::class,
+                BaseResponse::class => Response::class,
+            ],
+            'annotations'  => [
                 'scan' => [
                     'paths' => [
                         __DIR__,

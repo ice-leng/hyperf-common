@@ -4,6 +4,8 @@ namespace Lengbin\Hyperf\Common\Framework;
 
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
+use Lengbin\Helper\YiiSoft\StringHelper;
+use Lengbin\Hyperf\Common\Constant\ErrorCode;
 use Psr\Container\ContainerInterface;
 use Hyperf\Di\Annotation\Inject;
 
@@ -26,4 +28,23 @@ class BaseController
      * @var ResponseInterface
      */
     protected $response;
+
+    /**
+     * @param null|mixed $params
+     *
+     */
+    public function success($params = null)
+    {
+        return $this->response->success($params);
+    }
+
+    /**
+     * @param string      $code
+     * @param string|null $message
+     */
+    public function fail(string $code, ?string $message = null)
+    {
+        return $this->response->fail($code, $message);
+    }
+
 }

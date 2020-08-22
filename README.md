@@ -22,6 +22,6 @@ composer require lengbin/hyperf-common
 or add
 
 ```
-"lengbin/hyperf-helper": "*"
+"lengbin/hyperf-common": "*"
 ```
 to the require section of your `composer.json` file.
