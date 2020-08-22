@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SwooleX\Constants;
+namespace Lengbin\Hyperf\Common\Constant;
 
 use Hyperf\Constants\AbstractConstants;
 use Hyperf\Constants\Annotation\Constants;
