@@ -3,7 +3,6 @@
 namespace Lengbin\Hyperf\Common\Framework;
 
 use Hyperf\Database\Model\Builder;
-use Hyperf\Utils\Str;
 use Lengbin\Helper\Util\RegularHelper;
 use Lengbin\Helper\YiiSoft\StringHelper;
 use Lengbin\Hyperf\Common\Component\Sort\Sort;
@@ -101,11 +100,11 @@ class BaseService
      * 收集数据
      *
      * @param array         $data
-     * @param \Closure|null $call
+     * @param callable|null $call
      *
      * @return array
      */
-    public function collection(array $data, ?\Closure $call = null): array
+    public function collection(array $data, ?callable $call = null): array
     {
         $item = [];
         $results = isset($data['list']) ? $data['list'] : $data;
@@ -159,11 +158,11 @@ class BaseService
      * detail
      *
      * @param array $params
-     * @param array $columns
+     * @param array $field
      *
      * @return mixed
      */
-    public function detail(array $params, array $columns = ['*']): array
+    public function detail(array $params, array $field = ['*']): array
     {
         throw new MethodNotImplException();
     }

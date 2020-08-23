@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lengbin\Hyperf\Common\Constant;
+namespace Lengbin\Hyperf\Common\Error;
 
 use Hyperf\Constants\AbstractConstants;
 use Hyperf\Constants\Annotation\Constants;
@@ -10,10 +10,10 @@ use Hyperf\Constants\Annotation\Constants;
 /**
  * @Constants
  */
-class ErrorCode extends AbstractConstants
+class CommentErrorCode extends AbstractConstants
 {
     /**
-     * @Message("成功")
+     * @Message("Success")
      */
     const SUCCESS = '0';
 
