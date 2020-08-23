@@ -5,6 +5,21 @@ namespace Lengbin\Hyperf\Common\Helper;
 use Lengbin\Helper\YiiSoft\Arrays\ArrayHelper;
 use Lengbin\Helper\YiiSoft\StringHelper;
 
+/**
+ * Class RedisHelper
+ * @package Lengbin\Hyperf\Common\Helper
+ * eg:
+ * $data = RedisHelper::getCacheByKeys(['test2', 'test'], function ($results) {
+ *              $data = xxxx::findALl($results);
+ *              foreach ($results as $key => $result) {
+ *                  $results[$key] = $data[$result];
+ *              }
+ *              return $results;
+ *        });
+ *
+ *
+ *
+ */
 class RedisHelper
 {
     /**
@@ -56,23 +71,24 @@ class RedisHelper
      */
     public static function getCacheByKey(string $key, ?callable $call = null, ?string $prefix = null, ?int $ttl = null)
     {
+        // redis
         $redis = CommonHelper::getRedis();
+        // get
         $k = self::getCacheKey($key, $prefix);
         $data = $redis->get($k);
-        if (!is_null($data)) {
-            return $data;
+        if ($data !== false) {
+            return unserialize($data);
         }
+        // call back
         if (!is_null($call)) {
             $ttl = self::getRedisTtl($ttl);
             $data = call_user_func($call, $key);
         }
-
         if (StringHelper::isEmpty($data)) {
             $data = [];
             $ttl = 60;
         }
-        $data = is_object($data) ? $data->toArray() : $data;
-        $redis->set($k, json_encode($data), $ttl);
+        $redis->set($k, serialize($data), $ttl);
         return $data;
     }
 
@@ -98,18 +114,19 @@ class RedisHelper
         foreach ($keys as $key) {
             $ks[] = self::getCacheKey($key, $prefix);
         }
-        /* @var array $data */
+
         $data = $redis->mGet($ks);
 
         $output = [];
         $missed = [];
         foreach ($data as $index => $item) {
-            if (is_null($item)) {
+            // 获得 未缓存 key
+            if ($item === false) {
                 $key = $keys[$index];
                 $missed[$index] = $key;
                 continue;
             }
-            $output[$index] = json_decode($item, true);
+            $output[$index] = unserialize($item, true);
         }
         $models = [];
         if (!is_null($call)) {
@@ -118,10 +135,9 @@ class RedisHelper
         }
 
         foreach ($models as $index => $model) {
-            $model = is_object($model) ? $model->toArray() : $model;
             $output[$index] = $model;
             $targetIntersectKey = self::getCacheKey($keys[$index], $prefix);
-            $redis->set($targetIntersectKey, json_encode($model), $ttl);
+            $redis->set($targetIntersectKey, serialize($model), $ttl);
         }
         return $output;
     }
