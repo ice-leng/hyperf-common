@@ -53,7 +53,6 @@ class RedisHelper
      * @param int|null      $ttl 过期时间， 如果为 0 表示 不设置过期时间， null 表示redis配置的过期时间
      *
      * @return mixed
-     * @throws Throwable
      */
     public static function getCacheByKey(string $key, ?callable $call = null, ?string $prefix = null, ?int $ttl = null)
     {

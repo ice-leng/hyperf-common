@@ -2,10 +2,10 @@
 
 namespace Lengbin\Hyperf\Common\Helper;
 
-use Hyperf\Contract\ConfigInterface;
 use Psr\Container\ContainerInterface;
 use Hyperf\Utils\ApplicationContext;
 use Hyperf\Redis\Redis;
+use Hyperf\Contract\ConfigInterface;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 
