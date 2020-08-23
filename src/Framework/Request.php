@@ -3,7 +3,6 @@
 namespace Lengbin\Hyperf\Common\Framework;
 
 use Hyperf\HttpServer\Request as BaseRequest;
-use Lengbin\Hyperf\Common\Framework\Exception\MethodNotImplException;
 
 class Request extends BaseRequest
 {
@@ -14,10 +13,10 @@ class Request extends BaseRequest
      *
      * @return string
      */
-    public function clientRealIP($headerName = 'x-real-ip')
+    public function getClientIp($headerName = 'x-real-ip')
     {
         $client = $this->getServerParams();
-        $clientAddress = $client['remote_ip'];
+        $clientAddress = $client['remote_addr'];
         $xri = $this->getHeader($headerName);
         $xff = $this->getHeader('x-forwarded-for');
         if ($clientAddress === '127.0.0.1') {

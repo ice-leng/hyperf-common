@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace Lengbin\Hyperf\Common\Helper;
 
 use Hyperf\Di\Annotation\AnnotationCollector;
+use Hyperf\Di\Annotation\AnnotationInterface;
 use Hyperf\HttpServer\Router\Dispatched;
-use Hyperf\Utils\Context;
 use Lengbin\Helper\YiiSoft\Arrays\ArrayHelper;
-use Psr\Http\Message\ServerRequestInterface;
 
 class AnnotationHelper
 {
@@ -22,7 +21,7 @@ class AnnotationHelper
     public static function get(string $annotation, Dispatched $dispatched = null)
     {
         if ($dispatched === null) {
-            $request = Context::get(ServerRequestInterface::class);
+            $request = CommonHelper::getRequest();
             $dispatched = $request->getAttribute(Dispatched::class);
         }
         [$class, $method] = $dispatched->handler->callback;

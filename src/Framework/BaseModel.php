@@ -4,9 +4,10 @@ namespace Lengbin\Hyperf\Common\Framework;
 
 use Hyperf\Database\Model\Builder;
 use Hyperf\Database\Model\Collection;
-use SwooleX\Constants\SoftDeleted;
+use Hyperf\DbConnection\Model\Model;
+use Lengbin\Hyperf\Common\Constant\SoftDeleted;
 
-class BaseModel
+class BaseModel extends Model
 {
     const CREATED_AT = 'create_at';
 
@@ -89,11 +90,15 @@ class BaseModel
 
     /**
      * 删除
+     *
+     * @param string $deleteFiledName
+     * @param array  $options
+     *
      * @return bool
      */
-    public function softDelete(array $options = []): bool
+    public function softDelete(string $deleteFiledName = 'enable', array $options = []): bool
     {
-        $this->enable = SoftDeleted::DISABLE;
+        $this->$deleteFiledName = SoftDeleted::DISABLE;
         return $this->save($options);
     }
 
