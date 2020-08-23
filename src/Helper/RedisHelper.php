@@ -126,7 +126,7 @@ class RedisHelper
                 $missed[$index] = $key;
                 continue;
             }
-            $output[$index] = unserialize($item, true);
+            $output[$index] = unserialize($item);
         }
         $models = [];
         if (!is_null($call)) {
