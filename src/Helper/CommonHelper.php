@@ -2,6 +2,7 @@
 
 namespace Lengbin\Hyperf\Common\Helper;
 
+use Hyperf\Utils\Context;
 use Psr\Container\ContainerInterface;
 use Hyperf\Utils\ApplicationContext;
 use Hyperf\Redis\Redis;
@@ -57,6 +58,21 @@ class CommonHelper
     public static function getResponse(): ResponseInterface
     {
         return CommonHelper::getContainer()->get(ResponseInterface::class);
+    }
+
+    /**
+     * request set attribute
+     *
+     * @param mixed $key
+     * @param mixed $value
+     *
+     * @return RequestInterface
+     */
+    public static function setRequestAttribute($key, $value): RequestInterface
+    {
+        return Context::override(RequestInterface::class, function (RequestInterface $request) use ($key, $value) {
+            return $request->withAttribute($key, $value);
+        });
     }
 
 }
