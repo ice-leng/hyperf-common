@@ -11,20 +11,61 @@ use Lengbin\Helper\YiiSoft\Arrays\ArrayHelper;
 class AnnotationHelper
 {
     /**
-     * 获得 注解 对象
-     *
-     * @param string          $annotation
+     * 获得 路由 path 信息
      * @param Dispatched|null $dispatched
      *
-     * @return AnnotationInterface|null
+     * @return array|callable|string
      */
-    public static function get(string $annotation, Dispatched $dispatched = null)
+    public static function getRouter(Dispatched $dispatched = null)
     {
         if ($dispatched === null) {
             $request = CommonHelper::getRequest();
             $dispatched = $request->getAttribute(Dispatched::class);
         }
-        [$class, $method] = $dispatched->handler->callback;
+        return $dispatched->handler->callback;
+    }
+
+    /**
+     * 获得 类 注解
+     *
+     * @param string          $annotation
+     * @param Dispatched|null $dispatched
+     *
+     * @return mixed|null
+     */
+    public static function getClassAnnotation(string $annotation, Dispatched $dispatched = null)
+    {
+        [$class, $method] = self::getRouter($dispatched);
+        $classMethodAnnotations = AnnotationCollector::getClassMethodAnnotation($class, $method);
+        return ArrayHelper::getValue($classMethodAnnotations, $annotation);
+    }
+
+    /**
+     * 获得 方法 注解
+     *
+     * @param string          $annotation
+     * @param Dispatched|null $dispatched
+     *
+     * @return mixed|null
+     */
+    public static function getClassMethodAnnotation(string $annotation, Dispatched $dispatched = null)
+    {
+        [$class, $method] = self::getRouter($dispatched);
+        $classMethodAnnotations = AnnotationCollector::getClassMethodAnnotation($class, $method);
+        return ArrayHelper::getValue($classMethodAnnotations, $annotation);
+    }
+
+    /**
+     * 获得 属性 注解
+     *
+     * @param string          $annotation
+     * @param Dispatched|null $dispatched
+     *
+     * @return mixed|null
+     */
+    public static function getClassPropertyAnnotation(string $annotation, Dispatched $dispatched = null)
+    {
+        [$class, $method] = self::getRouter($dispatched);
         $classMethodAnnotations = AnnotationCollector::getClassMethodAnnotation($class, $method);
         return ArrayHelper::getValue($classMethodAnnotations, $annotation);
     }
