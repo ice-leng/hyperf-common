@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common;
 
+use Hyperf\HttpServer\Contract\RequestInterface;
+use Hyperf\HttpServer\Contract\ResponseInterface;
 use Lengbin\Hyperf\Common\Framework\Request;
 use Lengbin\Hyperf\Common\Framework\Response;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 class ConfigProvider
 {
