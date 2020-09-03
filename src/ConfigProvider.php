@@ -14,6 +14,7 @@ namespace Lengbin\Hyperf\Common;
 
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use Lengbin\Hyperf\Common\Framework\Request;
 use Lengbin\Hyperf\Common\Framework\Response;
 
@@ -23,8 +24,9 @@ class ConfigProvider
     {
         return [
             'dependencies' => [
-                RequestInterface::class  => Request::class,
-                ResponseInterface::class => Response::class,
+                RequestInterface::class     => Request::class,
+                ResponseInterface::class    => Response::class,
+                PsrResponseInterface::class => Response::class,
             ],
             'annotations'  => [
                 'scan' => [
