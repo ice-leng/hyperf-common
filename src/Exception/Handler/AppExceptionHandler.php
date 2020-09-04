@@ -13,11 +13,19 @@ declare(strict_types=1);
 namespace Lengbin\Hyperf\Common\Exception\Handler;
 
 use Hyperf\ExceptionHandler\ExceptionHandler;
+use Lengbin\Hyperf\Common\Error\CommentErrorCode;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 class AppExceptionHandler extends ExceptionHandler
 {
     use ExceptionHandlerTrait;
+
+    public function handle(Throwable $throwable, ResponseInterface $response)
+    {
+        $this->formatLog($throwable);
+        return $this->response->fail(CommentErrorCode::SERVER_ERROR);
+    }
 
     public function isValid(Throwable $throwable): bool
     {
