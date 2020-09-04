@@ -6,11 +6,18 @@ namespace Lengbin\Hyperf\Common\Exception\Handler;
 
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Lengbin\Hyperf\Common\Exception\BusinessException;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 class BusinessExceptionHandler extends ExceptionHandler
 {
     use ExceptionHandlerTrait;
+
+    public function handle(Throwable $throwable, ResponseInterface $response)
+    {
+        $this->formatLog($throwable);
+        return $this->response->fail((string)$throwable->getCode());
+    }
 
     /**
      * Determine if the current exception handler should handle the exception,.

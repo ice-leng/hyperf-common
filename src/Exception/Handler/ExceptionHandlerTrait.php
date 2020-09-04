@@ -65,10 +65,4 @@ trait ExceptionHandlerTrait
         }
         $this->loggerFactory->error($this->formatter->format($throwable));
     }
-
-    public function handle(Throwable $throwable, ResponseInterface $response)
-    {
-        $this->formatLog($throwable);
-        return $this->response->fail($throwable->getCode(), $throwable->getMessage());
-    }
 }
