@@ -4,6 +4,7 @@ namespace Lengbin\Hyperf\Common\Exception\Handler;
 
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\StdoutLoggerInterface;
+use Hyperf\ExceptionHandler\Formatter\FormatterInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface as HttpResponseInterface;
 use Hyperf\Logger\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
@@ -27,15 +28,25 @@ trait ExceptionHandlerTrait
     protected $loggerFactory;
 
     /**
-     * @var $config
+     * @var ConfigInterface
      */
     protected $config;
 
-    public function __construct(ConfigInterface $config, StdoutLoggerInterface $logger, LoggerFactory $loggerFactory, HttpResponseInterface $response)
+    /**
+     * @var FormatterInterface
+     */
+    protected $formatter;
+
+    public function __construct(ConfigInterface $config,
+        StdoutLoggerInterface $logger,
+        LoggerFactory $loggerFactory,
+        HttpResponseInterface $response,
+        FormatterInterface $formatter)
     {
         $this->logger = $logger;
         $this->response = $response;
         $this->config = $config;
+        $this->formatter = $formatter;
         $this->loggerFactory = $loggerFactory->get('Exception Trace');
     }
 
@@ -49,12 +60,10 @@ trait ExceptionHandlerTrait
      */
     public function formatLog(Throwable $throwable): void
     {
-        $errorMessage = sprintf('%s[%s] in %s', $throwable->getMessage(), $throwable->getLine(), $throwable->getFile());
         if ($this->config->get('app_env', 'prod') === 'dev') {
-            $this->logger->error($errorMessage);
+            $this->logger->error($this->formatter->format($throwable));
         }
-        $this->loggerFactory->error($errorMessage);
-        $this->loggerFactory->error($throwable->getTraceAsString());
+        $this->loggerFactory->error($this->formatter->format($throwable));
     }
 
     public function handle(Throwable $throwable, ResponseInterface $response)
