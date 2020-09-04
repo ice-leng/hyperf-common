@@ -10,7 +10,7 @@ use Lengbin\Hyperf\Common\Entity\PageEntity;
 use Lengbin\Hyperf\Common\Helper\CommonHelper;
 use Psr\Container\ContainerInterface;
 use Hyperf\Di\Annotation\Inject;
-use Lengbin\Hyperf\Common\Framework\Exception\MethodNotImplException;
+use Lengbin\Hyperf\Common\Exception\MethodNotImplException;
 
 class BaseService
 {

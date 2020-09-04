@@ -1,6 +1,6 @@
 <?php
 
-namespace Lengbin\Hyperf\Common\Framework\Exception\Handler;
+namespace Lengbin\Hyperf\Common\Exception\Handler;
 
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\StdoutLoggerInterface;
@@ -36,7 +36,7 @@ trait ExceptionHandlerTrait
         $this->logger = $logger;
         $this->response = $response;
         $this->config = $config;
-        $this->loggerFactory = $loggerFactory->get('server error');
+        $this->loggerFactory = $loggerFactory->get('Exception Trace');
     }
 
     /**

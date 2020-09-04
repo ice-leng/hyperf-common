@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 
-namespace Lengbin\Hyperf\Common\Framework\Exception\Handler;
+namespace Lengbin\Hyperf\Common\Exception\Handler;
 
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Throwable;

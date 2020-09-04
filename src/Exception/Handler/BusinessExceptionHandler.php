@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lengbin\Hyperf\Common\Framework\Exception\Handler;
+namespace Lengbin\Hyperf\Common\Exception\Handler;
 
 use Hyperf\ExceptionHandler\ExceptionHandler;
-use Lengbin\Hyperf\Common\Framework\Exception\BusinessException;
-use Psr\Http\Message\ResponseInterface;
+use Lengbin\Hyperf\Common\Exception\BusinessException;
 use Throwable;
 
 class BusinessExceptionHandler extends ExceptionHandler
