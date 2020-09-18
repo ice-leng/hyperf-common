@@ -2,7 +2,7 @@
 
 namespace Lengbin\Hyperf\Common\Component\Sort;
 
-use Lengbin\Helper\BaseObject;
+use Lengbin\Helper\Component\BaseObject;
 
 /**
  * Class Sort

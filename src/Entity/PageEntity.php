@@ -2,7 +2,7 @@
 
 namespace Lengbin\Hyperf\Common\Entity;
 
-use Lengbin\Helper\BaseObject;
+use Lengbin\Helper\Component\BaseObject;
 
 class PageEntity extends BaseObject
 {
