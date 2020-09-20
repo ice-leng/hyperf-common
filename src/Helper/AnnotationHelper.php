@@ -22,7 +22,8 @@ class AnnotationHelper
             $request = CommonHelper::getRequest();
             $dispatched = $request->getAttribute(Dispatched::class);
         }
-        return $dispatched->handler->callback;
+        $callback = $dispatched->handler->callback;
+        return is_array($callback) ? $callback : ['', ''];
     }
 
     /**
