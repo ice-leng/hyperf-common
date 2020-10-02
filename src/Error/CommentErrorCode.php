@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common\Error;
 
-use Hyperf\Constants\AbstractConstants;
-use Hyperf\Constants\Annotation\Constants;
+use Lengbin\Helper\Component\BaseEnum;
 
-/**
- * @Constants
- */
-class CommentErrorCode extends AbstractConstants
+class CommentErrorCode extends BaseEnum
 {
     /**
      * @Message("Success")

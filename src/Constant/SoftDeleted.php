@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common\Constant;
 
-use Hyperf\Constants\AbstractConstants;
-use Hyperf\Constants\Annotation\Constants;
+use Lengbin\Helper\Component\BaseEnum;
 
-/**
- * @Constants
- */
-class SoftDeleted extends AbstractConstants
+class SoftDeleted extends BaseEnum
 {
     /**
      * @Message("正常")
