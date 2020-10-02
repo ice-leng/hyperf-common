@@ -3,13 +3,14 @@
 namespace Lengbin\Hyperf\Common\Framework;
 
 use Hyperf\Database\Model\Builder;
+use Lengbin\Helper\Component\Sort\Sort;
 use Lengbin\Helper\Util\RegularHelper;
 use Lengbin\Helper\YiiSoft\StringHelper;
-use Lengbin\Hyperf\Common\Component\Sort\Sort;
 use Lengbin\Hyperf\Common\Entity\PageEntity;
 use Lengbin\Hyperf\Common\Helper\CommonHelper;
 use Psr\Container\ContainerInterface;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\Contract\ConfigInterface;
 use Lengbin\Hyperf\Common\Exception\MethodNotImplException;
 
 class BaseService
@@ -19,6 +20,12 @@ class BaseService
      * @var ContainerInterface
      */
     protected $container;
+
+    /**
+     * @Inject
+     * @var ConfigInterface
+     */
+    protected $config;
 
     /**
      * page
@@ -49,10 +56,10 @@ class BaseService
     private function getDefaultSort(): Sort
     {
         return new Sort([
-            'attributes' => [
-                'create_at' => Sort::generateSortAttribute('create_at', SORT_DESC),
+            'attributes'   => [
+                'create_at',
             ],
-            'sort'       => '-create_at',
+            'defaultOrder' => ['create_at' => SORT_DESC],
         ]);
     }
 
@@ -191,7 +198,7 @@ class BaseService
         if (RegularHelper::checkUrl($path)) {
             return $path;
         }
-        $imageUrl = CommonHelper::getConfig()->get('image_url');
+        $imageUrl = $this->config->get('image_url');
         if (StringHelper::isEmpty($imageUrl)) {
             $uri = CommonHelper::getRequest()->getUri();
             $imageUrl = $uri->getScheme() . '://' . $uri->getAuthority();
