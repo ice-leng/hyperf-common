@@ -22,7 +22,7 @@ class Response extends BaseResponse
         $data = [
             "code"    => CommentErrorCode::SUCCESS,
             "result"  => $params,
-            "message" => CommentErrorCode::getMessage(CommentErrorCode::SUCCESS),
+            "message" => CommentErrorCode::SUCCESS()->getMessage(),
         ];
         return $this->json($data);
     }
@@ -36,7 +36,7 @@ class Response extends BaseResponse
     public function fail(string $code, ?string $message = null)
     {
         if (StringHelper::isEmpty($message)) {
-            $message = CommentErrorCode::getMessage($code);
+            $message = CommentErrorCode::byValue($code)->getMessage();
         }
         $data = [
             "code"    => $code,

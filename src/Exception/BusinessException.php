@@ -12,7 +12,7 @@ class BusinessException extends ServerException
     public function __construct($code, string $message = null, \Throwable $previous = null)
     {
         if (is_null($message)) {
-            $message = CommentErrorCode::getMessage($code);
+            $message = CommentErrorCode::byValue($code)->getMessage();
         }
 
         parent::__construct($message, $code, $previous);
