@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common\Constant;
 
-use Lengbin\Helper\Component\BaseEnum;
+use Lengbin\ErrorCode\BaseEnum;
 
 class SoftDeleted extends BaseEnum
 {

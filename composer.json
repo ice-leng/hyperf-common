@@ -14,6 +14,7 @@
     "hyperf/framework": "~2.0.0",
     "hyperf/http-server": "~2.0.0",
     "hyperf/constants": "~2.0.0",
+    "lengbin/common": "dev-master",
     "lengbin/helper": "dev-master"
   },
   "minimum-stability": "stable",

@@ -2,7 +2,7 @@
 
 namespace Lengbin\Hyperf\Common\Helper;
 
-use Lengbin\Helper\Util\RedisCacheHelper;
+use Lengbin\Common\Component\RedisCache;
 
 /**
  * Class RedisHelper
@@ -19,7 +19,7 @@ use Lengbin\Helper\Util\RedisCacheHelper;
  *
  *
  */
-class RedisHelper extends RedisCacheHelper
+class Redis extends RedisCache
 {
     public function getRedis()
     {

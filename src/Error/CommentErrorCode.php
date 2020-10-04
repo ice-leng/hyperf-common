@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common\Error;
 
-use Lengbin\Helper\Component\BaseEnum;
+use Lengbin\ErrorCode\BaseEnum;
 
 class CommentErrorCode extends BaseEnum
 {
