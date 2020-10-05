@@ -14,7 +14,8 @@
     "hyperf/framework": "~2.0.0",
     "hyperf/http-server": "~2.0.0",
     "hyperf/constants": "~2.0.0",
-    "lengbin/common": "@dev"
+    "lengbin/common": "@dev",
+    "lengbin/error-code": "dev-main"
   },
   "minimum-stability": "stable",
   "autoload": {
