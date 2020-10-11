@@ -16,6 +16,8 @@ use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Lengbin\Hyperf\Common\Framework\Request;
 use Lengbin\Hyperf\Common\Framework\Response;
+use Hyperf\Database\Commands\Ast\ModelUpdateVisitor as Visitor;
+use Lengbin\Hyperf\Common\Framework\Visitor\ModelUpdateVisitor;
 
 class ConfigProvider
 {
@@ -25,6 +27,7 @@ class ConfigProvider
             'dependencies' => [
                 RequestInterface::class  => Request::class,
                 ResponseInterface::class => Response::class,
+                Visitor::class => ModelUpdateVisitor::class
             ],
             'annotations'  => [
                 'scan' => [
