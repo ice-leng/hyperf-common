@@ -8,7 +8,7 @@ use Lengbin\Common\Component\RedisCache;
  * Class RedisHelper
  * @package Lengbin\Hyperf\Common\Helper
  * eg:
- * $data = RedisHelper::getInstance()->getCacheByKeys(['test2', 'test'], function ($results) {
+ * $data = RedisCacheHelper::getInstance()->getCacheByKeys(['test2', 'test'], function ($results) {
  *              $data = xxxx::findALl($results);
  *              foreach ($results as $key => $result) {
  *                  $results[$key] = $data[$result];
