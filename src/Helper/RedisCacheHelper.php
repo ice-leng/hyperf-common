@@ -19,7 +19,7 @@ use Lengbin\Common\Component\RedisCache;
  *
  *
  */
-class Redis extends RedisCache
+class RedisCacheHelper extends RedisCache
 {
     public function getRedis()
     {
