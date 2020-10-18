@@ -17,7 +17,7 @@ class BusinessExceptionHandler extends ExceptionHandler
     {
         $this->stopPropagation();
         $this->formatLog($throwable);
-        return $this->response->fail((string)$throwable->getCode());
+        return $this->response->fail($throwable->getRealCode(), $throwable->getMessage());
     }
 
     /**

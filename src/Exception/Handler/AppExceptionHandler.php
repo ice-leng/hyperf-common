@@ -24,7 +24,8 @@ class AppExceptionHandler extends ExceptionHandler
     public function handle(Throwable $throwable, ResponseInterface $response)
     {
         $this->formatLog($throwable);
-        return $this->response->fail(CommentErrorCode::SERVER_ERROR);
+        $error = CommentErrorCode::SERVER_ERROR();
+        return $this->response->fail($error->getValue(), $error->getMessage());
     }
 
     public function isValid(Throwable $throwable): bool

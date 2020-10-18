@@ -28,16 +28,13 @@ class Response extends BaseResponse
     }
 
     /**
-     * @param string      $code
-     * @param string|null $message
+     * @param string $code
+     * @param string $message
      *
      * @return ResponseInterface
      */
-    public function fail(string $code, ?string $message = null)
+    public function fail(string $code, string $message)
     {
-        if (StringHelper::isEmpty($message)) {
-            $message = CommentErrorCode::byValue($code)->getMessage();
-        }
         $data = [
             "code"    => $code,
             "result"  => new \stdClass(),

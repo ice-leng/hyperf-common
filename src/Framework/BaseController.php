@@ -37,10 +37,10 @@ class BaseController
     }
 
     /**
-     * @param string      $code
-     * @param string|null $message
+     * @param string $code
+     * @param string $message
      */
-    public function fail(string $code, ?string $message = null)
+    public function fail(string $code, string $message)
     {
         return $this->response->fail($code, $message);
     }
