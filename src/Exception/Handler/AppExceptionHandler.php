@@ -25,7 +25,8 @@ class AppExceptionHandler extends ExceptionHandler
     {
         $this->formatLog($throwable);
         $error = CommentErrorCode::SERVER_ERROR();
-        return $this->response->fail($error->getValue(), $error->getMessage());
+        $message = $this->config->get('app_env', 'prod') === 'dev' ? $this->formatter->format($throwable) : $error->getMessage();
+        return $this->response->fail($error->getValue(), $message);
     }
 
     public function isValid(Throwable $throwable): bool
