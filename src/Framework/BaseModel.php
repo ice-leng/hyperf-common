@@ -112,18 +112,25 @@ class BaseModel extends Model
      */
     public static function findOne(string $key, $value, $field = ['*'], ?string $deleteFiledName = 'enable'): ?self
     {
-        $query = self::query();
-        if (!empty($deleteFiledName)) {
-            $query->where([$deleteFiledName => SoftDeleted::ENABLE]);
-        }
+        return self::findOneCondition([$key => $value], $field, $deleteFiledName);
+    }
 
-        if (is_array($value)) {
-            $query->whereIn($key, $value);
-        } else {
-            $query->where($key, $value);
+    /**
+     * @param Builder $query
+     * @param array   $conditions
+     *
+     * @return Builder
+     */
+    protected static function condition(Builder $query, array $conditions = []): Builder
+    {
+        foreach ($conditions as $key => $value) {
+            if (is_array($value)) {
+                $query->whereIn($key, $value);
+            } else {
+                $query->where($key, $value);
+            }
         }
-
-        return $query->first($field);
+        return $query;
     }
 
     /**
@@ -138,19 +145,10 @@ class BaseModel extends Model
     public static function findOneCondition(array $conditions, $field = ['*'], ?string $deleteFiledName = 'enable'): ?self
     {
         $query = self::query();
-
         if (!empty($deleteFiledName)) {
-            $query->where([$deleteFiledName => SoftDeleted::ENABLE]);
+            $conditions[$deleteFiledName] = SoftDeleted::ENABLE;
         }
-
-        foreach ($conditions as $key => $value) {
-            if (is_array($value)) {
-                $query->whereIn($key, $value);
-            } else {
-                $query->where($key, $value);
-            }
-        }
-        return $query->first($field);
+        return self::condition($query, $conditions)->first($field);
     }
 
     /**
@@ -166,16 +164,9 @@ class BaseModel extends Model
     {
         $query = self::query();
         if (!empty($deleteFiledName)) {
-            $query->where([$deleteFiledName => SoftDeleted::ENABLE]);
+            $conditions[$deleteFiledName] = SoftDeleted::ENABLE;
         }
-        foreach ($conditions as $key => $value) {
-            if (is_array($value)) {
-                $query->whereIn($key, $value);
-            } else {
-                $query->where($key, $value);
-            }
-        }
-        return $query->get($field);
+        return self::condition($query, $conditions)->get($field);
     }
 
     /**
@@ -190,18 +181,9 @@ class BaseModel extends Model
     {
         $query = self::query();
         if (!empty($deleteFiledName)) {
-            $query->where([$deleteFiledName => SoftDeleted::ENABLE]);
+            $conditions[$deleteFiledName] = SoftDeleted::ENABLE;
         }
-
-        foreach ($conditions as $key => $value) {
-            if (is_array($value)) {
-                $query->whereIn($key, $value);
-            } else {
-                $query->where($key, $value);
-            }
-        }
-
-        return $query->update([$deleteFiledName => SoftDeleted::DISABLE]);
+        return self::condition($query, $conditions)->update([$deleteFiledName => SoftDeleted::DISABLE]);
     }
 
     /**
