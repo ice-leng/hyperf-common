@@ -75,4 +75,13 @@ class CommonHelper
         });
     }
 
+    /**
+     * 是否为开发环境
+     * @return bool
+     */
+    public static function isDev(): bool
+    {
+        return self::getConfig()->get('app_env', 'prod') === 'dev';
+    }
+
 }

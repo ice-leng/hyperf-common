@@ -7,6 +7,7 @@ use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\Formatter\FormatterInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface as HttpResponseInterface;
 use Hyperf\Logger\LoggerFactory;
+use Lengbin\Hyperf\Common\Helper\CommonHelper;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -25,29 +26,24 @@ trait ExceptionHandlerTrait
     /**
      * @var LoggerFactory
      */
-    protected $loggerFactory;
+    protected $loggerFile;
 
     /**
      * @var ConfigInterface
      */
     protected $config;
 
-    /**
-     * @var FormatterInterface
-     */
-    protected $formatter;
+
 
     public function __construct(ConfigInterface $config,
         StdoutLoggerInterface $logger,
         LoggerFactory $loggerFactory,
-        HttpResponseInterface $response,
-        FormatterInterface $formatter)
+        HttpResponseInterface $response)
     {
         $this->logger = $logger;
         $this->response = $response;
         $this->config = $config;
-        $this->formatter = $formatter;
-        $this->loggerFactory = $loggerFactory->get('Exception Trace');
+        $this->loggerFile = $loggerFactory->get('Exception Trace');
     }
 
     /**
@@ -57,12 +53,13 @@ trait ExceptionHandlerTrait
      * 命令行打出日志
      *
      * @param Throwable $throwable
+     * @param string    $level
      */
-    public function formatLog(Throwable $throwable): void
+    public function formatLog(Throwable $throwable, $level = 'warning'): void
     {
-        if ($this->config->get('app_env', 'prod') === 'dev') {
-            $this->logger->error($this->formatter->format($throwable));
+        if (CommonHelper::isDev()) {
+            $this->logger->$level(sprintf('%s[%s] in %s', $throwable->getMessage(), $throwable->getLine(), $throwable->getFile()));
         }
-        $this->loggerFactory->error($this->formatter->format($throwable));
+        $this->loggerFile->$level($throwable->getTraceAsString());
     }
 }

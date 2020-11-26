@@ -14,6 +14,7 @@ namespace Lengbin\Hyperf\Common\Exception\Handler;
 
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Lengbin\Hyperf\Common\Error\CommentErrorCode;
+use Lengbin\Hyperf\Common\Helper\CommonHelper;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -23,9 +24,9 @@ class AppExceptionHandler extends ExceptionHandler
 
     public function handle(Throwable $throwable, ResponseInterface $response)
     {
-        $this->formatLog($throwable);
+        $this->formatLog($throwable, 'error');
         $error = CommentErrorCode::SERVER_ERROR();
-        $message = $this->config->get('app_env', 'prod') === 'dev' ? $this->formatter->format($throwable) : $error->getMessage();
+        $message = CommonHelper::isDev() ? $throwable->getTraceAsString() : $error->getMessage();
         return $this->response->fail($error->getValue(), $message);
     }
 
