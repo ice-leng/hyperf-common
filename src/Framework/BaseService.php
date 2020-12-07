@@ -3,7 +3,7 @@
 namespace Lengbin\Hyperf\Common\Framework;
 
 use Hyperf\Database\Model\Builder;
-use Lengbin\Helper\Component\Sort\Sort;
+use Lengbin\Common\Component\Sort\Sort;
 use Lengbin\Helper\Util\RegularHelper;
 use Lengbin\Helper\YiiSoft\StringHelper;
 use Lengbin\Hyperf\Common\Entity\PageEntity;

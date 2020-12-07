@@ -82,7 +82,7 @@ class BaseModel extends Model
      *
      * @return bool
      */
-    public function update(array $attributes = [], array $options = [])
+    public function update(array $attributes = [], array $options = []): bool
     {
         $attributes = $this->parseAttributes($attributes);
         return parent::update($attributes, $options);
@@ -108,9 +108,9 @@ class BaseModel extends Model
      * @param string[]         $field
      * @param string|null      $deleteFiledName
      *
-     * @return Builder|object|null
+     * @return object|null|static
      */
-    public static function findOne(string $key, $value, $field = ['*'], ?string $deleteFiledName = 'enable'): ?self
+    public static function findOne(string $key, $value, $field = ['*'], ?string $deleteFiledName = 'enable'): ?static
     {
         return self::findOneCondition([$key => $value], $field, $deleteFiledName);
     }
@@ -136,13 +136,13 @@ class BaseModel extends Model
     /**
      * 多条件
      *
-     * @param array       $conditions 如果是 string 表示走 主键
+     * @param array       $conditions
      * @param array       $field
      * @param string|null $deleteFiledName
      *
-     * @return Builder|static|object|null
+     * @return static|object|null
      */
-    public static function findOneCondition(array $conditions, $field = ['*'], ?string $deleteFiledName = 'enable'): ?self
+    public static function findOneCondition(array $conditions, $field = ['*'], ?string $deleteFiledName = 'enable'): ?static
     {
         $query = self::query();
         if (!empty($deleteFiledName)) {
@@ -158,9 +158,9 @@ class BaseModel extends Model
      * @param array       $field
      * @param string|null $deleteFiledName
      *
-     * @return Builder|static|object|null
+     * @return Collection|static[]
      */
-    public static function findAllCondition(array $conditions, $field = ['*'], ?string $deleteFiledName = 'enable'): ?Collection
+    public static function findAllCondition(array $conditions, $field = ['*'], ?string $deleteFiledName = 'enable'): Collection
     {
         $query = self::query();
         if (!empty($deleteFiledName)) {
@@ -177,7 +177,7 @@ class BaseModel extends Model
      *
      * @return int
      */
-    public static function softDeleteCondition(array $conditions, ?string $deleteFiledName = 'enable'): ?int
+    public static function softDeleteCondition(array $conditions, ?string $deleteFiledName = 'enable'): int
     {
         $query = self::query();
         if (!empty($deleteFiledName)) {

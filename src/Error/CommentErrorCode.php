@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common\Error;
 
-use Lengbin\Hyperf\ErrorCode\BaseEnum;
+use Lengbin\ErrorCode\AbstractEnum;
 
-class CommentErrorCode extends BaseEnum
+class CommentErrorCode extends AbstractEnum
 {
     /**
      * @Message("Success")
