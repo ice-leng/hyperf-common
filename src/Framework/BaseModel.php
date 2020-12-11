@@ -110,7 +110,7 @@ class BaseModel extends Model
      *
      * @return object|null|static
      */
-    public static function findOne(string $key, $value, $field = ['*'], ?string $deleteFiledName = 'enable'): ?static
+    public static function findOne(string $key, $value, $field = ['*'], ?string $deleteFiledName = 'enable'): ?self
     {
         return self::findOneCondition([$key => $value], $field, $deleteFiledName);
     }
@@ -142,7 +142,7 @@ class BaseModel extends Model
      *
      * @return static|object|null
      */
-    public static function findOneCondition(array $conditions, $field = ['*'], ?string $deleteFiledName = 'enable'): ?static
+    public static function findOneCondition(array $conditions, $field = ['*'], ?string $deleteFiledName = 'enable'): ?self
     {
         $query = self::query();
         if (!empty($deleteFiledName)) {
