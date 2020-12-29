@@ -1,6 +1,6 @@
 <?php
 
-namespace Lengbin\Hyperf\Component\Generate\Model;
+namespace Lengbin\Hyperf\Common\Component\Generate\Model;
 
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Database\Commands\Ast\GenerateModelIDEVisitor;
