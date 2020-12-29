@@ -173,7 +173,8 @@ class GenerateModel
      */
     protected function buildClass(string $table, string $name, string $primaryKey, ModelOption $option): string
     {
-        $stub = file_get_contents(__DIR__ . '/stubs/Model.stub');
+        // 不能用 __DIR__ 代理类 反代理后 就变到 runtime，只能写绝对路径
+        $stub = file_get_contents(BASE_PATH . '/vendor/lengbin/hyperf-common/src/Component/Generate/Model/stubs/Model.stub');
 
         return $this->replaceNamespace($stub, $name)
             ->replaceInheritance($stub, $option->getInheritance())
