@@ -305,14 +305,17 @@ class GenerateModel
         return $this->config->get("databases.{$pool}.{$key}", $default);
     }
 
-    public function create(string $table = '', string $pool = 'default'): bool
+    public function create(string $table = '', string $pool = 'default', string $path = ''): bool
     {
+        if (empty($path)) {
+            $path = $this->getOption('commands.gen:model.path', $pool, 'app/Model');
+        }
         $option = new ModelOption();
         $option->setPool($pool)
-            ->setPath($this->getOption('commands.gen:model.path', $pool, 'app/Model'))
+            ->setPath($path)
             ->setPrefix($this->getOption('prefix', $pool, ''))
             ->setInheritance($this->getOption('commands.gen:model.inheritance', $pool, 'Model'))
-            ->setUses($this->getOption('commands.gen:model.uses', $pool, 'Hyperf\DbConnection\Model\Model'))
+            ->setUses($this->getOption('commands.gen:model.uses', $pool, 'Hyperf\\DbConnection\\Model\\Model'))
             ->setForceCasts($this->getOption('commands.gen:model.force_casts', $pool, false))
             ->setRefreshFillable($this->getOption('commands.gen:model.refresh_fillable', $pool, false))
             ->setTableMapping($this->getOption('commands.gen:model.table_mapping', $pool, []))
@@ -321,13 +324,11 @@ class GenerateModel
             ->setWithIde($this->getOption('commands.gen:model.with_ide', $pool, false))
             ->setVisitors($this->getOption('commands.gen:model.visitors', $pool, []))
             ->setPropertyCase($this->getOption('commands.gen:model.property_case', $pool));
-
         if ($table) {
             $this->createModel($table, $option);
         } else {
             $this->createModels($option);
         }
-
         return true;
     }
 }
