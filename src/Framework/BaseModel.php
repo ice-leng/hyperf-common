@@ -187,6 +187,23 @@ class BaseModel extends Model
     }
 
     /**
+     * 条件更新
+     *
+     * @param array $conditions
+     * @param array $update
+     *
+     * @return int
+     */
+    public static function updateCondition(array $conditions, array $update): int
+    {
+        $query = self::query();
+        if (!empty($deleteFiledName)) {
+            $conditions[$deleteFiledName] = SoftDeleted::ENABLE;
+        }
+        return self::condition($query, $conditions)->update($update);
+    }
+
+    /**
      * format created_at
      *
      * @param $value
