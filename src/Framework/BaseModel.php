@@ -189,18 +189,43 @@ class BaseModel extends Model
     /**
      * 条件更新
      *
-     * @param array $conditions
-     * @param array $update
+     * @param array       $conditions
+     * @param array       $update
+     * @param string|null $deleteFiledName
      *
      * @return int
      */
-    public static function updateCondition(array $conditions, array $update): int
+    public static function updateCondition(array $conditions, array $update, ?string $deleteFiledName = 'enable'): int
     {
         $query = self::query();
         if (!empty($deleteFiledName)) {
             $conditions[$deleteFiledName] = SoftDeleted::ENABLE;
         }
         return self::condition($query, $conditions)->update($update);
+    }
+
+    /**
+     * 是否存在
+     *
+     * @param array       $conditions
+     * @param string|null $deleteFiledName
+     *
+     * @return bool
+     */
+    public static function existCondition(array $conditions, ?string $deleteFiledName = 'enable'): bool
+    {
+        $model = new static();
+        $query = $model->newQuery();
+        if (!empty($deleteFiledName)) {
+            $conditions[$deleteFiledName] = SoftDeleted::ENABLE;
+        }
+
+        if (!empty($conditions[$model->getKeyName()])) {
+            $query->where($model->getKeyName(), '!=', $conditions[$model->getKeyName()]);
+            unset($conditions[$model->getKeyName()]);
+        }
+
+        return self::condition($query, $conditions)->first() ? true : false;
     }
 
     /**
