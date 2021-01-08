@@ -116,14 +116,21 @@ class BaseModel extends Model
     }
 
     /**
-     * @param Builder $query
-     * @param array   $conditions
+     * @param Builder     $query
+     * @param array       $conditions
+     * @param string|null $deleteFiledName
      *
      * @return Builder
      */
-    protected static function condition(Builder $query, array $conditions = []): Builder
+    public static function queryCondition(Builder $query, array $conditions = [], ?string $deleteFiledName = 'enable'): Builder
     {
+        if (!empty($deleteFiledName) && !array_key_exists($deleteFiledName, $conditions)) {
+            $conditions[$deleteFiledName] = SoftDeleted::ENABLE;
+        }
         foreach ($conditions as $key => $value) {
+            if (is_null($value)) {
+                continue;
+            }
             if (is_array($value)) {
                 $query->whereIn($key, $value);
             } else {
@@ -144,11 +151,7 @@ class BaseModel extends Model
      */
     public static function findOneCondition(array $conditions, $field = ['*'], ?string $deleteFiledName = 'enable'): ?self
     {
-        $query = self::query();
-        if (!empty($deleteFiledName)) {
-            $conditions[$deleteFiledName] = SoftDeleted::ENABLE;
-        }
-        return self::condition($query, $conditions)->first($field);
+        return self::queryCondition(self::query(), $conditions, $deleteFiledName)->first($field);
     }
 
     /**
@@ -162,28 +165,22 @@ class BaseModel extends Model
      */
     public static function findAllCondition(array $conditions, $field = ['*'], ?string $deleteFiledName = 'enable'): Collection
     {
-        $query = self::query();
-        if (!empty($deleteFiledName)) {
-            $conditions[$deleteFiledName] = SoftDeleted::ENABLE;
-        }
-        return self::condition($query, $conditions)->get($field);
+        return self::queryCondition(self::query(), $conditions, $deleteFiledName)->get($field);
     }
 
     /**
      * 条件删除
      *
-     * @param array       $conditions
-     * @param string|null $deleteFiledName
+     * @param array  $conditions
+     * @param string $deleteFiledName
      *
      * @return int
      */
-    public static function softDeleteCondition(array $conditions, ?string $deleteFiledName = 'enable'): int
+    public static function softDeleteCondition(array $conditions, string $deleteFiledName = 'enable'): int
     {
-        $query = self::query();
-        if (!empty($deleteFiledName)) {
-            $conditions[$deleteFiledName] = SoftDeleted::ENABLE;
-        }
-        return self::condition($query, $conditions)->update([$deleteFiledName => SoftDeleted::DISABLE]);
+        return self::queryCondition(self::query(), $conditions, $deleteFiledName)->update([
+            $deleteFiledName => SoftDeleted::DISABLE,
+        ]);
     }
 
     /**
@@ -197,11 +194,7 @@ class BaseModel extends Model
      */
     public static function updateCondition(array $conditions, array $update, ?string $deleteFiledName = 'enable'): int
     {
-        $query = self::query();
-        if (!empty($deleteFiledName)) {
-            $conditions[$deleteFiledName] = SoftDeleted::ENABLE;
-        }
-        return self::condition($query, $conditions)->update($update);
+        return self::queryCondition(self::query(), $conditions, $deleteFiledName)->update($update);
     }
 
     /**
@@ -216,16 +209,13 @@ class BaseModel extends Model
     {
         $model = new static();
         $query = $model->newQuery();
-        if (!empty($deleteFiledName)) {
-            $conditions[$deleteFiledName] = SoftDeleted::ENABLE;
-        }
 
         if (!empty($conditions[$model->getKeyName()])) {
             $query->where($model->getKeyName(), '!=', $conditions[$model->getKeyName()]);
             unset($conditions[$model->getKeyName()]);
         }
 
-        return self::condition($query, $conditions)->first() ? true : false;
+        return self::queryCondition($query, $conditions, $deleteFiledName)->first() ? true : false;
     }
 
     /**
