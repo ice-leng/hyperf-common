@@ -48,7 +48,7 @@ class BaseModel extends Model
      *
      * @return array
      */
-    private function parseAttributes(array $attributes): array
+    protected function parseAttributes(array $attributes): array
     {
         foreach ($attributes as $key => $value) {
             if (is_null($value)) {
@@ -122,7 +122,7 @@ class BaseModel extends Model
      *
      * @return Builder
      */
-    public static function queryCondition(Builder $query, array $conditions = [], ?string $deleteFiledName = 'enable'): Builder
+    protected static function queryCondition(Builder $query, array $conditions = [], ?string $deleteFiledName = 'enable'): Builder
     {
         if (!empty($deleteFiledName) && !array_key_exists($deleteFiledName, $conditions)) {
             $conditions[$deleteFiledName] = SoftDeleted::ENABLE;
