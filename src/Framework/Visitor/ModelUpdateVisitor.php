@@ -15,6 +15,8 @@ class ModelUpdateVisitor extends Visitor
             case 'mediumint':
             case 'int':
                 return 'integer';
+            case 'bigint':
+                return 'string';
             case 'decimal':
             case 'float':
             case 'double':
