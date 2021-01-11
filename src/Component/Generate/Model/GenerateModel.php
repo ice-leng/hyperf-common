@@ -230,10 +230,10 @@ class GenerateModel
         $class = $option->getTableMapping()[$table] ?? Str::studly(Str::singular($table));
         $class = $project->namespace($option->getPath()) . $class;
         $path = BASE_PATH . '/' . $project->path($class);
-
+        $primaryKey = $this->getPrimaryKey($columns);
         if (!file_exists($path)) {
             $this->mkdir($path);
-            file_put_contents($path, $this->buildClass($table, $class, $this->getPrimaryKey($columns), $option));
+            file_put_contents($path, $this->buildClass($table, $class, $primaryKey, $option));
         }
 
         $columns = $this->getColumns($class, $columns, $option->isForceCasts());
@@ -258,6 +258,7 @@ class GenerateModel
         if ($option->isWithIde()) {
             $this->generateIDE($code, $option, $data);
         }
+        return $primaryKey;
     }
 
     protected function generateIDE(string $code, ModelOption $option, ModelData $data)
@@ -282,7 +283,7 @@ class GenerateModel
         return $table === $this->config->get('databases.migrations', 'migrations');
     }
 
-    protected function createModels(ModelOption $option)
+    protected function createModels(ModelOption $option): array
     {
         $builder = $this->getSchemaBuilder($option->getPool());
         $tables = [];
@@ -294,10 +295,11 @@ class GenerateModel
                 $tables[] = $table;
             }
         }
-
+        $result = [];
         foreach ($tables as $table) {
-            $this->createModel($table, $option);
+            $result[$table] = $this->createModel($table, $option);
         }
+        return $result;
     }
 
     protected function getOption(string $key, string $pool = 'default', $default = null)
@@ -305,7 +307,7 @@ class GenerateModel
         return $this->config->get("databases.{$pool}.{$key}", $default);
     }
 
-    public function create(string $table = '', string $pool = 'default', string $path = ''): bool
+    public function create(string $table = '', string $pool = 'default', string $path = ''): array
     {
         if (empty($path)) {
             $path = $this->getOption('commands.gen:model.path', $pool, 'app/Model');
@@ -324,11 +326,12 @@ class GenerateModel
             ->setWithIde($this->getOption('commands.gen:model.with_ide', $pool, false))
             ->setVisitors($this->getOption('commands.gen:model.visitors', $pool, []))
             ->setPropertyCase($this->getOption('commands.gen:model.property_case', $pool));
+        $data = [];
         if ($table) {
-            $this->createModel($table, $option);
+            $data[$table] = $this->createModel($table, $option);
         } else {
-            $this->createModels($option);
+            $data = $this->createModels($option);
         }
-        return true;
+        return $data;
     }
 }
