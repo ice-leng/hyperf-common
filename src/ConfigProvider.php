@@ -12,12 +12,14 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common;
 
+use Hyperf\Database\MySqlConnection as HyperfMysqlConnection;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
+use Lengbin\Hyperf\Common\Component\Database\MySqlConnection;
+use Lengbin\Hyperf\Common\Component\Database\Visitor\ModelUpdateVisitor;
 use Lengbin\Hyperf\Common\Framework\Request;
 use Lengbin\Hyperf\Common\Framework\Response;
 use Hyperf\Database\Commands\Ast\ModelUpdateVisitor as Visitor;
-use Lengbin\Hyperf\Common\Framework\Visitor\ModelUpdateVisitor;
 
 class ConfigProvider
 {
@@ -27,7 +29,8 @@ class ConfigProvider
             'dependencies' => [
                 RequestInterface::class  => Request::class,
                 ResponseInterface::class => Response::class,
-                Visitor::class => ModelUpdateVisitor::class
+                Visitor::class => ModelUpdateVisitor::class,
+                HyperfMysqlConnection::class => MySqlConnection::class
             ],
             'annotations'  => [
                 'scan' => [

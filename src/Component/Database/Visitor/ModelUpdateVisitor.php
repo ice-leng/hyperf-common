@@ -1,6 +1,6 @@
 <?php
 
-namespace Lengbin\Hyperf\Common\Framework\Visitor;
+namespace Lengbin\Hyperf\Common\Component\Database\Visitor;
 
 use Hyperf\Database\Commands\Ast\ModelUpdateVisitor as Visitor;
 use Hyperf\Utils\Str;
