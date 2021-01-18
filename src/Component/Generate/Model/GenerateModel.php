@@ -227,8 +227,8 @@ class GenerateModel
         $columns = $this->formatColumns($builder->getColumnTypeListing($table));
 
         $project = new Project();
-        $class = $option->getTableMapping()[$table] ?? Str::studly(Str::singular($table));
-        $class = $project->namespace($option->getPath()) . $class;
+        $classname = $option->getTableMapping()[$table] ?? Str::studly(Str::singular($table));
+        $class = $project->namespace($option->getPath()) . $classname;
         $path = BASE_PATH . '/' . $project->path($class);
         $primaryKey = $this->getPrimaryKey($columns);
         if (!file_exists($path)) {
@@ -258,7 +258,13 @@ class GenerateModel
         if ($option->isWithIde()) {
             $this->generateIDE($code, $option, $data);
         }
-        return $primaryKey;
+
+        return [
+            'classname'  => $classname,
+            'class'      => $class,
+            'file'       => $path,
+            'primaryKey' => $primaryKey,
+        ];
     }
 
     protected function generateIDE(string $code, ModelOption $option, ModelData $data)
