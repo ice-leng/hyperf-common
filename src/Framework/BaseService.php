@@ -3,10 +3,10 @@
 namespace Lengbin\Hyperf\Common\Framework;
 
 use Hyperf\Database\Model\Builder;
+use Lengbin\Common\Component\Entity\PageEntity;
 use Lengbin\Common\Component\Sort\Sort;
 use Lengbin\Helper\Util\RegularHelper;
 use Lengbin\Helper\YiiSoft\StringHelper;
-use Lengbin\Hyperf\Common\Entity\PageEntity;
 use Lengbin\Hyperf\Common\Helper\CommonHelper;
 use Psr\Container\ContainerInterface;
 use Hyperf\Di\Annotation\Inject;
@@ -101,22 +101,17 @@ class BaseService
     }
 
     /**
-     * @param               $data
-     * @param callable|null $call
+     * @param array    $data
+     * @param callable $call
      *
      * @return array
      */
-    public function toArray(array $data, ?callable $call = null): array
+    public function toArray(array $data, callable $call): array
     {
         $item = [];
         $results = isset($data['list']) ? $data['list'] : $data;
         foreach ($results as $key => $result) {
-            $change = is_null($call) ? $result : call_user_func($call, $result);
-            if (is_null($change)) {
-                unset($item[$key]);
-            } else {
-                $item[$key] = $change;
-            }
+            $item[$key] = call_user_func($call, $result);
         }
         if (isset($data['list'])) {
             $data['list'] = $item;
@@ -124,24 +119,6 @@ class BaseService
             $data = $item;
         }
         return $data;
-    }
-
-    /**
-     * 收集数据
-     *
-     * @param array         $data
-     * @param callable|null $call
-     *
-     * @return array
-     */
-    public function collection(array $data, ?callable $call = null): array
-    {
-        $item = [];
-        $results = isset($data['list']) ? $data['list'] : $data;
-        foreach ($results as $key => $result) {
-            $item[$key] = is_null($call) ? $result : call_user_func($call, $result);
-        }
-        return $item;
     }
 
     /**
@@ -216,7 +193,7 @@ class BaseService
      *
      * @return string
      */
-    public function imageUrl($path): string
+    public function imageUrl(string $path): string
     {
         if (RegularHelper::checkUrl($path)) {
             return $path;

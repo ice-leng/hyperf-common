@@ -13,7 +13,7 @@ class Request extends BaseRequest
      *
      * @return string
      */
-    public function getClientIp($headerName = 'x-real-ip')
+    public function getClientIp($headerName = 'x-real-ip'): string
     {
         $client = $this->getServerParams();
         $clientAddress = $client['remote_addr'];

@@ -16,5 +16,5 @@ class SoftDeleted extends BaseEnum
     /**
      * @Message("删除")
      */
-    const DISABLE = 0;
+    const DISABLE = 2;
 }

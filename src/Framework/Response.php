@@ -5,19 +5,14 @@ namespace Lengbin\Hyperf\Common\Framework;
 use Hyperf\HttpServer\Response as BaseResponse;
 use Lengbin\Helper\YiiSoft\StringHelper;
 use Lengbin\Hyperf\Common\Error\CommentErrorCode;
-use Psr\Http\Message\ResponseInterface;
+use stdClass;
 
 class Response extends BaseResponse
 {
-    /**
-     * @param null $params
-     *
-     * @return ResponseInterface
-     */
     public function success($params = null)
     {
         if (StringHelper::isEmpty($params)) {
-            $params = new \stdClass();
+            $params = new stdClass();
         }
         $data = [
             "code"    => CommentErrorCode::SUCCESS,
@@ -27,17 +22,11 @@ class Response extends BaseResponse
         return $this->json($data);
     }
 
-    /**
-     * @param string $code
-     * @param string $message
-     *
-     * @return ResponseInterface
-     */
     public function fail(string $code, string $message)
     {
         $data = [
             "code"    => $code,
-            "result"  => new \stdClass(),
+            "result"  => new stdClass(),
             "message" => $message,
         ];
         return $this->json($data);

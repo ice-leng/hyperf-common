@@ -27,19 +27,11 @@ class BaseController
      */
     protected $response;
 
-    /**
-     * @param null|mixed $params
-     *
-     */
     public function success($params = null)
     {
         return $this->response->success($params);
     }
 
-    /**
-     * @param string $code
-     * @param string $message
-     */
     public function fail(string $code, string $message)
     {
         return $this->response->fail($code, $message);
