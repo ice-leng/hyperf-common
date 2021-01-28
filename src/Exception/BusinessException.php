@@ -16,12 +16,12 @@ class BusinessException extends ServerException
      */
     private $realCode;
 
-    public function __construct($code, string $message = null, \Throwable $previous = null)
+    public function __construct($code, array $replace = [], string $message = null, \Throwable $previous = null)
     {
         if (is_null($message)) {
             $config = CommonHelper::getConfig()->get('errorCode', []);
             $class = $config ? $config['classNamespace'] . '\\' . $config['classname'] : CommentErrorCode::class;
-            $message = $class::byValue($code)->getMessage();
+            $message = $class::byValue($code)->getMessage($replace);
         }
         $this->realCode = $code;
         parent::__construct($message, 0, $previous);

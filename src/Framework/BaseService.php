@@ -42,9 +42,9 @@ class BaseService
         $list = $query->forPage($pageEntity->getPage(), $pageSize)->get()->toArray();
         return [
             'list'      => $list,
+            'page'      => $pageEntity->getPage(),
             'pageSize'  => $pageSize,
             'total'     => $total,
-            'totalPage' => ceil($total / $pageSize),
         ];
     }
 
@@ -65,9 +65,9 @@ class BaseService
         $list = array_slice($params, $offset, $pageSize);
         return [
             'list'      => $list,
+            'page'      => $pageEntity->getPage(),
             'pageSize'  => $pageSize,
             'total'     => $total,
-            'totalPage' => ceil($total / $pageSize),
         ];
     }
 
