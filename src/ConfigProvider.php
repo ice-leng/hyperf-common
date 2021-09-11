@@ -13,10 +13,6 @@ declare(strict_types=1);
 namespace Lengbin\Hyperf\Common;
 
 use Hyperf\Utils\Coroutine;
-use Lengbin\Hyperf\Common\Http\Response;
-use Lengbin\Hyperf\Common\Logs\LoggerFactory;
-use Psr\Http\Message\ResponseInterface;
-use Hyperf\Contract\StdoutLoggerInterface;
 
 class ConfigProvider
 {
@@ -24,9 +20,6 @@ class ConfigProvider
     {
         return [
             'dependencies' => [
-                ResponseInterface::class                     => Response::class,
-                Hyperf\HttpServer\Response::class            => Response::class,
-                StdoutLoggerInterface::class                 => LoggerFactory::class,
             ],
             'annotations'  => [
                 'scan' => [
