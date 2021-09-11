@@ -14,9 +14,9 @@ use Throwable;
 
 abstract class AbstractException extends ServerException
 {
-    public function __construct($code, array $replace = [], string $message = null, Throwable $previous = null)
+    public function __construct($code, string $message = null, array $replace = [], Throwable $previous = null)
     {
-        if (is_null($message)) {
+        if (empty($message)) {
             $config = config('errorCode', []);
             $class = $config['classNamespace'] . '\\' . $config['classname'];
             $message = $class::byValue($code)->getMessage($replace);
