@@ -16,6 +16,6 @@ class BusinessException extends AbstractException
 {
     public function getRealCode(): string
     {
-        return sprintf('B-%d', $this->formatCode());
+        return sprintf('B-%s', $this->formatCode());
     }
 }

@@ -13,6 +13,6 @@ class FrameworkException extends AbstractException
 {
     public function getRealCode(): string
     {
-        return sprintf('F-%d', $this->formatCode());
+        return sprintf('F-%s', $this->formatCode());
     }
 }
