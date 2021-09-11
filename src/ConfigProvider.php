@@ -12,14 +12,12 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common;
 
-use Hyperf\Database\MySqlConnection as HyperfMysqlConnection;
-use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\HttpServer\Contract\ResponseInterface;
-use Lengbin\Hyperf\Common\Component\Database\MySqlConnection;
-use Lengbin\Hyperf\Common\Component\Database\Visitor\ModelUpdateVisitor;
-use Lengbin\Hyperf\Common\Framework\Request;
-use Lengbin\Hyperf\Common\Framework\Response;
-use Hyperf\Database\Commands\Ast\ModelUpdateVisitor as Visitor;
+use Hyperf\Utils\Coroutine;
+use Lengbin\Hyperf\Common\Commands\Model\ModelCommand;
+use Lengbin\Hyperf\Common\Http\Response;
+use Lengbin\Hyperf\Common\Logs\LoggerFactory;
+use Psr\Http\Message\ResponseInterface;
+use Hyperf\Contract\StdoutLoggerInterface;
 
 class ConfigProvider
 {
@@ -27,17 +25,25 @@ class ConfigProvider
     {
         return [
             'dependencies' => [
-                RequestInterface::class  => Request::class,
-                ResponseInterface::class => Response::class,
-                Visitor::class => ModelUpdateVisitor::class,
-                HyperfMysqlConnection::class => MySqlConnection::class
+                ResponseInterface::class                     => Response::class,
+                Hyperf\HttpServer\Response::class            => Response::class,
+                StdoutLoggerInterface::class                 => LoggerFactory::class,
+                Hyperf\Database\Commands\ModelCommand::class => ModelCommand::class,
             ],
             'annotations'  => [
                 'scan' => [
                     'paths' => [
                         __DIR__,
                     ],
+                    'class_map'          => [
+                        Coroutine::class => BASE_PATH . '/vendor/lengbin/hyperf-common/src/ClassMap/Coroutine.php'
+                    ],
                 ],
+            ],
+            'commands' => [
+
+            ],
+            'listeners' => [
             ],
             'publish'      => [
                 [
