@@ -11,11 +11,11 @@ declare(strict_types=1);
  */
 namespace Lengbin\Hyperf\Common\Exceptions\Handler;
 
-use App\Kernel\Exceptions\AbstractException;
-use App\Kernel\Exceptions\FrameworkException;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Lengbin\Hyperf\Common\Constants\Errors\CommentError;
+use Lengbin\Hyperf\Common\Exceptions\AbstractException;
+use Lengbin\Hyperf\Common\Exceptions\FrameworkException;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
