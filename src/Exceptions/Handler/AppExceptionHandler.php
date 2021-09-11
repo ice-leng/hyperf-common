@@ -41,6 +41,7 @@ class AppExceptionHandler extends ExceptionHandler
     public function handle(Throwable $throwable, ResponseInterface $response)
     {
         $this->logger->error(sprintf('%s[%s] in %s', $throwable->getMessage(), $throwable->getLine(), $throwable->getFile()));
+        $this->logger->error($throwable->getTraceAsString());
 
         if ($throwable instanceof AbstractException) {
             return $this->response->fail($throwable->getRealCode(), $throwable->getMessage());
@@ -50,8 +51,6 @@ class AppExceptionHandler extends ExceptionHandler
         $message = $serverError->getMessage();
         if (config('app_env', 'dev') === 'dev') {
             $message = $throwable->getTraceAsString();
-        } else {
-            $this->logger->error($throwable->getTraceAsString());
         }
 
         $systemError = new FrameworkException($serverError->getValue());
