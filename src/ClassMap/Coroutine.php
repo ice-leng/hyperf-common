@@ -18,12 +18,12 @@ declare(strict_types=1);
 
 namespace Hyperf\Utils;
 
-use App\Kernel\Log\AppendRequestIdProcessor;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Engine\Coroutine as Co;
 use Hyperf\Engine\Exception\CoroutineDestroyedException;
 use Hyperf\Engine\Exception\RunningInNonCoroutineException;
 use Hyperf\ExceptionHandler\Formatter\FormatterInterface;
+use Lengbin\Hyperf\Common\Logs\AppendRequestIdProcessor;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
