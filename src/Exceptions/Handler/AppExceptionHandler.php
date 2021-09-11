@@ -16,6 +16,7 @@ use Hyperf\ExceptionHandler\ExceptionHandler;
 use Lengbin\Hyperf\Common\Constants\Errors\CommentError;
 use Lengbin\Hyperf\Common\Exceptions\AbstractException;
 use Lengbin\Hyperf\Common\Exceptions\FrameworkException;
+use Lengbin\Hyperf\Common\Http\Response;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -26,9 +27,15 @@ class AppExceptionHandler extends ExceptionHandler
      */
     protected $logger;
 
-    public function __construct(StdoutLoggerInterface $logger)
+    /**
+     * @var Response
+     */
+    protected $response;
+
+    public function __construct(StdoutLoggerInterface $logger, Response $response)
     {
         $this->logger = $logger;
+        $this->response = $response;
     }
 
     public function handle(Throwable $throwable, ResponseInterface $response)
@@ -36,7 +43,7 @@ class AppExceptionHandler extends ExceptionHandler
         $this->logger->error(sprintf('%s[%s] in %s', $throwable->getMessage(), $throwable->getLine(), $throwable->getFile()));
 
         if ($throwable instanceof AbstractException) {
-            return $response->fail($throwable->getRealCode(), $throwable->getMessage());
+            return $this->response->fail($throwable->getRealCode(), $throwable->getMessage());
         }
 
         $serverError = CommentError::SERVER_ERROR();
@@ -48,7 +55,7 @@ class AppExceptionHandler extends ExceptionHandler
         }
 
         $systemError = new FrameworkException($serverError->getValue());
-        return $response->fail($systemError->getRealCode(), $message);
+        return $this->response->fail($systemError->getRealCode(), $message);
     }
 
     public function isValid(Throwable $throwable): bool
