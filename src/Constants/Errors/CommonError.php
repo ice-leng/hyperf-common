@@ -6,7 +6,7 @@ namespace Lengbin\Hyperf\Common\Constants\Errors;
 
 use Lengbin\Hyperf\ErrorCode\BaseEnum;
 
-class CommentError extends BaseEnum
+class CommonError extends BaseEnum
 {
     /**
      * @Message("Success")

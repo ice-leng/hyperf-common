@@ -13,7 +13,7 @@ namespace Lengbin\Hyperf\Common\Exceptions\Handler;
 
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
-use Lengbin\Hyperf\Common\Constants\Errors\CommentError;
+use Lengbin\Hyperf\Common\Constants\Errors\CommonError;
 use Lengbin\Hyperf\Common\Exceptions\AbstractException;
 use Lengbin\Hyperf\Common\Exceptions\FrameworkException;
 use Lengbin\Hyperf\Common\Http\Response;
@@ -47,7 +47,7 @@ class AppExceptionHandler extends ExceptionHandler
             return $this->response->fail($throwable->getRealCode(), $throwable->getMessage());
         }
 
-        $serverError = CommentError::SERVER_ERROR();
+        $serverError = CommonError::SERVER_ERROR();
         $message = $serverError->getMessage();
         if (config('app_env', 'dev') === 'dev') {
             $message = $throwable->getTraceAsString();
