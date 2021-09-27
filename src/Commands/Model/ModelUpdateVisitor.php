@@ -25,7 +25,7 @@ class ModelUpdateVisitor extends \Hyperf\Database\Commands\Ast\ModelUpdateVisito
             'enable',
         ];
         foreach ($this->columns as $column) {
-            if ($column['column_key'] === 'PRI' || in_array($column['column_name'], $exceptColumn)) {
+            if (in_array($column['column_name'], $exceptColumn)) {
                 continue;
             }
             $items[] = new Node\Expr\ArrayItem(new String_($column['column_name']));
