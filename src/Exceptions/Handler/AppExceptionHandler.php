@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace Lengbin\Hyperf\Common\Exceptions\Handler;
 
 use Hyperf\Contract\StdoutLoggerInterface;
@@ -43,18 +44,25 @@ class AppExceptionHandler extends ExceptionHandler
         $this->logger->error(sprintf('%s[%s] in %s', $throwable->getMessage(), $throwable->getLine(), $throwable->getFile()));
         $this->logger->error($throwable->getTraceAsString());
 
+        $message = null;
+        if (config('app_env', 'dev') === 'dev') {
+            $message = sprintf("%s: %s(%s) in %s:%s\nStack trace:\n%s",
+                get_class($throwable),
+                $throwable->getMessage(),
+                $throwable->getCode(),
+                $throwable->getFile(),
+                $throwable->getLine(),
+                $throwable->getTraceAsString()
+            );
+        }
+
         if ($throwable instanceof AbstractException) {
-            return $this->response->fail($throwable->getRealCode(), $throwable->getMessage());
+            return $this->response->fail($throwable->getRealCode(), $message ?? $throwable->getMessage());
         }
 
         $serverError = CommonError::SERVER_ERROR();
-        $message = $serverError->getMessage();
-        if (config('app_env', 'dev') === 'dev') {
-            $message = $throwable->getTraceAsString();
-        }
-
         $systemError = new FrameworkException($serverError->getValue());
-        return $this->response->fail($systemError->getRealCode(), $message);
+        return $this->response->fail($systemError->getRealCode(), $message ?? $serverError->getMessage());
     }
 
     public function isValid(Throwable $throwable): bool
