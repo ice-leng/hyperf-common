@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Kernel\Constants;
+namespace Lengbin\Hyperf\Common\Constants;
 
 use Lengbin\ErrorCode\AbstractEnum;
 
