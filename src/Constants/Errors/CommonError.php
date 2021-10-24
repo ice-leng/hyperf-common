@@ -29,7 +29,7 @@ class CommonError extends BaseEnum
     const INVALID_PARAMS = 3;
 
     /**
-     * @Message("请重新登录")
+     * @Message("登录已超时")
      */
     const TOKEN_EXPIRED = 4;
 
