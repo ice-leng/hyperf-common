@@ -54,11 +54,11 @@ abstract class BaseModel extends Model
     public static function betweenTime(Builder $model, string $field, array $data)
     {
         $model->where(function (Builder $builder) use ($field, $data) {
-            if ($data[0] > 0) {
-                $builder->where($field, '>=', $data[0]);
+            if ($data['start'] > 0) {
+                $builder->where($field, '>=', $data['start']);
             }
-            if ($data[1] > 0) {
-                $builder->where($field, '<', $data[1]);
+            if ($data['end'] > 0) {
+                $builder->where($field, '<', $data['end']);
             }
         });
     }
@@ -93,6 +93,7 @@ abstract class BaseModel extends Model
         if ($forUpdate) {
             $model->lockForUpdate();
         }
+        $model->orderByDesc(self::getKeyName());
         return $model->first($field);
     }
 
@@ -124,6 +125,7 @@ abstract class BaseModel extends Model
         if ($forUpdate) {
             $model->lockForUpdate();
         }
+        $model->orderBy(self::getKeyName());
         return $model->get($field);
     }
 
