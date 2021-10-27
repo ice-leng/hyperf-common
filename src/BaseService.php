@@ -33,7 +33,7 @@ class BaseService
      *
      * @return array
      */
-    public function output(array $data, Page $page): array
+    public function outputForArray(array $data, Page $page): array
     {
         $output = [];
         if ($page->total) {

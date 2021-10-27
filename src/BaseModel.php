@@ -72,7 +72,8 @@ abstract class BaseModel extends Model
      */
     public static function findOneCondition(array $conditions, $field = ['*'], $forUpdate = false): ?self
     {
-        $model = self::query();
+        $model = new static();
+        $query = $model->newQuery();
 
         if (count($conditions) === count($conditions, 1)) {
             foreach ($conditions as $key => $value) {
@@ -80,21 +81,21 @@ abstract class BaseModel extends Model
                     continue;
                 }
                 if (is_array($value)) {
-                    $model->whereIn($key, $value);
+                    $query->whereIn($key, $value);
                 } else {
-                    $model->where($key, $value);
+                    $query->where($key, $value);
                 }
             }
         } else {
-            $model->where($conditions);
+            $query->where($conditions);
         }
 
-        $model->where('enable', SoftDeleted::ENABLE);
+        $query->where('enable', SoftDeleted::ENABLE);
         if ($forUpdate) {
-            $model->lockForUpdate();
+            $query->lockForUpdate();
         }
-        $model->orderByDesc(self::getKeyName());
-        return $model->first($field);
+        $query->orderByDesc($model->getKeyName());
+        return $query->first($field);
     }
 
     /**
@@ -106,27 +107,28 @@ abstract class BaseModel extends Model
      */
     public static function findCondition(array $conditions, $field = ['*'], $forUpdate = false)
     {
-        $model = self::query();
+        $model = new static();
+        $query = $model->newQuery();
         if (count($conditions) === count($conditions, 1)) {
             foreach ($conditions as $key => $value) {
                 if (is_null($value)) {
                     continue;
                 }
                 if (is_array($value)) {
-                    $model->whereIn($key, $value);
+                    $query->whereIn($key, $value);
                 } else {
-                    $model->where($key, $value);
+                    $query->where($key, $value);
                 }
             }
         } else {
-            $model->where($conditions);
+            $query->where($conditions);
         }
-        $model->where('enable', SoftDeleted::ENABLE);
+        $query->where('enable', SoftDeleted::ENABLE);
         if ($forUpdate) {
-            $model->lockForUpdate();
+            $query->lockForUpdate();
         }
-        $model->orderBy(self::getKeyName());
-        return $model->get($field);
+        $query->orderBy($model->getKeyName());
+        return $query->get($field);
     }
 
     /**
