@@ -17,5 +17,5 @@ class WhetherStatus extends AbstractEnum
     /**
      * @Message("否")
      */
-    const NO = 2;
+    const NO = 0;
 }
