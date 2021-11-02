@@ -25,6 +25,11 @@ class BaseService
         return $data;
     }
 
+    protected function toJson($value)
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
     /**
      * page
      *
