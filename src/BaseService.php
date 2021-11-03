@@ -9,10 +9,29 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common;
 
+use Hyperf\Snowflake\IdGenerator\SnowflakeIdGenerator;
 use Lengbin\Common\Entity\Page;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class BaseService
 {
+
+    /**
+     * @var SnowflakeIdGenerator
+     */
+    protected SnowflakeIdGenerator $idGenerator;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher, SnowflakeIdGenerator $idGenerator)
+    {
+        $this->idGenerator = $idGenerator;
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     public function toArray($data, callable $handler)
     {
         if (is_object($data)) {
