@@ -2,6 +2,7 @@
 
 namespace Lengbin\Hyperf\Common\Helpers;
 
+use EasySwoole\HttpAnnotation\AnnotationTag\Inject;
 use Hyperf\Utils\ApplicationContext;
 use Lengbin\Common\AbstractRedisCache;
 use Hyperf\Redis\Redis;
@@ -21,9 +22,15 @@ use Hyperf\Redis\Redis;
  */
 class RedisCacheHelper extends AbstractRedisCache
 {
+    /**
+     * @Inject()
+     * @var Redis
+     */
+    protected Redis $redis;
+
     public function getRedis()
     {
-        return ApplicationContext::getContainer(Redis::class);
+        return $this->redis;
     }
 
     public function getConfig(): array
