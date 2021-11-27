@@ -2,8 +2,7 @@
 
 namespace Lengbin\Hyperf\Common\Helpers;
 
-use EasySwoole\HttpAnnotation\AnnotationTag\Inject;
-use Hyperf\Utils\ApplicationContext;
+use Hyperf\Di\Annotation\Inject;
 use Lengbin\Common\AbstractRedisCache;
 use Hyperf\Redis\Redis;
 
