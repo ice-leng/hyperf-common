@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Lengbin\Hyperf\Common;
 
 use Hyperf\Database\Model\Collection;
+use Lengbin\Helper\YiiSoft\Arrays\ArrayHelper;
 use Lengbin\Hyperf\Common\Constants\SoftDeleted;
 use Hyperf\Database\Model\Builder;
 use Hyperf\Database\Query\Expression;
@@ -109,7 +110,9 @@ abstract class BaseModel extends Model
     {
         $model = new static();
         $query = $model->newQuery();
-        if (count($conditions) === count($conditions, 1)) {
+        if (ArrayHelper::isIndexed($conditions)) {
+            $query->where($conditions);
+        } else {
             foreach ($conditions as $key => $value) {
                 if (is_null($value)) {
                     continue;
@@ -120,8 +123,6 @@ abstract class BaseModel extends Model
                     $query->where($key, $value);
                 }
             }
-        } else {
-            $query->where($conditions);
         }
         $query->where('enable', SoftDeleted::ENABLE);
         if ($forUpdate) {
