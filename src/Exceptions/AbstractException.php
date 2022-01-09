@@ -14,12 +14,18 @@ use Throwable;
 
 abstract class AbstractException extends ServerException
 {
+    private $realCode;
+
     public function __construct($code, string $message = null, array $replace = [], Throwable $previous = null)
     {
         if (empty($message)) {
             $config = config('errorCode', []);
             $class = $config['classNamespace'] . '\\' . $config['classname'];
             $message = $class::byValue($code)->getMessage($replace);
+        }
+        if (is_string($code)) {
+            $this->realCode = $code;
+            $code = 0;
         }
         parent::__construct($message, $code, $previous);
     }
@@ -28,8 +34,8 @@ abstract class AbstractException extends ServerException
 
     public function formatCode()
     {
-        if (is_string($this->code)) {
-            return $this->code;
+        if ($this->realCode) {
+            return $this->realCode;
         }
         $code = str_pad((string)$this->code, 9, "0", STR_PAD_LEFT);
         return implode('-', str_split($code, 3));
