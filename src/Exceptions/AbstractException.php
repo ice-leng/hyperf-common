@@ -28,6 +28,9 @@ abstract class AbstractException extends ServerException
 
     public function formatCode()
     {
+        if (is_string($this->code)) {
+            return $this->code;
+        }
         $code = str_pad((string)$this->code, 9, "0", STR_PAD_LEFT);
         return implode('-', str_split($code, 3));
     }
