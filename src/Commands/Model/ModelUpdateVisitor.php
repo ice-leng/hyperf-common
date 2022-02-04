@@ -57,4 +57,20 @@ class ModelUpdateVisitor extends \Hyperf\Database\Commands\Ast\ModelUpdateVisito
                 return null;
         }
     }
+
+    protected function formatPropertyType(string $type, ?string $cast): ?string
+    {
+        if (! isset($cast)) {
+            $cast = $this->formatDatabaseType($type) ?? 'string';
+        }
+
+        switch ($cast) {
+            case 'integer':
+                return 'int';
+            case 'json':
+                return 'array';
+        }
+
+        return $cast;
+    }
 }
