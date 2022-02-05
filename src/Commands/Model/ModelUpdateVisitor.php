@@ -67,6 +67,9 @@ class ModelUpdateVisitor extends \Hyperf\Database\Commands\Ast\ModelUpdateVisito
         switch ($cast) {
             case 'integer':
                 return 'int';
+            case 'date':
+            case 'datetime':
+                return $type;
             case 'json':
                 return 'array';
         }
