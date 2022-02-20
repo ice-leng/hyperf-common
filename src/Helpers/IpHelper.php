@@ -26,6 +26,12 @@ class IpHelper
     protected ClientFactory $clientFactory;
 
     /**
+     * @Inject()
+     * @var ServerRequestInterface
+     */
+    protected ServerRequestInterface $request;
+
+    /**
      * @param string $ip
      *
      * @return array
@@ -64,16 +70,16 @@ class IpHelper
      *
      * @return string
      */
-    public function getClientIp(ServerRequestInterface $request, string $headerName = 'x-real-ip'): string
+    public function getClientIp(string $headerName = 'x-real-ip'): string
     {
-        $client = $request->getServerParams();
-        $xri = $request->getHeader($headerName);
+        $client = $this->request->getServerParams();
+        $xri = $this->request->getHeader($headerName);
         if (!empty($xri)) {
             $clientAddress = $xri[0];
         } else {
             $clientAddress = $client['remote_addr'];
         }
-        $xff = $request->getHeader('x-forwarded-for');
+        $xff = $this->request->getHeader('x-forwarded-for');
         if ($clientAddress === '127.0.0.1') {
             if (!empty($xri)) {
                 // 如果有xri 则判定为前端有NGINX等代理
