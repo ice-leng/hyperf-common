@@ -32,4 +32,21 @@ class BaseMySQLDao
         $output['list'] = $query->get()->toArray();
         return $output;
     }
+
+    /**
+     * @param Builder $model
+     * @param string  $field
+     * @param array   $data [start, end]
+     */
+    public function betweenTime(Builder $model, string $field, array $data)
+    {
+        $model->where(function (Builder $builder) use ($field, $data) {
+            if ($data['start'] > 0) {
+                $builder->where($field, '>=', $data['start']);
+            }
+            if ($data['end'] > 0) {
+                $builder->where($field, '<', $data['end']);
+            }
+        });
+    }
 }
