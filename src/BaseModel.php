@@ -76,7 +76,9 @@ abstract class BaseModel extends Model
         $model = new static();
         $query = $model->newQuery();
 
-        if (count($conditions) === count($conditions, 1)) {
+        if (ArrayHelper::isIndexed($conditions)) {
+            $query->where($conditions);
+        } else {
             foreach ($conditions as $key => $value) {
                 if (is_null($value)) {
                     continue;
@@ -87,8 +89,6 @@ abstract class BaseModel extends Model
                     $query->where($key, $value);
                 }
             }
-        } else {
-            $query->where($conditions);
         }
 
         $query->where('enable', SoftDeleted::ENABLE);
