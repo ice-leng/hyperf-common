@@ -28,54 +28,15 @@ abstract class BaseModel extends Model
     protected $dateFormat = 'U';
 
     /**
-     * 删除
-     * @return bool
-     */
-    public function disable()
-    {
-        $this->enable = SoftDeleted::DISABLE;
-        return $this->save();
-    }
-
-    /**
-     * @param mixed $value
+     * @param array       $conditions
+     * @param string|null $softDeleted
      *
-     * @return string
+     * @return Builder
      */
-    public function fromDateTime($value)
-    {
-        return strval($this->asTimestamp($value));
-    }
-
-    /**
-     * @param Builder $model
-     * @param string  $field
-     * @param array   $data [start, end]
-     */
-    public static function betweenTime(Builder $model, string $field, array $data)
-    {
-        $model->where(function (Builder $builder) use ($field, $data) {
-            if ($data['start'] > 0) {
-                $builder->where($field, '>=', $data['start']);
-            }
-            if ($data['end'] > 0) {
-                $builder->where($field, '<', $data['end']);
-            }
-        });
-    }
-
-    /**
-     * @param array $conditions
-     * @param array $field
-     * @param bool  $forUpdate
-     *
-     * @return null|BaseModel|object|static
-     */
-    public static function findOneCondition(array $conditions, $field = ['*'], $forUpdate = false): ?self
+    public static function buildQuery(array $conditions, ?string $softDeleted = 'enable'): Builder
     {
         $model = new static();
         $query = $model->newQuery();
-
         if (ArrayHelper::isIndexed($conditions)) {
             $query->where($conditions);
         } else {
@@ -91,45 +52,77 @@ abstract class BaseModel extends Model
             }
         }
 
-        $query->where('enable', SoftDeleted::ENABLE);
+        if (!empty($softDeleted)) {
+            $query->where($softDeleted, SoftDeleted::ENABLE);
+        }
+
+        return $query;
+    }
+
+    /**
+     * @param array       $conditions
+     * @param array       $field
+     * @param bool        $forUpdate
+     * @param string|null $softDeleted
+     *
+     * @return null|BaseModel|object|static
+     */
+    public static function findOneCondition(array $conditions, array $field = ['*'], bool $forUpdate = false, ?string $softDeleted = 'enable'): ?self
+    {
+        $query = self::buildQuery($conditions, $softDeleted);
         if ($forUpdate) {
             $query->lockForUpdate();
         }
-        $query->orderByDesc($model->getKeyName());
         return $query->first($field);
     }
 
     /**
-     * @param array $conditions
-     * @param array $field
-     * @param bool  $forUpdate
+     * @param array       $conditions
+     * @param array       $field
+     * @param bool        $forUpdate
+     * @param string|null $softDeleted
      *
      * @return Collection|static[]
      */
-    public static function findCondition(array $conditions, $field = ['*'], $forUpdate = false)
+    public static function findCondition(array $conditions, array $field = ['*'], bool $forUpdate = false, ?string $softDeleted = 'enable')
     {
-        $model = new static();
-        $query = $model->newQuery();
-        if (ArrayHelper::isIndexed($conditions)) {
-            $query->where($conditions);
-        } else {
-            foreach ($conditions as $key => $value) {
-                if (is_null($value)) {
-                    continue;
-                }
-                if (is_array($value)) {
-                    $query->whereIn($key, $value);
-                } else {
-                    $query->where($key, $value);
-                }
-            }
-        }
-        $query->where('enable', SoftDeleted::ENABLE);
+        $query = self::buildQuery($conditions, $softDeleted);
         if ($forUpdate) {
             $query->lockForUpdate();
         }
-        $query->orderBy($model->getKeyName());
         return $query->get($field);
+    }
+
+    /**
+     * @param array       $condition
+     * @param array       $data
+     * @param string|null $softDeleted
+     *
+     * @return int
+     */
+    public static function updateCondition(array $condition, array $data, ?string $softDeleted = 'enable'): int
+    {
+        $query = static::buildQuery($condition);
+        return $query->update($data);
+    }
+
+    /**
+     * @param array       $condition
+     * @param bool        $forceDelete
+     * @param string|null $softDeleted
+     *
+     * @return int
+     */
+    public static function removeCondition(array $condition, bool $forceDelete = false, ?string $softDeleted = 'enable'): int
+    {
+        $query = static::buildQuery($condition, $softDeleted);
+        if ($forceDelete) {
+            return $query->delete();
+        } else {
+            return $query->update([
+                $softDeleted => SoftDeleted::DISABLE,
+            ]);
+        }
     }
 
     /**
@@ -198,8 +191,18 @@ abstract class BaseModel extends Model
         }));
     }
 
-    protected function asJson($value)
+    protected function asJson($value): string
     {
         return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return string
+     */
+    public function fromDateTime($value): string
+    {
+        return strval($this->asTimestamp($value));
     }
 }
