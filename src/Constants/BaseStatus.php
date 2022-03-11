@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Lengbin\Hyperf\Common\Constants;
 
 use Lengbin\ErrorCode\AbstractEnum;
+use Lengbin\ErrorCode\Annotation\EnumMessage;
 
 /**
  * 基础状态
@@ -19,10 +20,12 @@ class BaseStatus extends AbstractEnum
     /**
      * @Message("禁用")
      */
+    #[EnumMessage("禁用")]
     const FROZEN = 0;
 
     /**
      * @Message("正常")
      */
+    #[EnumMessage("正常")]
     const NORMAL = 1;
 }
