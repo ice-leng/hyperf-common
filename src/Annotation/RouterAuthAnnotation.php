@@ -21,4 +21,10 @@ class RouterAuthAnnotation extends AbstractAnnotation
 
     // 是否为白名单， 走auth验证，如果不存在token不报错
     public bool $isWhitelist = false;
+
+    public function __construct(bool $isPublic = false, bool $isWhitelist = false)
+    {
+        $this->isPublic = $isPublic;
+        $this->isWhitelist = $isWhitelist;
+    }
 }

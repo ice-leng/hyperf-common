@@ -30,15 +30,28 @@ class ModelCommand extends BaseModelCommand
         return $primaryKey;
     }
 
+    protected function getOptionPath(string $table, ModelOption $option): string
+    {
+        $isOpenDdd = $this->getOption('path', 'commands.gen:model.for_table_ddd', $option->getPool(), false);
+        if (!$isOpenDdd) {
+            return $option->getPath();
+        }
+        $module = ucwords(Str::before($table, '_'));
+        $paths = explode('/', $option->getPath());
+        array_splice($paths, 1, 0,  [$module]);
+        return implode('/', $paths);
+    }
+
     protected function createModel(string $table, ModelOption $option)
     {
         $builder = $this->getSchemaBuilder($option->getPool());
         $table = Str::replaceFirst($option->getPrefix(), '', $table);
-        $columns = $this->formatColumns($builder->getColumnTypeListing($table));
+        $optionPath = $this->getOptionPath($table, $option);
 
+        $columns = $this->formatColumns($builder->getColumnTypeListing($table));
         $project = new Project();
         $class = $option->getTableMapping()[$table] ?? Str::studly(Str::singular($table));
-        $class = $project->namespace($option->getPath()) . $class;
+        $class = $project->namespace($optionPath) . $class;
         $path = BASE_PATH . '/' . $project->path($class);
 
         if (! file_exists($path)) {
@@ -47,6 +60,13 @@ class ModelCommand extends BaseModelCommand
         }
 
         $columns = $this->getColumns($class, $columns, $option->isForceCasts());
+        foreach ($columns as $key => $value) {
+            $columns[$key]['cast'] = $casts[$value['column_name']] ?? null;
+            if ($value['column_name'] === 'version') {
+                $value['cast'] = 'version';
+                $columns[$key] = $value;
+            }
+        }
 
         $stms = $this->astParser->parse(file_get_contents($path));
         $traverser = new NodeTraverser();
