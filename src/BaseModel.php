@@ -28,69 +28,48 @@ abstract class BaseModel extends Model
     protected $dateFormat = 'U';
 
     /**
-     * @param array       $conditions
-     * @param string|null $softDeleted
+     * @param array $conditions
+     * @param bool  $excludePk
      *
      * @return Builder
      */
-    public static function buildQuery(array $conditions, ?string $softDeleted = 'enable'): Builder
+    public static function buildQuery(array $conditions, bool $forExcludePk = false): Builder
     {
         $model = new static();
         $query = $model->newQuery();
+
         if (ArrayHelper::isIndexed($conditions)) {
             $query->where($conditions);
         } else {
             foreach ($conditions as $key => $value) {
-                if (is_null($value)) {
+                if (is_null($value) || !in_array($key, $model->getFillable())) {
                     continue;
                 }
+                $excludePk = $forExcludePk && $key == $model->getKeyName();
                 if (is_array($value)) {
-                    $query->whereIn($key, $value);
+                    $excludePk ? $query->whereNotIn($key, $value) : $query->whereIn($key, $value);
                 } else {
-                    $query->where($key, $value);
+                    $excludePk ? $query->where($key, '!=', $value) : $query->where($key, $value);
                 }
             }
         }
-
-        if (!empty($softDeleted)) {
-            $query->where($softDeleted, SoftDeleted::ENABLE);
-        }
-
         return $query;
     }
 
     /**
-     * @param array       $conditions
-     * @param array       $field
-     * @param bool        $forUpdate
-     * @param string|null $softDeleted
+     * @param array $conditions
+     * @param array $field
+     * @param bool  $forUpdate
      *
      * @return null|BaseModel|object|static
      */
-    public static function findOneCondition(array $conditions, array $field = ['*'], bool $forUpdate = false, ?string $softDeleted = 'enable'): ?self
+    public static function findOne(array $conditions, array $field = ['*'], bool $forExcludePk = false, bool $forUpdate = false): ?self
     {
-        $query = self::buildQuery($conditions, $softDeleted);
+        $query = self::buildQuery($conditions, $forExcludePk);
         if ($forUpdate) {
             $query->lockForUpdate();
         }
         return $query->first($field);
-    }
-
-    /**
-     * @param array       $conditions
-     * @param array       $field
-     * @param bool        $forUpdate
-     * @param string|null $softDeleted
-     *
-     * @return Collection|static[]
-     */
-    public static function findCondition(array $conditions, array $field = ['*'], bool $forUpdate = false, ?string $softDeleted = 'enable')
-    {
-        $query = self::buildQuery($conditions, $softDeleted);
-        if ($forUpdate) {
-            $query->lockForUpdate();
-        }
-        return $query->get($field);
     }
 
     /**
@@ -100,7 +79,7 @@ abstract class BaseModel extends Model
      *
      * @return int
      */
-    public static function updateCondition(array $condition, array $data, ?string $softDeleted = 'enable'): int
+    public static function updateCondition(array $condition, array $data): int
     {
         $query = static::buildQuery($condition);
         return $query->update($data);
@@ -113,9 +92,9 @@ abstract class BaseModel extends Model
      *
      * @return int
      */
-    public static function removeCondition(array $condition, bool $forceDelete = false, ?string $softDeleted = 'enable'): int
+    public static function removeCondition(array $condition, bool $forceDelete = false, string $softDeleted = 'enable'): int
     {
-        $query = static::buildQuery($condition, $softDeleted);
+        $query = static::buildQuery($condition);
         if ($forceDelete) {
             return $query->delete();
         } else {
@@ -204,5 +183,14 @@ abstract class BaseModel extends Model
     public function fromDateTime($value): string
     {
         return strval($this->asTimestamp($value));
+    }
+
+    public function getTableName(bool $isTablePrefix = false): string
+    {
+        $tableName = $this->getTable();
+        if ($isTablePrefix) {
+            $tableName = $this->getConnection()->getTablePrefix() . $tableName;
+        }
+        return $tableName;
     }
 }

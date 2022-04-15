@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Lengbin\Hyperf\Common;
 
 use Hyperf\Database\Model\Builder;
-use Hyperf\DbConnection\Db;
 use Lengbin\Common\Entity\Page;
 
 class BaseMySQLDao
@@ -19,8 +18,7 @@ class BaseMySQLDao
     {
         $output = [];
         if ($page->total) {
-            $sql = sprintf("select count(*) as count from (%s) as b", $query->toSql());
-            $output['total'] = Db::selectOne($sql, $query->getBindings())->count;
+            $output['total'] = $query->count();
         }
 
         if (!$page->all) {
@@ -38,9 +36,9 @@ class BaseMySQLDao
      * @param string  $field
      * @param array   $data [start, end]
      */
-    public function betweenTime(Builder $model, string $field, array $data)
+    public function betweenTime(Builder $query, string $field, array $data): Builder
     {
-        $model->where(function (Builder $builder) use ($field, $data) {
+        $query->where(function (Builder $builder) use ($field, $data) {
             if ($data['start'] > 0) {
                 $builder->where($field, '>=', $data['start']);
             }
@@ -48,5 +46,7 @@ class BaseMySQLDao
                 $builder->where($field, '<', $data['end']);
             }
         });
+
+        return $query;
     }
 }
