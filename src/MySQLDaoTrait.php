@@ -97,10 +97,10 @@ trait MySQLDaoTrait
         return $this->modelClass()::updateCondition($search, $data);
     }
 
-    public function remove(array $condition, array $search, string $softDeleted = 'enable'): int
+    public function remove(array $search, array $condition = [], string $softDeleted = 'enable'): int
     {
         $forceDelete = boolval($condition['for_delete'] ?? false);
-        return $this->modelClass()::removeCondition($search, $forceDelete);
+        return $this->modelClass()::removeCondition($search, $forceDelete, $softDeleted);
     }
 
     public function detail(array $condition, array $search, array $field = ['*']): array
