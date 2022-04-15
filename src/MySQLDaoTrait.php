@@ -19,7 +19,6 @@ trait MySQLDaoTrait
 
     abstract protected function handleSearch(Builder $query, array $search, array $condition): Builder;
 
-
     public function getList(array $condition, array $search, array $sort, Page $page, array $field = ['*']): array
     {
         $query = $this->modelClass()::buildQuery($search);
@@ -79,7 +78,7 @@ trait MySQLDaoTrait
         return $data;
     }
 
-    public function create(array $condition, array $data): array
+    public function create(array $data, array $condition = []): array
     {
         if (ArrayHelper::isValidValue($condition, 'for_insert')) {
             return $this->batchInsert($data);
