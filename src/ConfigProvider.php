@@ -14,9 +14,7 @@ namespace Lengbin\Hyperf\Common;
 
 use Hyperf\Utils\Coroutine;
 use Lengbin\Hyperf\Common\Http\Response;
-use Lengbin\Hyperf\Common\Logs\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
-use Hyperf\Contract\StdoutLoggerInterface;
 
 class ConfigProvider
 {
@@ -24,16 +22,15 @@ class ConfigProvider
     {
         return [
             'dependencies' => [
-                ResponseInterface::class                     => Response::class,
-                Hyperf\HttpServer\Response::class            => Response::class,
-                StdoutLoggerInterface::class                 => LoggerFactory::class,
+                ResponseInterface::class => Response::class,
+                Hyperf\HttpServer\Response::class => Response::class,
             ],
-            'annotations'  => [
+            'annotations' => [
                 'scan' => [
                     'paths' => [
                         __DIR__,
                     ],
-                    'class_map'          => [
+                    'class_map' => [
                         Coroutine::class => BASE_PATH . '/vendor/lengbin/hyperf-common/src/ClassMap/Coroutine.php'
                     ],
                 ],
@@ -43,9 +40,9 @@ class ConfigProvider
             ],
             'listeners' => [
             ],
-            'publish'      => [
+            'publish' => [
                 [
-                    'id'          => 'common',
+                    'id' => 'common',
                     'description' => 'The config for common.',
                 ],
             ],

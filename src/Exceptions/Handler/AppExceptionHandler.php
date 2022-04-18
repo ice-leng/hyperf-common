@@ -18,7 +18,6 @@ use Lengbin\Hyperf\Common\Constants\Errors\CommonError;
 use Lengbin\Hyperf\Common\Exceptions\AbstractException;
 use Lengbin\Hyperf\Common\Exceptions\FrameworkException;
 use Lengbin\Hyperf\Common\Http\Response;
-use Lengbin\Hyperf\Common\Logs\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -51,7 +50,7 @@ class AppExceptionHandler extends ExceptionHandler
             $throwable->getLine(),
             $throwable->getTraceAsString()
         );
-        $this->logger->debug($msg);
+        $this->logger->error($msg);
 
         $message = null;
         if (config('app_env', 'dev') === 'dev') {
