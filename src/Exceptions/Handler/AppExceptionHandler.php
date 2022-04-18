@@ -12,20 +12,19 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common\Exceptions\Handler;
 
+use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
-use Hyperf\Logger\LoggerFactory;
 use Lengbin\Hyperf\Common\Constants\Errors\CommonError;
 use Lengbin\Hyperf\Common\Exceptions\AbstractException;
 use Lengbin\Hyperf\Common\Exceptions\FrameworkException;
 use Lengbin\Hyperf\Common\Http\Response;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerInterface;
 use Throwable;
 
 class AppExceptionHandler extends ExceptionHandler
 {
     /**
-     * @var LoggerInterface
+     * @var StdoutLoggerInterface
      */
     protected $logger;
 
@@ -34,9 +33,9 @@ class AppExceptionHandler extends ExceptionHandler
      */
     protected $response;
 
-    public function __construct(LoggerFactory $logger, Response $response)
+    public function __construct(StdoutLoggerInterface $logger, Response $response)
     {
-        $this->logger = $logger->get('throw-error');
+        $this->logger = $logger;
         $this->response = $response;
     }
 
