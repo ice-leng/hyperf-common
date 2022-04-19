@@ -49,7 +49,7 @@ trait MySQLDaoTrait
         $now = time();
         foreach ($data as $key => $item) {
             foreach ($columns as $column) {
-                if (!ArrayHelper::isValidValue($item, $column)) {
+                if (!ArrayHelper::keyExists($item, $column)) {
                     $item[$column] = $now;
                 }
             }
@@ -80,10 +80,10 @@ trait MySQLDaoTrait
 
     public function create(array $data, array $condition = []): array
     {
-        if (ArrayHelper::isValidValue($condition, 'for_insert')) {
+        if (ArrayHelper::isValidValue($condition, '_insert')) {
             return $this->batchInsert($data);
         }
-        if (ArrayHelper::isValidValue($condition, 'for_update')) {
+        if (ArrayHelper::isValidValue($condition, '_update')) {
             return $this->batchUpdate($data);
         }
 
@@ -99,14 +99,14 @@ trait MySQLDaoTrait
 
     public function remove(array $search, array $condition = [], string $softDeleted = 'enable'): int
     {
-        $forceDelete = boolval($condition['for_delete'] ?? false);
+        $forceDelete = boolval($condition['_delete'] ?? false);
         return $this->modelClass()::removeCondition($search, $forceDelete, $softDeleted);
     }
 
     public function detail(array $condition, array $search, array $field = ['*']): array
     {
-        $forUpdate = boolval($condition['for_update'] ?? false);
-        $forExcludePk = boolval($condition['for_exclude_pk'] ?? false);
+        $forUpdate = boolval($condition['_forUpdate'] ?? false);
+        $forExcludePk = boolval($condition['_excludePk'] ?? false);
         $model = $this->modelClass()::findOne($search, $field, $forExcludePk, $forUpdate);
         if (!$model) {
             return [];
