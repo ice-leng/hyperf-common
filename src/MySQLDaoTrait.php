@@ -106,7 +106,7 @@ trait MySQLDaoTrait
     public function detail(array $condition, array $search, array $field = ['*']): array
     {
         $forUpdate = boolval($condition['_forUpdate'] ?? false);
-        $forExcludePk = boolval($condition['_excludePk'] ?? false);
+        $forExcludePk = boolval($condition['_exceptPk'] ?? false);
         $model = $this->modelClass()::findOne($search, $field, $forExcludePk, $forUpdate);
         if (!$model) {
             return [];
