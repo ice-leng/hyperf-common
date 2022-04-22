@@ -30,7 +30,7 @@ class ControllerGenerator extends ApplicationGenerator
                 lcfirst($this->config->version),
                 $application
             ],
-            explode('/', Str::snake($this->modelInfo->module, '/'))
+            explode('/', Str::snake($this->modelInfo->name, '/'))
         );
         $uri = implode('/', array_filter($url));
 
