@@ -78,7 +78,7 @@ trait MySQLDaoTrait
         return $data;
     }
 
-    public function create(array $condition = [], array $data = []): array
+    public function create(array $condition, array $data): array
     {
         if (empty($data)) {
             return [];
@@ -101,7 +101,7 @@ trait MySQLDaoTrait
         return $this->modelClass()::updateCondition($search, $data);
     }
 
-    public function remove(array $condition = [], array $search = [], string $softDeleted = 'enable'): int
+    public function remove(array $condition, array $search, string $softDeleted = 'enable'): int
     {
         if (empty($search)) {
             return 0;
