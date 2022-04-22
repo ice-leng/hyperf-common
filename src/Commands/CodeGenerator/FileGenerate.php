@@ -6,6 +6,7 @@ namespace Lengbin\Hyperf\Common\Commands\CodeGenerator;
 
 use Hyperf\ApiDocs\Annotation\ApiModelProperty;
 use Hyperf\DTO\Annotation\Validation\Required;
+use Hyperf\Utils\Str;
 use Lengbin\Common\BaseObject;
 use Lengbin\Helper\YiiSoft\StringHelper;
 use Lengbin\PhpGenerator\GenerateClass;
@@ -89,11 +90,13 @@ class FileGenerate
 
     protected function getProperty($column): array
     {
+        $name = Str::camel($column['column_name']);
+
         $type = $this->formatPropertyType($column['data_type'], $column['cast'] ?? null);
 
         $comment = $column['column_comment'] ?? '';
 
-        return [$column['column_name'], $type, $comment];
+        return [$this->all ? $column['column_name'] : $name, $type, $comment];
     }
 
     protected function formatDatabaseType(string $type): ?string
