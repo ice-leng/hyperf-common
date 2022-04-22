@@ -19,10 +19,11 @@ abstract class ApplicationGenerator extends AbstractGenerator
                 } else {
                     if (str_starts_with($key, 'entity_')) {
                         foreach ($result as $k => $v) {
+                            if ($v instanceof ClassInfo) {
+                                $context[$k] = $v;
+                            }
                             if (is_array($v)) {
                                 $context[$k] = $v[$application] ?? [];
-                            } else {
-                                $context[$k] = $v;
                             }
                         }
                     } else {
