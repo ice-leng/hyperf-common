@@ -78,8 +78,12 @@ trait MySQLDaoTrait
         return $data;
     }
 
-    public function create(array $data, array $condition = []): array
+    public function create(array $condition = [], array $data = []): array
     {
+        if (empty($data)) {
+            return [];
+        }
+
         if (ArrayHelper::isValidValue($condition, '_insert')) {
             return $this->batchInsert($data);
         }
@@ -97,8 +101,11 @@ trait MySQLDaoTrait
         return $this->modelClass()::updateCondition($search, $data);
     }
 
-    public function remove(array $search, array $condition = [], string $softDeleted = 'enable'): int
+    public function remove(array $condition = [], array $search = [], string $softDeleted = 'enable'): int
     {
+        if (empty($search)) {
+            return 0;
+        }
         $forceDelete = boolval($condition['_delete'] ?? false);
         return $this->modelClass()::removeCondition($search, $forceDelete, $softDeleted);
     }
