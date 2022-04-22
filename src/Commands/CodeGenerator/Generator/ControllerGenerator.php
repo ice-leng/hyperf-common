@@ -27,9 +27,9 @@ class ControllerGenerator extends ApplicationGenerator
         $application = $results['_application'];
         $url = array_merge(
             explode('/', $this->config->url), [
-                lcfirst($this->config->version),
-                $application
-            ],
+            lcfirst($this->config->version),
+            $application
+        ],
             explode('/', Str::snake($this->modelInfo->name, '/'))
         );
         $uri = implode('/', array_filter($url));
@@ -56,6 +56,7 @@ class ControllerGenerator extends ApplicationGenerator
             ])
             ->replace($stub, '%Middleware%', ucfirst($application))
             ->replace($stub, '%URI%', $uri)
+            ->replace($stub, '%TITLE%', ucfirst($application) . '-' . $this->modelInfo->comment)
             ->replace($stub, '%MESSAGE%', $this->modelInfo->comment)
             ->replace($stub, '%LOGIC%', $logic->name)
             ->replace($stub, '%LOGIC_NAME%', lcfirst($logic->name))

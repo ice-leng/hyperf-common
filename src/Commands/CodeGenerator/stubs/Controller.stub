@@ -16,7 +16,7 @@ use Hyperf\HttpServer\Annotation\PostMapping;
 use Lengbin\Hyperf\Common\BaseController;
 %USES%
 #[Controller(prefix: "%URI%")]
-#[Api(tags: "%MESSAGE%管理")]
+#[Api(tags: "%TITLE%管理")]
 #[Middleware(%Middleware%Middleware::class)]
 #[ApiHeader(name: 'Authorization')]
 class %CLASS% extends BaseController
