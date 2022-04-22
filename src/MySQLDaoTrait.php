@@ -15,6 +15,8 @@ use Lengbin\Helper\YiiSoft\Arrays\ArrayHelper;
 
 trait MySQLDaoTrait
 {
+    protected string $softDeleted = 'enable';
+
     abstract public function modelClass(): string;
 
     abstract protected function handleSearch(Builder $query, array $search, array $condition): Builder;
@@ -101,13 +103,13 @@ trait MySQLDaoTrait
         return $this->modelClass()::updateCondition($search, $data);
     }
 
-    public function remove(array $condition, array $search, string $softDeleted = 'enable'): int
+    public function remove(array $condition, array $search): int
     {
         if (empty($search)) {
             return 0;
         }
         $forceDelete = boolval($condition['_delete'] ?? false);
-        return $this->modelClass()::removeCondition($search, $forceDelete, $softDeleted);
+        return $this->modelClass()::removeCondition($search, $forceDelete, $this->softDeleted);
     }
 
     public function detail(array $condition, array $search, array $field = ['*']): array
