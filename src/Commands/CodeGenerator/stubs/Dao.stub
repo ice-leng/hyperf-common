@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace %NAMESPACE%;
+
+use Hyperf\Database\Model\Builder;
+use Lengbin\Hyperf\Common\BaseMySQLDao;
+use Lengbin\Hyperf\Common\MySQLDaoTrait;
+%USES%
+class %CLASS% extends BaseMySQLDao implements %INHERITANCE%
+{
+    use MySQLDaoTrait;
+
+    public function modelClass(): string
+    {
+        return %MODEL%::class;
+    }
+
+    protected function handleSearch(Builder $query, array $search, array $condition): Builder
+    {
+        return $query;
+    }
+}

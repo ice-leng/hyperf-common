@@ -1,0 +1,49 @@
+<?php
+
+declare(strict_types=1);
+
+namespace %NAMESPACE%;
+
+use App\Common\Entity\Response\BaseSuccessResponse;
+use Hyperf\Di\Annotation\Inject;
+use Lengbin\Hyperf\Common\BaseService;
+%USES%
+class %CLASS% extends BaseService
+{
+    #[Inject()]
+    protected %SERVICE% $%SERVICE_NAME%;
+
+    public function getList(%LIST_REQUEST% $request): %LIST_RESPONSE%
+    {
+        $result = $this->%SERVICE_NAME%->getList($request->condition->toArray(), $request->search->toArray(), $request->sort->toArray(), $request->page, [
+
+        ]);
+        return new %LIST_RESPONSE%($result);
+    }
+
+    public function create(%CREAT_REQUEST% $request): BaseSuccessResponse
+    {
+        $this->%SERVICE_NAME%->create([], $request->data->toArray());
+        return new BaseSuccessResponse();
+    }
+
+    public function modify(%MODIFY_REQUEST% $request): BaseSuccessResponse
+    {
+        $this->%SERVICE_NAME%->modify([], $request->search->toArray(), $request->data->toArray());
+        return new BaseSuccessResponse();
+    }
+
+    public function remove(%REMOVE_REQUEST% $request): BaseSuccessResponse
+    {
+        $this->%SERVICE_NAME%->remove([], $request->search->toArray());
+        return new BaseSuccessResponse();
+    }
+
+    public function detail(%DETAIL_REQUEST% $request): %DETAIL_RESPONSE%
+    {
+        $result = $this->%SERVICE_NAME%->detail($request->condition->toArray(), $request->search->toArray(), [
+
+        ]);
+        return new %DETAIL_RESPONSE%($result);
+    }
+}
