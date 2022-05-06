@@ -49,7 +49,7 @@ class AppExceptionHandler extends ExceptionHandler
             $throwable->getLine(),
             $throwable->getTraceAsString()
         );
-        $this->logger->debug($msg);
+        $this->logger->error($msg);
 
         $message = null;
         if (config('app_env', 'dev') === 'dev') {
