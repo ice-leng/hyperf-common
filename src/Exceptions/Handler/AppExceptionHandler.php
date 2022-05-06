@@ -41,13 +41,12 @@ class AppExceptionHandler extends ExceptionHandler
 
     public function handle(Throwable $throwable, ResponseInterface $response)
     {
-        $msg = sprintf("%s: %s(%s) in %s:%s\nStack trace:\n%s",
+        $msg = sprintf("%s: %s(%s) in %s:%s",
             get_class($throwable),
             $throwable->getMessage(),
             $throwable->getCode(),
             $throwable->getFile(),
-            $throwable->getLine(),
-            $throwable->getTraceAsString()
+            $throwable->getLine()
         );
         $this->logger->error($msg);
 
