@@ -76,7 +76,7 @@ abstract class BaseModel extends Model
         $model = new static();
         $query = $model->newQuery();
 
-        if (ArrayHelper::isIndexed($conditions)) {
+        if (!ArrayHelper::isIndexed($conditions)) {
             $query->where($conditions);
         } else {
             foreach ($conditions as $key => $value) {
@@ -110,7 +110,7 @@ abstract class BaseModel extends Model
     {
         $model = new static();
         $query = $model->newQuery();
-        if (ArrayHelper::isIndexed($conditions)) {
+        if (!ArrayHelper::isIndexed($conditions)) {
             $query->where($conditions);
         } else {
             foreach ($conditions as $key => $value) {
