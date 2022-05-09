@@ -39,6 +39,8 @@ abstract class BaseModel extends Model
         $query = $model->newQuery();
 
         if (ArrayHelper::isIndexed($conditions)) {
+            $query->where($conditions);
+        } else {
             foreach ($conditions as $key => $value) {
                 if (is_null($value) || !in_array($key, $model->getFillable())) {
                     continue;
@@ -50,8 +52,6 @@ abstract class BaseModel extends Model
                     $excludePk ? $query->where($key, '!=', $value) : $query->where($key, $value);
                 }
             }
-        } else {
-            $query->where($conditions);
         }
         return $query;
     }
