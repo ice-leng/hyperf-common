@@ -22,7 +22,6 @@ class ModelUpdateVisitor extends \Hyperf\Database\Commands\Ast\ModelUpdateVisito
         $exceptColumn = [
             'create_at',
             'update_at',
-            'enable',
         ];
         foreach ($this->columns as $column) {
             if (in_array($column['column_name'], $exceptColumn)) {
