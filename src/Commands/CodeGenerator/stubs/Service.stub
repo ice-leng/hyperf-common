@@ -55,7 +55,7 @@ class %CLASS% extends BaseService implements %INHERITANCE%
     public function create(array $condition, array $data): array
     {
         $data = $this->validate($condition, $data);
-        $result = $this->%DAO_NAME%->create($data, $condition);
+        $result = $this->%DAO_NAME%->create($condition, $data);
         if (!$result && ArrayHelper::isValidValue($condition, '_notThrow')) {
             throw new BusinessException(%ERROR%::CREATE_ERROR);
         }
@@ -92,7 +92,7 @@ class %CLASS% extends BaseService implements %INHERITANCE%
      */
     public function remove(array $condition, array $search): int
     {
-        $result = $this->%DAO_NAME%->remove($search, $condition);
+        $result = $this->%DAO_NAME%->remove($condition, $search);
         if (!$result && ArrayHelper::isValidValue($condition, '_notThrow')) {
             throw new BusinessException(%ERROR%::DELETE_ERROR);
         }
