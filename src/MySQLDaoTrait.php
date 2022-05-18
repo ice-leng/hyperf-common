@@ -41,7 +41,7 @@ trait MySQLDaoTrait
             $query->orderBy($column, $sortType);
         }
 
-        $model = new $this->modelClass();
+        $model = make($this->modelClass());
         $query->orderBy("{$model->getTableName()}.{$model->getKeyName()}");
         return $this->output($this->handleSearch($query, $search, $condition), $page);
     }
@@ -93,7 +93,7 @@ trait MySQLDaoTrait
             return $this->batchUpdate($data);
         }
 
-        $model = (new $this->modelClass())->fill($data);
+        $model = (make($this->modelClass()))->fill($data);
         $ret = $model->save();
         return $ret ? $model->toArray() : [];
     }
