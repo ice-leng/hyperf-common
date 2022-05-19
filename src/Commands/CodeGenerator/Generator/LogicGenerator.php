@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common\Commands\CodeGenerator\Generator;
 
+use Lengbin\Helper\YiiSoft\Arrays\ArrayHelper;
+use Lengbin\Helper\YiiSoft\VarDumper;
 use Lengbin\Hyperf\Common\Commands\CodeGenerator\ClassInfo;
 
 class LogicGenerator extends ApplicationGenerator
@@ -30,6 +32,8 @@ class LogicGenerator extends ApplicationGenerator
         $responseDetail = $results['responseDetail'];
         $requestModify = $results['requestModify'];
         $requestRemove = $results['requestRemove'];
+        $filed = ArrayHelper::get($this->modelInfo->columns, '*.column_name');
+
         $this->replaceNamespace($stub, $class->namespace)
             ->replaceClass($stub, $class->name)
             ->replaceUses($stub, [
@@ -50,7 +54,8 @@ class LogicGenerator extends ApplicationGenerator
             ->replace($stub, '%MODIFY_REQUEST%', $requestModify->name)
             ->replace($stub, '%DETAIL_REQUEST%', $requestDetail->name)
             ->replace($stub, '%DETAIL_RESPONSE%', $responseDetail->name)
-            ->replace($stub, '%REMOVE_REQUEST%', $requestRemove->name);
+            ->replace($stub, '%REMOVE_REQUEST%', $requestRemove->name)
+            ->replace($stub, '%FILED%', VarDumper::export($filed));
         return $stub;
     }
 }

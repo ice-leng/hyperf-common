@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace %NAMESPACE%;
 
-use Lengbin\Hyperf\Common\Entity\Response\BaseSuccessResponse;
 use Hyperf\ApiDocs\Annotation\Api;
 use Hyperf\ApiDocs\Annotation\ApiHeader;
 use Hyperf\ApiDocs\Annotation\ApiOperation;
@@ -14,6 +13,7 @@ use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middleware;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Lengbin\Hyperf\Common\BaseController;
+use Lengbin\Hyperf\Common\Entity\Response\BaseSuccessResponse;
 %USES%
 #[Controller(prefix: "%URI%")]
 #[Api(tags: "%TITLE%管理")]

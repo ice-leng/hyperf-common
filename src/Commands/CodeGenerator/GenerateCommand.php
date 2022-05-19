@@ -165,6 +165,7 @@ class GenerateCommand extends HyperfCommand
 
     protected function removeRequest(array $condition): Vertex
     {
+        $requestCondition = Vertex::of(new GeneratorCondition($condition), 'requestCondition');
         $requestSearch = Vertex::of(new GeneratorSearch($condition), 'requestSearch');
         $requestRemoveSearch = Vertex::of(new GeneratorRemoveSearch($condition), 'requestRemoveSearch');
         $requestRemove = Vertex::of(new GeneratorRemoveRequest($condition), 'requestRemove');
@@ -173,7 +174,9 @@ class GenerateCommand extends HyperfCommand
         $dagRequestRemove->addVertex($requestRemove)
             ->addVertex($requestSearch)
             ->addVertex($requestRemoveSearch)
+            ->addVertex($requestCondition)
             ->addEdge($requestSearch, $requestRemoveSearch)
+            ->addEdge($requestCondition, $requestRemove)
             ->addEdge($requestRemoveSearch, $requestRemove);
         return Vertex::of($dagRequestRemove, 'entity_remove');
     }
