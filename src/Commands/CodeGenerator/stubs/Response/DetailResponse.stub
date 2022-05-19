@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace %NAMESPACE%;
 
 use Hyperf\ApiDocs\Annotation\ApiModelProperty;
-use Lengbin\Common\BaseObject;
 
 class %CLASS% extends %INHERITANCE%
 {

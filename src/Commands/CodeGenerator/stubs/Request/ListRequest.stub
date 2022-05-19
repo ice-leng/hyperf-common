@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace %NAMESPACE%;
 
-use App\Common\Entity\Request\BaseSort;
+use Lengbin\Hyperf\Common\Entity\Request\BaseSort;
 use Hyperf\ApiDocs\Annotation\ApiModelProperty;
 use Lengbin\Common\BaseObject;
 use Lengbin\Common\Entity\Page;

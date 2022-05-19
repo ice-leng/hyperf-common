@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace %NAMESPACE%;
 
-use App\Common\Entity\Response\BaseSuccessResponse;
+use Lengbin\Hyperf\Common\Entity\Response\BaseSuccessResponse;
 use Hyperf\ApiDocs\Annotation\Api;
 use Hyperf\ApiDocs\Annotation\ApiHeader;
 use Hyperf\ApiDocs\Annotation\ApiOperation;

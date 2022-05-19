@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace %NAMESPACE%;
 
 use Hyperf\ApiDocs\Annotation\ApiModelProperty;
-use App\Common\Entity\Request\BaseCondition;
+use Lengbin\Hyperf\Common\Entity\Request\BaseCondition;
 
 class %CLASS% extends BaseCondition
 {
