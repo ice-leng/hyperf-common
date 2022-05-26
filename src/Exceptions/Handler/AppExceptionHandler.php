@@ -14,6 +14,7 @@ namespace Lengbin\Hyperf\Common\Exceptions\Handler;
 
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
+use Lengbin\Helper\YiiSoft\StringHelper;
 use Lengbin\Hyperf\Common\Constants\Errors\CommonError;
 use Lengbin\Hyperf\Common\Exceptions\AbstractException;
 use Lengbin\Hyperf\Common\Exceptions\FrameworkException;
@@ -48,7 +49,7 @@ class AppExceptionHandler extends ExceptionHandler
             $throwable->getFile(),
             $throwable->getLine()
         );
-        $this->logger->error($msg);
+        $this->logger->error(StringHelper::substr($msg, 0, 1000));
 
         $message = null;
         if (config('app_env', 'dev') === 'dev') {
