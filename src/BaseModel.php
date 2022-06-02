@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common;
 
-use Hyperf\Database\Model\Collection;
 use Lengbin\Helper\YiiSoft\Arrays\ArrayHelper;
 use Lengbin\Hyperf\Common\Constants\SoftDeleted;
 use Hyperf\Database\Model\Builder;

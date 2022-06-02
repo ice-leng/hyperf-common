@@ -11,14 +11,22 @@ namespace Lengbin\Hyperf\Common;
 
 use Hyperf\Database\Model\Builder;
 use Lengbin\Common\Entity\Page;
+use Hyperf\DbConnection\Db;
 
 class BaseMySQLDao
 {
+
+    public function count(Builder $query): int
+    {
+        $sql = sprintf("select count(*) as count from (%s) as b", $query->toSql());
+        return Db::selectOne($sql, $query->getBindings())->count;
+    }
+
     public function output(Builder $query, Page $page): array
     {
         $output = [];
         if ($page->total) {
-            $output['total'] = $query->count();
+            $output['total'] = $this->count($query);
         }
 
         if (!$page->all) {
