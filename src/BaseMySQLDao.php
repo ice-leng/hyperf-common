@@ -24,7 +24,12 @@ class BaseMySQLDao
 
     public function output(Builder $query, Page $page): array
     {
-        $output = [];
+        $output = [
+            'total' => null,
+            'page' => null,
+            'page_size' => null,
+        ];
+
         if ($page->total) {
             $output['total'] = $this->count($query);
         }
