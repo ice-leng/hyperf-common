@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace %NAMESPACE%;
 
 use Hyperf\ApiDocs\Annotation\ApiModelProperty;
+use Lengbin\Hyperf\Common\Entity\Traits\EnableIdentifier;
 
 class %CLASS% extends %INHERITANCE%
 {
-
+    use EnableIdentifier;
 }

@@ -6,8 +6,9 @@ namespace %NAMESPACE%;
 
 use Hyperf\ApiDocs\Annotation\ApiModelProperty;
 use Lengbin\Common\BaseObject;
+use Lengbin\Hyperf\Common\Entity\Traits\EnableIdentifier;
 
 class %CLASS% extends BaseObject
 {
-
+    use EnableIdentifier;
 }

@@ -9,6 +9,7 @@ use Hyperf\DTO\Annotation\Validation\Required;
 use Hyperf\Utils\Str;
 use Lengbin\Common\BaseObject;
 use Lengbin\Helper\YiiSoft\StringHelper;
+use Lengbin\Hyperf\Common\Entity\Traits\EnableIdentifier;
 use Lengbin\PhpGenerator\GenerateClass;
 use Lengbin\PhpGenerator\Printer\PrinterFactory;
 use Lengbin\PhpGenerator\Property;
@@ -39,6 +40,10 @@ class FileGenerate
         $generate->setUses([
             BaseObject::class,
             ApiModelProperty::class,
+            EnableIdentifier::class,
+        ]);
+        $generate->setTraits([
+            'EnableIdentifier'
         ]);
         if ($this->required) {
             $generate->addUse(Required::class);
