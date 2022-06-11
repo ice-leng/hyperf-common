@@ -17,7 +17,7 @@ class GeneratorSearch extends BaseGeneratorRequest
 
     public function buildClass(ClassInfo $class, array $results = []): string
     {
-        $fileGenerate = new FileGenerate($this->modelInfo, $class, true);
+        $fileGenerate = new FileGenerate($this->modelInfo, $class, true, false, true);
         return $fileGenerate->pk();
     }
 }

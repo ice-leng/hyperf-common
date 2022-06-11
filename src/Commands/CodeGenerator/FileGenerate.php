@@ -59,6 +59,9 @@ class FileGenerate
             if (!$this->all && (in_array($column['column_name'], [$this->modelInfo->pk, 'enable']) || in_array($column['column_name'], $this->exceptColumn))) {
                 continue;
             }
+            if ($this->all && $column['column_name'] == 'enable') {
+                continue;
+            }
             [$name, $type, $comment] = $this->getProperty($column);
             $required = $this->required ? ', Required' : '';
             $this->generate->addProperty(new Property([
