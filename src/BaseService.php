@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common;
 
-use Hyperf\Utils\Str;
 use Lengbin\Common\Entity\Page;
 
 class BaseService
@@ -29,24 +28,6 @@ class BaseService
     protected function toJson($value)
     {
         return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    }
-
-    public function toSnakeKey(array $result, string $delimiter = '_'): array
-    {
-        $data = [];
-        foreach ($result as $key => $value) {
-            $data[Str::snake($key, $delimiter)] = $value;
-        }
-        return $data;
-    }
-
-    public function toCamelKey(array $result): array
-    {
-        $data = [];
-        foreach ($result as $key => $value) {
-            $data[Str::camel($key)] = $value;
-        }
-        return $data;
     }
 
     /**

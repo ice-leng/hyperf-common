@@ -21,14 +21,14 @@ class FileGenerate
     protected array $exceptColumn = [
         'create_at',
         'update_at',
-        'enable',
     ];
 
     public function __construct(
         public ModelInfo $modelInfo,
         public ClassInfo $classInfo,
         public bool      $required = false,
-        public bool      $all = false
+        public bool      $all = false,
+        public bool      $enable = false
     )
     {
         $generate = new GenerateClass();
@@ -40,11 +40,13 @@ class FileGenerate
         $generate->setUses([
             BaseObject::class,
             ApiModelProperty::class,
-            EnableIdentifier::class,
         ]);
-        $generate->setTraits([
-            'EnableIdentifier'
-        ]);
+
+        if ($this->enable) {
+            $generate->addUse(EnableIdentifier::class);
+            $generate->addTrait('EnableIdentifier');
+        }
+
         if ($this->required) {
             $generate->addUse(Required::class);
         }
@@ -54,7 +56,7 @@ class FileGenerate
     public function handle(): string
     {
         foreach ($this->modelInfo->columns as $column) {
-            if (!$this->all && ($column['column_name'] == $this->modelInfo->pk || in_array($column['column_name'], $this->exceptColumn))) {
+            if (!$this->all && (in_array($column['column_name'], [$this->modelInfo->pk, 'enable']) || in_array($column['column_name'], $this->exceptColumn))) {
                 continue;
             }
             [$name, $type, $comment] = $this->getProperty($column);
