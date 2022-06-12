@@ -106,7 +106,7 @@ class FileGenerate
 
         $comment = $column['column_comment'] ?? '';
 
-        return [$this->all ? $column['column_name'] : $name, $type, $comment];
+        return [$name, $type, $comment];
     }
 
     protected function formatDatabaseType(string $type): ?string
