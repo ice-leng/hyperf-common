@@ -18,7 +18,7 @@ class %CLASS% extends BaseService
     public function getList(%LIST_REQUEST% $request): %LIST_RESPONSE%
     {
         $result = $this->%SERVICE_NAME%->getList(
-            $request->condition->setUnderlineName()->toArray(),
+            $request->condition->toArray(),
             $request->search->setUnderlineName()->toArray(),
             $request->sort->setUnderlineName()->toArray(),
             $request->page,
@@ -29,14 +29,14 @@ class %CLASS% extends BaseService
 
     public function create(%CREAT_REQUEST% $request): BaseSuccessResponse
     {
-        $this->%SERVICE_NAME%->create($request->condition->setUnderlineName()->toArray(), $request->data->setUnderlineName()->toArray());
+        $this->%SERVICE_NAME%->create($request->condition->toArray(), $request->data->setUnderlineName()->toArray());
         return new BaseSuccessResponse();
     }
 
     public function modify(%MODIFY_REQUEST% $request): BaseSuccessResponse
     {
         $this->%SERVICE_NAME%->modify(
-            $request->condition->setUnderlineName()->toArray(),
+            $request->condition->toArray(),
             $request->search->setUnderlineName()->toArray(),
             $request->data->setUnderlineName()->toArray()
         );
@@ -45,14 +45,14 @@ class %CLASS% extends BaseService
 
     public function remove(%REMOVE_REQUEST% $request): BaseSuccessResponse
     {
-        $this->%SERVICE_NAME%->remove($request->condition->setUnderlineName()->toArray(), $request->search->setUnderlineName()->toArray());
+        $this->%SERVICE_NAME%->remove($request->condition->toArray(), $request->search->setUnderlineName()->toArray());
         return new BaseSuccessResponse();
     }
 
     public function detail(%DETAIL_REQUEST% $request): %DETAIL_RESPONSE%
     {
         $result = $this->%SERVICE_NAME%->detail(
-            $request->condition->setUnderlineName()->toArray(),
+            $request->condition->toArray(),
             $request->search->setUnderlineName()->toArray(),
             $this->field
         );
