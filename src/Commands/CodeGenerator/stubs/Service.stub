@@ -11,11 +11,10 @@ use Lengbin\Hyperf\Common\Exceptions\BusinessException;
 %USES%
 class %CLASS% extends BaseService implements %INHERITANCE%
 {
-    protected %DAO_INTERFACE% $%DAO_NAME%;
 
-    public function __construct(%DAO_INTERFACE% $%DAO_NAME%)
+    public function __construct(protected %DAO_INTERFACE% $%DAO_NAME%)
     {
-        $this->%DAO_NAME% = $%DAO_NAME%;
+
     }
 
     /**
