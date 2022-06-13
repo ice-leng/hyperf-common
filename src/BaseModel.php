@@ -28,14 +28,15 @@ abstract class BaseModel extends Model
 
     /**
      * @param array $conditions
-     * @param bool  $excludePk
+     * @param Builder $query
+     * @param bool $excludePk
      *
      * @return Builder
      */
-    public static function buildQuery(array $conditions, bool $forExcludePk = false): Builder
+    public static function buildQuery(array $conditions, ?Builder $query = null, bool $forExcludePk = false): Builder
     {
         $model = new static();
-        $query = $model->newQuery();
+        $query = $query ?? $model->newQuery();
 
         if (ArrayHelper::isIndexed($conditions)) {
             $query->where($conditions);
@@ -58,13 +59,13 @@ abstract class BaseModel extends Model
     /**
      * @param array $conditions
      * @param array $field
-     * @param bool  $forUpdate
+     * @param bool $forUpdate
      *
      * @return null|BaseModel|object|static
      */
     public static function findOne(array $conditions, array $field = ['*'], bool $forExcludePk = false, bool $forUpdate = false): ?self
     {
-        $query = self::buildQuery($conditions, $forExcludePk);
+        $query = self::buildQuery($conditions, null, $forExcludePk);
         if ($forUpdate) {
             $query->lockForUpdate();
         }
@@ -72,8 +73,8 @@ abstract class BaseModel extends Model
     }
 
     /**
-     * @param array       $condition
-     * @param array       $data
+     * @param array $condition
+     * @param array $data
      * @param string|null $softDeleted
      *
      * @return int
@@ -85,8 +86,8 @@ abstract class BaseModel extends Model
     }
 
     /**
-     * @param array       $condition
-     * @param bool        $forceDelete
+     * @param array $condition
+     * @param bool $forceDelete
      * @param string|null $softDeleted
      *
      * @return int
@@ -140,7 +141,7 @@ abstract class BaseModel extends Model
      * Compile all of the columns for an update statement.
      *
      * @param Grammar $grammar
-     * @param array   $values
+     * @param array $values
      *
      * @return string
      */
