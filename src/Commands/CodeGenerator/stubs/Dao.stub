@@ -19,6 +19,6 @@ class %CLASS% extends BaseMySQLDao implements %INHERITANCE%
 
     protected function handleSearch(Builder $query, array $search, array $condition): Builder
     {
-        return $query;
+        return [$query, $search, $condition];
     }
 }
