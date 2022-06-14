@@ -20,7 +20,7 @@ trait MySQLDaoTrait
 
     abstract public function modelClass(): string;
 
-    abstract protected function handleSearch(Builder $query, array $search, array $condition): Builder;
+    abstract protected function handleSearch(Builder $query, array $search, array $condition): array;
 
     protected function appendTableName(array $data, string $tableName): array
     {
