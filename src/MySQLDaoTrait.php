@@ -12,6 +12,7 @@ namespace Lengbin\Hyperf\Common;
 use Hyperf\Database\Model\Builder;
 use Lengbin\Common\Entity\Page;
 use Lengbin\Helper\YiiSoft\Arrays\ArrayHelper;
+use Lengbin\Hyperf\Common\Constants\SortType;
 
 trait MySQLDaoTrait
 {
@@ -19,38 +20,72 @@ trait MySQLDaoTrait
 
     abstract public function modelClass(): string;
 
-    abstract protected function handleSearch(Builder $query, array &$search, array $condition): Builder;
+    abstract protected function handleSearch(Builder $query, array &$search, array &$condition): Builder;
 
-    protected function handleQuery(array $condition, array $search, array $field = ['*'], bool $forExcludePk = false): Builder
+    protected function appendTableName(array $data, string $tableName): array
+    {
+        $result = [];
+        foreach ($data as $key => $value) {
+            if (!str_contains($key, '.') && !str_starts_with($value, '_')) {
+                $key = "{$tableName}.{$key}";
+            }
+            $result[$key] = $value;
+        }
+        return $result;
+    }
+
+    protected function handleQuery(array $condition, array $search, array $sort = [], array $field = ['*']): Builder
     {
         $model = make($this->modelClass());
-        $query = $model->newQuery()->select($field);
+        $query = $model->newQuery();
+        $query = $this->handleSearch($query, $search, $condition);
 
-        $query->orderBy("{$model->getTableName()}.{$model->getKeyName()}");
+        $forExcludePk = false;
 
+        $sort[$model->getKeyName()] = SortType::ASC;
         foreach ($condition as $with => $whether) {
             if (!$whether) {
                 continue;
             }
-            if (str_starts_with($with, 'with_')) {
-                $query->with(substr($with, 5));
-            } elseif (str_starts_with($with, 'with')) {
-                $query->with(lcfirst(substr($with, 4)));
+            switch ($with) {
+                case '_leftJoin':
+                    $field = $this->appendTableName($field, $model->getTableName());
+                    $sort = $this->appendTableName($sort, $model->getTableName());
+                    $search = $this->appendTableName($search, $model->getTableName());
+                    break;
+                case "_exceptPk":
+                    $forExcludePk = true;
+                    break;
+                case "_forUpdate";
+                    $query->lockForUpdate();
+                    break;
+                default:
+                    if (str_starts_with($with, 'with_')) {
+                        $query->with(substr($with, 5));
+                    } elseif (str_starts_with($with, 'with')) {
+                        $query->with(lcfirst(substr($with, 4)));
+                    }
+                    break;
             }
         }
 
-        $query = $this->handleSearch($query, $search, $condition);
-        return $this->modelClass()::buildQuery($search, $query, $forExcludePk);
-    }
-
-    public function getList(array $condition, array $search, array $sort, Page $page, array $field = ['*']): array
-    {
-        $query = $this->handleQuery($condition, $search, $field);
+        $query->select($field);
 
         foreach ($sort as $column => $sortType) {
             $query->orderBy($column, $sortType);
         }
 
+        $groupBy = ArrayHelper::remove($search, '_groupBy');
+        if ($groupBy) {
+            $query->groupBy($groupBy);
+        }
+
+        return $this->modelClass()::buildQuery($search, $query, $forExcludePk);
+    }
+
+    public function getList(array $condition, array $search, array $sort, Page $page, array $field = ['*']): array
+    {
+        $query = $this->handleQuery($condition, $search, $sort, $field);
         return $this->output($query, $page);
     }
 
@@ -122,23 +157,8 @@ trait MySQLDaoTrait
 
     public function detail(array $condition, array $search, array $field = ['*']): array
     {
-        $forUpdate = boolval($condition['_forUpdate'] ?? false);
-        $forExcludePk = boolval($condition['_exceptPk'] ?? false);
-
-        $groupBy = ArrayHelper::remove($search, '_groupBy');
-        $query = $this->handleQuery($condition, $search, $field, $forExcludePk);
-        if ($groupBy) {
-            $query->groupBy($groupBy);
-        }
-
-        if ($forUpdate) {
-            $query->lockForUpdate();
-        }
+        $query = $this->handleQuery($condition, $search, $field);
         $model = $query->first($field);
-
-        if (!$model) {
-            return [];
-        }
-        return $model->toArray();
+        return $model ? $model->toArray() : [];
     }
 }
