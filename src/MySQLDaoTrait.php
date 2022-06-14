@@ -26,7 +26,7 @@ trait MySQLDaoTrait
     {
         $result = [];
         foreach ($data as $key => $value) {
-            if (!str_contains($key, '.') && !str_starts_with($value, '_')) {
+            if (!str_contains($key, '.')) {
                 $key = "{$tableName}.{$key}";
             }
             $result[$key] = $value;
@@ -40,16 +40,20 @@ trait MySQLDaoTrait
         $query = $model->newQuery();
         [$query, $search, $condition] = $this->handleSearch($query, $search, $condition);
 
-        $forExcludePk = false;
+        $groupBy = ArrayHelper::remove($search, '_groupBy');
+        if ($groupBy) {
+            $query->groupBy($groupBy);
+        }
 
         $sort[$model->getKeyName()] = SortType::ASC;
+
+        $forExcludePk = false;
         foreach ($condition as $with => $whether) {
             if (!$whether) {
                 continue;
             }
             switch ($with) {
                 case '_leftJoin':
-                    $field = $this->appendTableName($field, $model->getTableName());
                     $sort = $this->appendTableName($sort, $model->getTableName());
                     $search = $this->appendTableName($search, $model->getTableName());
                     break;
@@ -70,14 +74,11 @@ trait MySQLDaoTrait
         }
 
         $query->select($field);
-
         foreach ($sort as $column => $sortType) {
+            if (empty($sortType)) {
+                continue;
+            }
             $query->orderBy($column, $sortType);
-        }
-
-        $groupBy = ArrayHelper::remove($search, '_groupBy');
-        if ($groupBy) {
-            $query->groupBy($groupBy);
         }
 
         return $this->modelClass()::buildQuery($search, $query, $forExcludePk);
