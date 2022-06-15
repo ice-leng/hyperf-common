@@ -159,7 +159,7 @@ trait MySQLDaoTrait
     public function detail(array $condition, array $search, array $field = ['*']): array
     {
         $query = $this->handleQuery($condition, $search, $field);
-        $model = $query->first($field);
+        $model = $query->first();
         return $model ? $model->toArray() : [];
     }
 }
