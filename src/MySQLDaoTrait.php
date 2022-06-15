@@ -34,7 +34,7 @@ trait MySQLDaoTrait
         return $result;
     }
 
-    protected function handleQuery(array $condition, array $search, array $sort = [], array $field = ['*']): Builder
+    protected function handleQuery(array $condition, array $search, array $field = ['*'], array $sort = []): Builder
     {
         $model = make($this->modelClass());
         $query = $model->newQuery();
@@ -86,7 +86,7 @@ trait MySQLDaoTrait
 
     public function getList(array $condition, array $search, array $sort, Page $page, array $field = ['*']): array
     {
-        $query = $this->handleQuery($condition, $search, $sort, $field);
+        $query = $this->handleQuery($condition, $search, $field, $sort);
         return $this->output($query, $page);
     }
 
