@@ -20,7 +20,7 @@ trait MySQLDaoTrait
 
     abstract public function modelClass(): string;
 
-    abstract protected function handleSearch(Builder $query, array $search, array $condition): array;
+    abstract protected function handleSearch(Builder $query, array $search, array $condition, array $sort): array;
 
     protected function appendTableName(array $data, string $tableName): array
     {
@@ -38,7 +38,7 @@ trait MySQLDaoTrait
     {
         $model = make($this->modelClass());
         $query = $model->newQuery();
-        [$query, $search, $condition] = $this->handleSearch($query, $search, $condition);
+        [$query, $search, $condition, $sort] = $this->handleSearch($query, $search, $condition, $sort);
 
         $groupBy = ArrayHelper::remove($search, '_groupBy');
         if ($groupBy) {
