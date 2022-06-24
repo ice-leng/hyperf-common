@@ -10,26 +10,26 @@ use Lengbin\Common\BaseObject;
 class BaseCondition extends BaseObject
 {
     #[ApiModelProperty(value: "是否格式化", hidden: true)]
-    public bool $_format = true;
+    public int $_format = 1;
 
     #[ApiModelProperty(value: "是否获取源数据", hidden: true)]
-    public bool $_origin = false;
+    public int $_origin = 0;
 
     #[ApiModelProperty(value: "是否不抛异常", hidden: true)]
-    public bool $_notThrow = true;
+    public int $_notThrow = 1;
 
     #[ApiModelProperty(value: "是否批量添加", hidden: true)]
-    public bool $_insert = false;
+    public int $_insert = 0;
 
     #[ApiModelProperty(value: "是否批量更新", hidden: true)]
-    public bool $_update = false;
+    public int $_update = 0;
 
     #[ApiModelProperty(value: "是否强制删除", hidden: true)]
-    public bool $_delete = false;
+    public int $_delete = 0;
 
     #[ApiModelProperty(value: "是否悲观锁", hidden: true)]
-    public bool $_forUpdate = false;
+    public int $_forUpdate = 0;
 
     #[ApiModelProperty(value: "是否排除主键", hidden: true)]
-    public bool $_exceptPk = false;
+    public int $_exceptPk = 0;
 }
