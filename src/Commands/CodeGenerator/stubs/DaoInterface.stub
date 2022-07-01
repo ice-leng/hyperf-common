@@ -30,7 +30,7 @@ interface %CLASS%
      * @param array $data 更新数据
      * @return int
      */
-    public function modify(array $search, array $data): int;
+    public function modify(array $condition, array $search, array $data): int;
 
     /**
      * @param array $search

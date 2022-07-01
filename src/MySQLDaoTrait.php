@@ -142,9 +142,10 @@ trait MySQLDaoTrait
         return $ret ? $model->toArray() : [];
     }
 
-    public function modify(array $search, array $data): int
+    public function modify(array $condition, array $search, array $data): int
     {
-        return $this->modelClass()::updateCondition($search, $data);
+        $forExcludePk = boolval($condition['_leftJoin'] ?? false);
+        return $this->modelClass()::updateCondition($search, $data, $forExcludePk);
     }
 
     public function remove(array $condition, array $search): int

@@ -76,7 +76,7 @@ class %CLASS% extends BaseService implements %INHERITANCE%
             $condition['_origin'] = $this->detail($condition, $search);
         }
         $data = $this->validate($condition, $data);
-        $result = $this->%DAO_NAME%->modify($search, $data);
+        $result = $this->%DAO_NAME%->modify($condition, $search, $data);
 
         if (!$result && ArrayHelper::isValidValue($condition, '_notThrow')) {
             throw new BusinessException(%ERROR%::UPDATE_ERROR);

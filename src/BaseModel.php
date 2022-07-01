@@ -57,15 +57,15 @@ abstract class BaseModel extends Model
     }
 
     /**
-     * @param array $conditions
+     * @param array $condition
      * @param array $field
      * @param bool $forUpdate
      *
      * @return null|BaseModel|object|static
      */
-    public static function findOne(array $conditions, array $field = ['*'], bool $forExcludePk = false, bool $forUpdate = false): ?self
+    public static function findOne(array $condition, array $field = ['*'], bool $forExcludePk = false, bool $forUpdate = false): ?self
     {
-        $query = self::buildQuery($conditions, null, $forExcludePk);
+        $query = self::buildQuery($condition, null, $forExcludePk);
         if ($forUpdate) {
             $query->lockForUpdate();
         }
@@ -79,9 +79,9 @@ abstract class BaseModel extends Model
      *
      * @return int
      */
-    public static function updateCondition(array $condition, array $data): int
+    public static function updateCondition(array $condition, array $data, bool $forExcludePk): int
     {
-        $query = static::buildQuery($condition);
+        $query = static::buildQuery($condition, null, $forExcludePk);
         return $query->update($data);
     }
 
