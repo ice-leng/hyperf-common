@@ -144,7 +144,7 @@ trait MySQLDaoTrait
 
     public function modify(array $condition, array $search, array $data): int
     {
-        $forExcludePk = boolval($condition['_leftJoin'] ?? false);
+        $forExcludePk = boolval($condition['_exceptPk'] ?? false);
         return $this->modelClass()::updateCondition($search, $data, $forExcludePk);
     }
 
