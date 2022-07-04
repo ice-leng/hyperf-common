@@ -117,7 +117,7 @@ trait MySQLDaoTrait
     public function batchUpdate(array $data): array
     {
         $data = $this->appendTime($data, ['update_at']);
-        $ret = $this->modelClass()::query()->insertOrUpdate($data);
+        $ret = $this->modelClass()::insertOrUpdate($data);
         if (!$ret) {
             return [];
         }

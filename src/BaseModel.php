@@ -112,10 +112,10 @@ abstract class BaseModel extends Model
      *
      * @return bool
      */
-    public static function insertOrUpdate(array $values, array $column)
+    public static function insertOrUpdate(array $values, array $column = [])
     {
         if (empty($column)) {
-            $column = array_keys($values);
+            $column = array_keys(current($values));
         }
         $value = [];
         foreach ($column as $item) {
