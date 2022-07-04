@@ -41,7 +41,7 @@ class %CLASS% extends BaseService implements %INHERITANCE%
      * @param array $data 数据
      * @return array
      */
-    public function validate(array $condition, array $data): array
+    public function validate(array $condition, array $data, array $search = []): array
     {
         return $data;
     }
@@ -75,7 +75,7 @@ class %CLASS% extends BaseService implements %INHERITANCE%
         if (ArrayHelper::isValidValue($condition, '_origin')) {
             $condition['_origin'] = $this->detail($condition, $search);
         }
-        $data = $this->validate($condition, $data);
+        $data = $this->validate($condition, $data, $search);
         $result = $this->%DAO_NAME%->modify($condition, $search, $data);
 
         if (!$result && ArrayHelper::isValidValue($condition, '_notThrow')) {
