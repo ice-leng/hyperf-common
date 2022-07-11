@@ -64,10 +64,12 @@ trait MySQLDaoTrait
                     $query->lockForUpdate();
                     break;
                 default:
-                    if (str_starts_with($with, 'with_')) {
-                        $query->with(substr($with, 5));
-                    } elseif (str_starts_with($with, 'with')) {
-                        $query->with(lcfirst(substr($with, 4)));
+                    if ($whether == 1) {
+                        if (str_starts_with($with, 'with_')) {
+                            $query->with(substr($with, 5));
+                        } elseif (str_starts_with($with, 'with')) {
+                            $query->with(lcfirst(substr($with, 4)));
+                        }
                     }
                     break;
             }
