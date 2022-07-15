@@ -16,7 +16,7 @@ use Hyperf\HttpServer\Exception\Http\EncodingException;
 use Hyperf\HttpServer\Exception\Http\FileException;
 use Hyperf\Utils\ApplicationContext;
 use Hyperf\Utils\Codec\Json;
-use Hyperf\Utils\Context;
+use Hyperf\Context\Context;
 use Hyperf\Utils\MimeTypeExtensionGuesser;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use SplFileInfo;

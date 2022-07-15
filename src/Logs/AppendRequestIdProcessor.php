@@ -11,7 +11,7 @@ namespace Lengbin\Hyperf\Common\Logs;
 
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Snowflake\IdGenerator\SnowflakeIdGenerator;
-use Hyperf\Utils\Context;
+use Hyperf\Context\Context;
 use Hyperf\Utils\Coroutine;
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
