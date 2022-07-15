@@ -21,10 +21,7 @@ use Hyperf\Redis\Redis;
  */
 class RedisCacheHelper extends AbstractRedisCache
 {
-    /**
-     * @Inject()
-     * @var Redis
-     */
+    #[Inject]
     protected Redis $redis;
 
     public function getRedis()

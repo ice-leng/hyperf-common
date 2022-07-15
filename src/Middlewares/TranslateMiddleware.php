@@ -14,11 +14,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 class TranslateMiddleware implements MiddlewareInterface
 {
 
-    /**
-     * @Inject
-     * @var TranslatorInterface
-     */
-    private $translator;
+    #[Inject]
+    protected TranslatorInterface $translator;
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

@@ -19,16 +19,10 @@ use Throwable;
  */
 class IpHelper
 {
-    /**
-     * @Inject()
-     * @var ClientFactory
-     */
+    #[Inject]
     protected ClientFactory $clientFactory;
 
-    /**
-     * @Inject()
-     * @var ServerRequestInterface
-     */
+    #[Inject]
     protected ServerRequestInterface $request;
 
     /**
