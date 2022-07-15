@@ -24,7 +24,7 @@ abstract class BaseModel extends Model
 
     const UPDATED_AT = 'update_at';
 
-    protected $dateFormat = 'U';
+    protected ?string $dateFormat = 'U';
 
     /**
      * @param array $conditions

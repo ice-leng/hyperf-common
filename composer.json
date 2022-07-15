@@ -7,17 +7,17 @@
   "require": {
     "php": ">=7.2.0",
     "ext-swoole": ">=4.5",
-    "hyperf/redis": "~2.0.0|~2.1.0|~2.2.0|3.0.*",
-    "hyperf/command": "~2.0.0|~2.1.0|~2.2.0|3.0.*",
-    "hyperf/config": "~2.0.0|~2.1.0|~2.2.0|3.0.*",
-    "hyperf/db-connection": "~2.0.0|~2.1.0|~2.2.0|3.0.*",
-    "hyperf/framework": "~2.0.0|~2.1.0|~2.2.0|3.0.*",
-    "hyperf/http-server": "~2.0.0|~2.1.0|~2.2.0|3.0.*",
+    "hyperf/redis": "3.0.*",
+    "hyperf/command": "3.0.*",
+    "hyperf/config": "3.0.*",
+    "hyperf/db-connection": "3.0.*",
+    "hyperf/framework": "3.0.*",
+    "hyperf/http-server": "3.0.*",
     "lengbin/common": "v2.0.x-dev",
     "lengbin/error-code": "2.0.x-dev",
     "lengbin/php-generator": "dev-main",
-    "hyperf/dag": "^2.2|3.0.*",
-    "hyperf/snowflake": "^2.2|3.0.*"
+    "hyperf/dag": "3.0.*",
+    "hyperf/snowflake": "3.0.*"
   },
   "minimum-stability": "stable",
   "autoload": {
