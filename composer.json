@@ -16,8 +16,8 @@
     "lengbin/common": "v2.0.x-dev",
     "lengbin/error-code": "2.0.x-dev",
     "lengbin/php-generator": "dev-main",
-    "hyperf/dag": "^2.2",
-    "hyperf/snowflake": "^2.2"
+    "hyperf/dag": "^2.2|3.0.*",
+    "hyperf/snowflake": "^2.2|3.0.*"
   },
   "minimum-stability": "stable",
   "autoload": {
