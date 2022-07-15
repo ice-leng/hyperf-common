@@ -21,10 +21,7 @@ class AppendRequestIdProcessor implements ProcessorInterface
 
     const REQUEST_ID = 'log.request.id';
 
-    /**
-     * @Inject()
-     * @var SnowflakeIdGenerator
-     */
+    #[Inject()]
     protected SnowflakeIdGenerator $idGenerator;
 
     public function __invoke(array|LogRecord $record)
