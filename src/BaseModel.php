@@ -42,7 +42,7 @@ abstract class BaseModel extends Model
             $query->where($conditions);
         } else {
             foreach ($conditions as $key => $value) {
-                if (is_null($value) || !in_array($key, $model->getFillable())) {
+                if (is_null($value)) {
                     continue;
                 }
                 $excludePk = $forExcludePk && $key == $model->getKeyName();

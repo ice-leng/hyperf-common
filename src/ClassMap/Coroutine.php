@@ -23,6 +23,7 @@ use Hyperf\Engine\Coroutine as Co;
 use Hyperf\Engine\Exception\CoroutineDestroyedException;
 use Hyperf\Engine\Exception\RunningInNonCoroutineException;
 use Hyperf\ExceptionHandler\Formatter\FormatterInterface;
+use Hyperf\Context\Context;
 use Lengbin\Hyperf\Common\Logs\AppendRequestIdProcessor;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;

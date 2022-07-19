@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common\Middlewares;
 
-use Hyperf\Utils\Context;
+use Hyperf\Context\Context;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
