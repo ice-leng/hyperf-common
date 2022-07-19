@@ -76,7 +76,7 @@ class ModelCommand extends BaseModelCommand
             'option' => $option,
         ]));
         $traverser->addVisitor(make(ModelRewriteConnectionVisitor::class, [$class, $option->getPool()]));
-        $data = make(ModelData::class)->setClass($class)->setColumns($columns);
+        $data = make(ModelData::class, ['class' => $class, 'columns' => $columns]);
         foreach ($option->getVisitors() as $visitorClass) {
             $traverser->addVisitor(make($visitorClass, [$option, $data]));
         }
