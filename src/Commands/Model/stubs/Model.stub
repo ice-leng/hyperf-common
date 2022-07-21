@@ -13,33 +13,33 @@ class %CLASS% extends %INHERITANCE%
      *
      * @var string
      */
-    protected $primaryKey = '%PRIMARY_KEY%';
+    protected string $primaryKey = '%PRIMARY_KEY%';
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = '%TABLE%';
+    protected ?string $table = '%TABLE%';
 
     /**
      * The connection name for the model.
      *
      * @var string
      */
-    protected $connection = '%CONNECTION%';
+    protected ?string $connection = '%CONNECTION%';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [];
+    protected array $fillable = [];
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = [];
+    protected array $casts = [];
 }
