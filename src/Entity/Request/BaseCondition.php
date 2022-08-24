@@ -16,7 +16,7 @@ class BaseCondition extends BaseObject
     public int $_origin = 0;
 
     #[ApiModelProperty(value: "是否不抛异常", hidden: true)]
-    public int $_notThrow = 1;
+    public int $_throw = 1;
 
     #[ApiModelProperty(value: "是否批量添加", hidden: true)]
     public int $_insert = 0;

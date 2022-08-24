@@ -19,29 +19,29 @@ class CommonError extends BaseEnum
      * @Message("系统错误")
      */
     #[EnumMessage('系统错误')]
-    const SERVER_ERROR = 1;
+    const SERVER_ERROR = 500;
 
     /**
      * @Message("无效权限")
      */
     #[EnumMessage('无效权限')]
-    const INVALID_PERMISSION = 2;
+    const INVALID_PERMISSION = 403;
 
     /**
      * @Message("错误的请求参数")
      */
     #[EnumMessage('错误的请求参数')]
-    const INVALID_PARAMS = 3;
+    const INVALID_PARAMS = 400;
 
     /**
      * @Message("登录已超时")
      */
     #[EnumMessage('登录已超时')]
-    const TOKEN_EXPIRED = 4;
+    const TOKEN_EXPIRED = 408;
 
     /**
      * @Message("请重新登录")
      */
     #[EnumMessage('请重新登录')]
-    const INVALID_TOKEN = 5;
+    const INVALID_TOKEN = 401;
 }

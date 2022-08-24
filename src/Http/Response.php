@@ -70,10 +70,10 @@ class Response extends \Hyperf\HttpServer\Response
         return $result;
     }
 
-    public function raw($data): PsrResponseInterface
+    public function raw(string $data = ''): PsrResponseInterface
     {
         return $this->getResponse()
-            ->withBody(new SwooleStream((string) $data));
+            ->withBody(new SwooleStream($data));
     }
 
     public function fileFlow(string $file)

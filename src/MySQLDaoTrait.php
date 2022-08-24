@@ -92,7 +92,7 @@ trait MySQLDaoTrait
         return $this->output($query, $page);
     }
 
-    protected function appendTime(array $data, array $columns = ['create_at', 'update_at']): array
+    protected function appendTime(array $data, array $columns = [$this->modelClass()::CREATED_AT, $this->modelClass()::UPDATED_AT]): array
     {
         $now = time();
         foreach ($data as $key => $item) {
@@ -118,7 +118,7 @@ trait MySQLDaoTrait
 
     public function batchUpdate(array $data): array
     {
-        $data = $this->appendTime($data, ['update_at']);
+        $data = $this->appendTime($data, [$this->modelClass()::UPDATED_AT]);
         $ret = $this->modelClass()::insertOrUpdate($data);
         if (!$ret) {
             return [];

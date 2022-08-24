@@ -14,6 +14,8 @@ use Lengbin\ErrorCode\Annotation\EnumMessage;
 
 /**
  * 基础状态
+ * @method static BaseStatus FROZEN()
+ * @method static BaseStatus NORMAL()
  */
 class BaseStatus extends AbstractEnum
 {

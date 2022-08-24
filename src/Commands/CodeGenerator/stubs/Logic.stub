@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace %NAMESPACE%;
 
 use Hyperf\Di\Annotation\Inject;
-use Lengbin\Hyperf\Common\BaseService;
+use Lengbin\Hyperf\Common\BaseLogic;
 use Lengbin\Hyperf\Common\Entity\Response\BaseSuccessResponse;
 %USES%
-class %CLASS% extends BaseService
+class %CLASS% extends BaseLogic
 {
     #[Inject()]
     protected %SERVICE% $%SERVICE_NAME%;

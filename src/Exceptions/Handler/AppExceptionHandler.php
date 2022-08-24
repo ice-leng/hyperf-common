@@ -15,8 +15,7 @@ namespace Lengbin\Hyperf\Common\Exceptions\Handler;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Lengbin\Hyperf\Common\Constants\Errors\CommonError;
-use Lengbin\Hyperf\Common\Exceptions\AbstractException;
-use Lengbin\Hyperf\Common\Exceptions\FrameworkException;
+use Lengbin\Hyperf\Common\Exceptions\BusinessException;
 use Lengbin\Hyperf\Common\Http\Response;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
@@ -55,13 +54,13 @@ class AppExceptionHandler extends ExceptionHandler
             $message = $msg;
         }
 
-        if ($throwable instanceof AbstractException) {
-            return $this->response->fail($throwable->getRealCode(), $message ?? $throwable->getMessage());
+        if ($throwable instanceof BusinessException) {
+            return $this->response->fail($throwable->getCode(), $message ?? $throwable->getMessage());
         }
 
         $serverError = CommonError::SERVER_ERROR();
-        $systemError = new FrameworkException($serverError->getValue());
-        return $this->response->fail($systemError->getRealCode(), $message ?? $serverError->getMessage());
+        $systemError = new BusinessException($serverError->getValue());
+        return $this->response->fail($systemError->getCode(), $message ?? $serverError->getMessage());
     }
 
     public function isValid(Throwable $throwable): bool

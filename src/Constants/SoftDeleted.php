@@ -7,6 +7,11 @@ namespace Lengbin\Hyperf\Common\Constants;
 use Lengbin\ErrorCode\AbstractEnum;
 use Lengbin\ErrorCode\Annotation\EnumMessage;
 
+/**
+ * 删除
+ * @method static SoftDeleted ENABLE()
+ * @method static SoftDeleted DISABLE()
+ */
 class SoftDeleted extends AbstractEnum
 {
     /**

@@ -11,11 +11,18 @@ declare(strict_types=1);
  */
 namespace Lengbin\Hyperf\Common\Exceptions;
 
+use Hyperf\Server\Exception\ServerException;
+use Throwable;
 
-class BusinessException extends AbstractException
+class BusinessException extends ServerException
 {
-    public function getRealCode(): string
+    public function __construct(int $code, string $message = null, array $replace = [], Throwable $previous = null)
     {
-        return sprintf('B-%s', $this->formatCode());
+        if (empty($message)) {
+            $config = config('errorCode', []);
+            $class = $config['classNamespace'] . '\\' . $config['classname'];
+            $message = $class::byValue($code)->getMessage($replace);
+        }
+        parent::__construct($message, $code, $previous);
     }
 }

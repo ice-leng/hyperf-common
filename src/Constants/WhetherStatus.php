@@ -6,7 +6,9 @@ use Lengbin\ErrorCode\AbstractEnum;
 use Lengbin\ErrorCode\Annotation\EnumMessage;
 
 /**
- * 基础状态
+ * 是否
+ * @method static WhetherStatus YES()
+ * @method static WhetherStatus NO()
  */
 class WhetherStatus extends AbstractEnum
 {
