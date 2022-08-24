@@ -12,9 +12,6 @@ class BaseCondition extends BaseObject
     #[ApiModelProperty(value: "是否格式化", hidden: true)]
     public int $_format = 1;
 
-    #[ApiModelProperty(value: "是否获取源数据", hidden: true)]
-    public int $_origin = 0;
-
     #[ApiModelProperty(value: "是否不抛异常", hidden: true)]
     public int $_throw = 1;
 
