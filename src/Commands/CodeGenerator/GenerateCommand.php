@@ -220,7 +220,8 @@ class GenerateCommand extends HyperfCommand
         foreach ($models as $model) {
             $condition = [
                 'modelInfo' => $model,
-                'config' => $config
+                'config' => $config,
+                'ddd'    => $ddd
             ];
             $getListRequest = $this->getListRequest($condition);
             $createRequest = $this->createRequest($condition);

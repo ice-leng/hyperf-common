@@ -19,6 +19,8 @@ abstract class AbstractGenerator extends BaseObject implements Runner
 
     protected GeneratorConfig $config;
 
+    protected bool $ddd;
+
     public function __construct(array $config = [])
     {
         parent::__construct($config);

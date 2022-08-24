@@ -12,7 +12,8 @@ class ControllerGenerator extends ApplicationGenerator
     public function getPath(string $module = ''): string
     {
         $version = ucfirst($this->config->version);
-        return parent::getPath("/Controller/{$module}/{$version}");
+        $path = $this->ddd ? 'Application' : 'Controller';
+        return parent::getPath("/{$path}/{$module}/{$version}");
     }
 
     public function getFilename(): string
