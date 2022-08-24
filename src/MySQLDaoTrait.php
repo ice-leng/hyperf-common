@@ -92,8 +92,11 @@ trait MySQLDaoTrait
         return $this->output($query, $page);
     }
 
-    protected function appendTime(array $data, array $columns = [$this->modelClass()::CREATED_AT, $this->modelClass()::UPDATED_AT]): array
+    protected function appendTime(array $data, array $columns = []): array
     {
+        if (empty($columns)) {
+            $columns = [$this->modelClass()::CREATED_AT, $this->modelClass()::UPDATED_AT];
+        }
         $now = time();
         foreach ($data as $key => $item) {
             foreach ($columns as $column) {
