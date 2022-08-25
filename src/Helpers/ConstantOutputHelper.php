@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module;
+namespace Lengbin\Hyperf\Common\Helpers;
 
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Utils\Filesystem\Filesystem;
@@ -57,7 +57,7 @@ class ConstantOutputHelper
                     return ucfirst($str);
                 }, explode('/', str_replace(BASE_PATH, '', $filePath))));
                 $maps = $classname::getMapJson();
-                $data[$directoryName][$fileName] = $call ? call_user_func($call, $maps) : $maps;
+                $data[lcfirst($directoryName)][lcfirst($fileName)] = $call ? call_user_func($call, $maps) : $maps;
             }
         }
         return $data;

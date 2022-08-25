@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common\Commands\CodeGenerator;
 
+use Lengbin\Hyperf\Common\Commands\CodeGenerator\Generator\ConstantControllerGenerator;
 use Lengbin\Hyperf\Common\Commands\CodeGenerator\Generator\ControllerGenerator;
 use Lengbin\Hyperf\Common\Commands\CodeGenerator\Generator\DaoGenerator;
 use Lengbin\Hyperf\Common\Commands\CodeGenerator\Generator\DaoInterfaceGenerator;
@@ -243,7 +244,7 @@ class GenerateCommand extends HyperfCommand
             ])), 'error');
             $logic = Vertex::of(new LogicGenerator($condition), 'logic');
             $controller = Vertex::of(new ControllerGenerator($condition), 'controller');
-            //$constantController = Vertex::of(new ControllerGenerator($condition), 'constantController');
+            $constantController = Vertex::of(new ConstantControllerGenerator($condition), 'constantController');
 
             $dag->addVertex($dao)
                 ->addVertex($daoInterface)
@@ -259,6 +260,7 @@ class GenerateCommand extends HyperfCommand
                 ->addVertex($removeRequest)
                 ->addVertex($getListResponse)
                 ->addVertex($detailResponse)
+                ->addVertex($constantController)
                 ->addEdge($daoInterface, $dao)
                 ->addEdge($error, $service)
                 ->addEdge($dao, $service)
@@ -272,6 +274,7 @@ class GenerateCommand extends HyperfCommand
                 ->addEdge($detailResponse, $logic)
                 ->addEdge($service, $logic)
                 ->addEdge($logic, $controller)
+                ->addEdge($logic, $constantController)
                 ->run();
         }
     }

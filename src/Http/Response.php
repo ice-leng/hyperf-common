@@ -18,6 +18,7 @@ use Hyperf\Utils\ApplicationContext;
 use Hyperf\Utils\Codec\Json;
 use Hyperf\Context\Context;
 use Hyperf\Utils\MimeTypeExtensionGuesser;
+use Lengbin\Hyperf\Common\Constants\Errors\CommonError;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use SplFileInfo;
 use stdClass;
@@ -29,7 +30,7 @@ class Response extends \Hyperf\HttpServer\Response
     public function success($data = [], string $msg = ''): PsrResponseInterface
     {
         return $this->json([
-            'code' => "0",
+            'code' => CommonError::SUCCESS,
             'msg'  => $msg,
             'data' => empty($data) ? new stdClass() : $data,
         ]);

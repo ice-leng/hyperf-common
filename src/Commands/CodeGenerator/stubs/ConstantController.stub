@@ -1,0 +1,49 @@
+<?php
+declare(strict_types=1);
+
+namespace %NAMESPACE%;
+
+use Hyperf\ApiDocs\Annotation\Api;
+use Hyperf\ApiDocs\Annotation\ApiHeader;
+use Hyperf\ApiDocs\Annotation\ApiOperation;
+use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\Middleware;
+use Hyperf\HttpServer\Annotation\PostMapping;
+use Lengbin\Hyperf\Common\BaseController;
+use Lengbin\Hyperf\Common\Helpers\ConstantOutputHelper;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
+%USES%
+#[Controller(prefix: "%URI%")]
+#[Api(tags: "%TITLE%常量管理")]
+#[Middleware(%Middleware%Middleware::class)]
+#[ApiHeader(name: 'Authorization')]
+class %CLASS% extends BaseController
+{
+    protected array $enum = [];
+
+    protected array $error = [];
+
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct($container);
+        $path = BASE_PATH . "/app/Collection/Constants";
+        $constants = $container->get(ConstantOutputHelper::class)->scan($path);
+        $this->error = ArrayHelper::remove($constants, 'errors');
+        $this->enum = $constants;
+    }
+
+    #[PostMapping(path: "enums")]
+    #[ApiOperation("获取枚举")]
+    public function enums(): ResponseInterface
+    {
+        return $this->response->success($this->enum);
+    }
+
+    #[PostMapping(path: "errors")]
+    #[ApiOperation("获取错误码")]
+    public function errors(): ResponseInterface
+    {
+        return $this->response->success($this->error);
+    }
+}
