@@ -96,7 +96,7 @@ class ModelGenerator extends ModelCommand
         return $tables;
     }
 
-    public function generate(string $pool, ?string $table): array
+    public function generate(string $pool, ?string $table, ?bool $force): array
     {
         $tableClass = [];
 
@@ -107,7 +107,6 @@ class ModelGenerator extends ModelCommand
 
         foreach ($tables as $table) {
             $classInfo = new ModelInfo();
-            $this->createModel($table, $option);
 
             $sql = "select TABLE_COMMENT from information_schema.tables where table_name = '%s' and table_schema = '%s';";
             $comment = $builder->getConnection()->selectOne(sprintf($sql, $table, $builder->getConnection()->getDatabaseName()));
@@ -127,6 +126,10 @@ class ModelGenerator extends ModelCommand
             $class = $project->namespace($optionPath) . $class;
             $classInfo->namespace = $class;
 
+            $file = BASE_PATH . '/' . $project->path($class);
+            $classInfo->exist = !$force && file_exists($file);
+
+            $this->createModel($table, $option);
             $tableClass[] = $classInfo;
         }
         return $tableClass;

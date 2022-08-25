@@ -14,8 +14,8 @@ abstract class BaseGeneratorRequest extends ApplicationGenerator
         return parent::getPath("/Entity/Request/{$module}/{$version}/{$this->modelInfo->name}");
     }
 
-    public function isWrite(string $application): bool
+    public function isWrite(): bool
     {
-        return !is_dir(BASE_PATH . $this->getPath($application));
+        return !$this->modelInfo->exist;
     }
 }

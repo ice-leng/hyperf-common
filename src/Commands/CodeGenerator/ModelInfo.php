@@ -17,4 +17,7 @@ class ModelInfo extends ClassInfo
 
     // 表的备注
     public string $comment;
+
+    // 是否存在
+    public bool $exist;
 }

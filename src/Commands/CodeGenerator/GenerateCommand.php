@@ -64,6 +64,7 @@ class GenerateCommand extends HyperfCommand
         $this->addOption('url', 'u', InputOption::VALUE_REQUIRED, '请求url前缀', '/api');
         $this->addOption('applications', 'a', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, '应用端', []);
         $this->addOption('for_table_ddd', 'ddd', InputOption::VALUE_OPTIONAL, '根据表名区分模块');
+        $this->addOption('force', 'f', InputOption::VALUE_OPTIONAL, '强制创建');
     }
 
     public function handle()
@@ -207,7 +208,7 @@ class GenerateCommand extends HyperfCommand
     public function process(GeneratorConfig $config, string $pool = 'default', ?string $table = null, bool $ddd = false): void
     {
         // model 生成
-        $models = (new ModelGenerator($this->container, $ddd))->generate($pool, $table);
+        $models = (new ModelGenerator($this->container, $ddd))->generate($pool, $table, $this->input->getOption('force'));
         $modules = config('generate.modules', []);
         if (empty($modules)) {
             foreach ($models as $model) {
@@ -221,7 +222,7 @@ class GenerateCommand extends HyperfCommand
             $condition = [
                 'modelInfo' => $model,
                 'config' => $config,
-                'ddd'    => $ddd
+                'ddd' => $ddd
             ];
             $getListRequest = $this->getListRequest($condition);
             $createRequest = $this->createRequest($condition);
@@ -242,6 +243,7 @@ class GenerateCommand extends HyperfCommand
             ])), 'error');
             $logic = Vertex::of(new LogicGenerator($condition), 'logic');
             $controller = Vertex::of(new ControllerGenerator($condition), 'controller');
+            //$constantController = Vertex::of(new ControllerGenerator($condition), 'constantController');
 
             $dag->addVertex($dao)
                 ->addVertex($daoInterface)
