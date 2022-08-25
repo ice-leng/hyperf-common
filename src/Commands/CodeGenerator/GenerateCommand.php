@@ -64,7 +64,7 @@ class GenerateCommand extends HyperfCommand
         $this->addOption('url', 'u', InputOption::VALUE_REQUIRED, '请求url前缀', '/api');
         $this->addOption('applications', 'a', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, '应用端', []);
         $this->addOption('for_table_ddd', 'ddd', InputOption::VALUE_OPTIONAL, '根据表名区分模块');
-        $this->addOption('force', 'f', InputOption::VALUE_OPTIONAL, '强制创建');
+        $this->addOption('force', 'f', InputOption::VALUE_NEGATABLE, '强制创建');
     }
 
     public function handle()

@@ -126,8 +126,12 @@ class ModelGenerator extends ModelCommand
             $class = $project->namespace($optionPath) . $class;
             $classInfo->namespace = $class;
 
-            $file = BASE_PATH . '/' . $project->path($class);
-            $classInfo->exist = !$force && file_exists($file);
+            if ($force) {
+                $classInfo->exist = false;
+            } else {
+                $file = BASE_PATH . '/' . $project->path($class);
+                $classInfo->exist = file_exists($file);
+            }
 
             $this->createModel($table, $option);
             $tableClass[] = $classInfo;
