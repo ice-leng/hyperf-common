@@ -13,4 +13,9 @@ abstract class BaseGeneratorRequest extends ApplicationGenerator
         $version = ucfirst($this->config->version);
         return parent::getPath("/Entity/Request/{$module}/{$version}/{$this->modelInfo->name}");
     }
+
+    public function isWrite(): bool
+    {
+        return !is_dir(BASE_PATH . '/' . $this->getPath());
+    }
 }

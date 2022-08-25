@@ -37,10 +37,15 @@ abstract class ApplicationGenerator extends AbstractGenerator
         return $data;
     }
 
+    public function isWrite(): bool
+    {
+        return true;
+    }
+
     public function handle(array $results, string $application): ClassInfo
     {
         $class = $this->getClassInfo($application);
-        if (!file_exists($class->file)) {
+        if ($this->isWrite() && !file_exists($class->file)) {
             $this->mkdir($class->file);
             file_put_contents($class->file, $this->buildClass($class, $results));
         }
