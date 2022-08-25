@@ -18,7 +18,7 @@ class ConstantControllerGenerator extends ApplicationGenerator
 
     public function getFilename(): string
     {
-        return $this->modelInfo->name . 'ConstantController';
+        return $this->modelInfo->module . 'ConstantController';
     }
 
     public function buildClass(ClassInfo $class, array $results = []): string

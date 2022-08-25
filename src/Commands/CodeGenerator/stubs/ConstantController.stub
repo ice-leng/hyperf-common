@@ -9,11 +9,12 @@ use Hyperf\ApiDocs\Annotation\ApiOperation;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middleware;
 use Hyperf\HttpServer\Annotation\PostMapping;
+use Lengbin\Helper\YiiSoft\Arrays\ArrayHelper;
 use Lengbin\Hyperf\Common\BaseController;
 use Lengbin\Hyperf\Common\Helpers\ConstantOutputHelper;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
-%USES%
+
 #[Controller(prefix: "%URI%")]
 #[Api(tags: "%TITLE%常量管理")]
 #[Middleware(%Middleware%Middleware::class)]

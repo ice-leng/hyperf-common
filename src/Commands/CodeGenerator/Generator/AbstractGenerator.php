@@ -43,7 +43,7 @@ abstract class AbstractGenerator extends BaseObject implements Runner
 
     protected function getClassInfo(string $application = ''): ClassInfo
     {
-        $class = $this->project->namespace($this->getPath($application)) . $this->getFilename();
+        $class = $this->project->namespace($this->getPath(ucfirst($application))) . $this->getFilename();
         $path = BASE_PATH . '/' . $this->project->path($class);
         return new ClassInfo([
             'name' => $this->getFilename(),
