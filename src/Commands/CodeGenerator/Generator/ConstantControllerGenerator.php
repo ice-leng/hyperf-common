@@ -34,11 +34,12 @@ class ConstantControllerGenerator extends ApplicationGenerator
         );
         $uri = implode('/', array_filter($url)) . '/constant';
 
-        $path = implode('/', [
+        $path = implode('/', array_filter([
             $this->config->path,
             $this->modelInfo->module,
             "Constants"
-        ]);
+        ]));
+
         $this->replaceNamespace($stub, $class->namespace)
             ->replaceClass($stub, $class->name)
             ->replace($stub, '%Middleware%', ucfirst($application))
