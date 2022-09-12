@@ -58,9 +58,8 @@ class AppExceptionHandler extends ExceptionHandler
             return $this->response->fail($throwable->getCode(), $message ?? $throwable->getMessage());
         }
 
-        $serverError = CommonError::SERVER_ERROR();
-        $systemError = new BusinessException($serverError->getValue());
-        return $this->response->fail($systemError->getCode(), $message ?? $serverError->getMessage());
+        $systemError = new BusinessException(CommonError::SERVER_ERROR(), $message);
+        return $this->response->fail($systemError->getCode(), $systemError->getMessage());
     }
 
     public function isValid(Throwable $throwable): bool

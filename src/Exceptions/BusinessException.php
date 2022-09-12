@@ -17,7 +17,7 @@ use Throwable;
 
 class BusinessException extends ServerException
 {
-    public function __construct(int|BaseEnum $code, string $message = null, array $replace = [], Throwable $previous = null)
+    public function __construct(int|BaseEnum $code, ?string $message = null, array $replace = [], ?Throwable $previous = null)
     {
         if ($code instanceof BaseEnum) {
             if (empty($message)) {

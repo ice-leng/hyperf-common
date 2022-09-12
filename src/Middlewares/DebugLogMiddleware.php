@@ -40,19 +40,23 @@ class DebugLogMiddleware implements MiddlewareInterface
     {
         Context::getOrSet(AppendRequestIdProcessor::REQUEST_ID, $this->idGenerator->generate());
 
-        // 记录请求日志
-        $this->loggerFactory->get('request')->info(json_encode([
-            'user-agent' => $request->getHeaderLine('user-agent'),
-            'ip' => $this->ipHelper->getClientIp(),
-            'host' => $request->getUri()->getHost(),
-            'url' => $request->getUri()->getPath(),
-            'post' => $request->getParsedBody(),
-            'get' => $request->getQueryParams(),
-        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        if (config('logger.request_enable', true)) {
+            // 记录请求日志
+            $this->loggerFactory->get('request')->info(json_encode([
+                'user-agent' => $request->getHeaderLine('user-agent'),
+                'ip' => $this->ipHelper->getClientIp(),
+                'host' => $request->getUri()->getHost(),
+                'url' => $request->getUri()->getPath(),
+                'post' => $request->getParsedBody(),
+                'get' => $request->getQueryParams(),
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
 
         $response = $handler->handle($request);
 
-        $this->loggerFactory->get('response')->info($response->getBody()->getContents());
+        if (config('logger.response_enable', false)) {
+            $this->loggerFactory->get('response')->info($response->getBody()->getContents());
+        }
         return $response;
     }
 }
