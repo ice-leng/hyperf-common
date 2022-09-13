@@ -56,7 +56,7 @@ class %CLASS% extends BaseService implements %INHERITANCE%
         $data = $this->validate($condition, $data);
         $result = $this->%DAO_NAME%->create($condition, $data);
         if (!$result && ArrayHelper::isValidValue($condition, '_throw')) {
-            throw new BusinessException(%ERROR%::CREATE_ERROR);
+            throw new BusinessException(%ERROR%::CREATE_ERROR());
         }
         if (ArrayHelper::isValidValue($condition, '_format')) {
             return $this->format($result, $condition);
@@ -76,7 +76,7 @@ class %CLASS% extends BaseService implements %INHERITANCE%
         $result = $this->%DAO_NAME%->modify($condition, $search, $data);
 
         if (!$result && ArrayHelper::isValidValue($condition, '_throw')) {
-            throw new BusinessException(%ERROR%::UPDATE_ERROR);
+            throw new BusinessException(%ERROR%::UPDATE_ERROR());
         }
         return $result;
     }
@@ -90,7 +90,7 @@ class %CLASS% extends BaseService implements %INHERITANCE%
     {
         $result = $this->%DAO_NAME%->remove($condition, $search);
         if (!$result && ArrayHelper::isValidValue($condition, '_throw')) {
-            throw new BusinessException(%ERROR%::DELETE_ERROR);
+            throw new BusinessException(%ERROR%::DELETE_ERROR());
         }
         return $result;
     }
@@ -105,7 +105,7 @@ class %CLASS% extends BaseService implements %INHERITANCE%
     {
         $result = $this->%DAO_NAME%->detail($condition, $search, $field);
         if (!$result && ArrayHelper::isValidValue($condition, '_throw')) {
-            throw new BusinessException(%ERROR%::NOT_FOUND);
+            throw new BusinessException(%ERROR%::NOT_FOUND());
         }
         if (ArrayHelper::isValidValue($condition, '_format')) {
             return $this->format($result, $condition);
