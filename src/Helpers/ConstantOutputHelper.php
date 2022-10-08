@@ -1,11 +1,11 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * Date:  2021/11/2
  * Time:  9:44 下午
  */
-
-declare(strict_types=1);
+declare (strict_types=1);
 
 namespace Lengbin\Hyperf\Common\Helpers;
 
@@ -37,13 +37,16 @@ class ConstantOutputHelper
     {
         $data = [];
         $directories = $this->filesystem->directories($dir);
+        if (empty($directories)) {
+            $directories[] = $dir;
+        }
         foreach ($directories as $directory) {
             $directoryName = $this->filesystem->basename($directory);
             if (in_array($directoryName, $excludeDir)) {
                 continue;
             }
-            $files = $this->filesystem->allFiles($directory);
 
+            $files = $this->filesystem->allFiles($directory);
             foreach ($files as $file) {
                 $fileName = $file->getBasename('.php');
                 if (in_array($fileName, $excludeFile)) {
@@ -56,6 +59,10 @@ class ConstantOutputHelper
                 $classname = implode('\\', array_map(function ($str) {
                     return ucfirst($str);
                 }, explode('/', str_replace(BASE_PATH, '', $filePath))));
+
+                if (!is_subclass_of($classname, BaseEnum::class)) {
+                    continue;
+                }
                 $maps = $classname::getMapJson();
                 $data[lcfirst($directoryName)][lcfirst($fileName)] = $call ? call_user_func($call, $maps) : $maps;
             }
