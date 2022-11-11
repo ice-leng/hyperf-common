@@ -34,9 +34,30 @@ trait MySQLDaoTrait
         return $result;
     }
 
+    protected function getModel(string $key = ''): BaseModel
+    {
+        $model = new ($this->modelClass());
+        $tableName = $this->subTable($model, $key);
+        if ($tableName) {
+            $model->setTable($tableName);
+        }
+        return $model;
+    }
+
+    public function subTable(BaseModel $model, string $key = ''): string
+    {
+        return $key;
+    }
+
+    protected function handleModel(array $condition): BaseModel
+    {
+        $subTable = $condition['_subTable'] ?? '';
+        return $this->getModel($subTable);
+    }
+
     protected function handleQuery(array $condition, array $search, array $field = ['*'], array $sort = []): Builder
     {
-        $model = make($this->modelClass());
+        $model = $this->handleModel($condition);
         $query = $model->newQuery();
         [$query, $search, $condition, $sort] = $this->handleSearch($query, $search, $condition, $sort);
 
@@ -83,7 +104,7 @@ trait MySQLDaoTrait
             $query->orderBy($column, $sortType);
         }
 
-        return $this->modelClass()::buildQuery($search, $query, $forExcludePk);
+        return $model->buildQuery($search, $query, $forExcludePk);
     }
 
     public function getList(array $condition, array $search, array $sort, Page $page, array $field = ['*']): array
@@ -92,10 +113,10 @@ trait MySQLDaoTrait
         return $this->output($query, $page);
     }
 
-    protected function appendTime(array $data, array $columns = []): array
+    protected function appendTime(BaseModel $model,array $data, array $columns = []): array
     {
         if (empty($columns)) {
-            $columns = [$this->modelClass()::CREATED_AT, $this->modelClass()::UPDATED_AT];
+            $columns = [$model->getCreatedAtColumn(), $model->getUpdatedAtColumn()];
         }
         $now = time();
         foreach ($data as $key => $item) {
@@ -109,20 +130,20 @@ trait MySQLDaoTrait
         return $data;
     }
 
-    public function batchInsert(array $data): array
+    public function batchInsert(BaseModel $model, array $data): array
     {
-        $data = $this->appendTime($data);
-        $ret = $this->modelClass()::query()->insert($data);
+        $data = $this->appendTime($model, $data);
+        $ret = $model->newQuery()->insert($data);
         if (!$ret) {
             return [];
         }
         return $data;
     }
 
-    public function batchUpdate(array $data): array
+    public function batchUpdate(BaseModel $model, array $data): array
     {
-        $data = $this->appendTime($data, [$this->modelClass()::UPDATED_AT]);
-        $ret = $this->modelClass()::insertOrUpdate($data);
+        $data = $this->appendTime($model, $data, [$model->getUpdatedAtColumn()]);
+        $ret = $model->insertOrUpdate($data);
         if (!$ret) {
             return [];
         }
@@ -135,22 +156,24 @@ trait MySQLDaoTrait
             return [];
         }
 
+        $model = $this->handleModel($condition);
+
         if (ArrayHelper::isValidValue($condition, '_insert')) {
-            return $this->batchInsert($data);
+            return $this->batchInsert($model, $data);
         }
         if (ArrayHelper::isValidValue($condition, '_update')) {
-            return $this->batchUpdate($data);
+            return $this->batchUpdate($model, $data);
         }
 
-        $model = (make($this->modelClass()))->fill($data);
-        $ret = $model->save();
-        return $ret ? $model->toArray() : [];
+        $orm = $model->fill($data);
+        $ret = $orm->save();
+        return $ret ? $orm->toArray() : [];
     }
 
     public function modify(array $condition, array $search, array $data): int
     {
         $forExcludePk = boolval($condition['_exceptPk'] ?? false);
-        return $this->modelClass()::updateCondition($search, $data, $forExcludePk);
+        return $this->handleModel($condition)->updateCondition($search, $data, $forExcludePk);
     }
 
     public function remove(array $condition, array $search): int
@@ -159,7 +182,7 @@ trait MySQLDaoTrait
             return 0;
         }
         $forceDelete = boolval($condition['_delete'] ?? false);
-        return $this->modelClass()::removeCondition($search, $forceDelete, $this->softDeleted);
+        return $this->handleModel($condition)->removeCondition($search, $forceDelete, $this->softDeleted);
     }
 
     public function detail(array $condition, array $search, array $field = ['*']): array
