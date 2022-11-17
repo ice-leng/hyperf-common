@@ -30,6 +30,9 @@ class BaseCondition extends BaseObject
     #[ApiModelProperty(value: "是否排除主键", hidden: true)]
     public int $_exceptPk = 0;
 
-    #[ApiModelProperty(value: "分表", hidden: true)]
-    public string $_subTable = '';
+    #[ApiModelProperty(value: "日期分表", hidden: true)]
+    public string $_subTable_date = '';
+
+    #[ApiModelProperty(value: "hash分表", hidden: true)]
+    public string $_subTable_hash = '';
 }

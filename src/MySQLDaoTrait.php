@@ -34,30 +34,35 @@ trait MySQLDaoTrait
         return $result;
     }
 
-    protected function getModel(string $key = ''): BaseModel
+    protected function getModel(array $condition = []): BaseModel
     {
         $model = new ($this->modelClass());
-        $tableName = $this->subTable($model, $key);
+        $tableName = '';
+        if (isset($condition['_subTable_date'])) {
+            $tableName = $this->subTableDate($model, $condition['_subTable_date']);
+        }
+        if (isset($condition['_subTable_hash'])) {
+            $tableName = $this->subTableHash($model, $condition['_subTable_hash']);
+        }
         if ($tableName) {
             $model->setTable($tableName);
         }
         return $model;
     }
 
-    public function subTable(BaseModel $model, string $key = ''): string
+    public function subTableDate(BaseModel $model, string $key = ''): string
     {
         return $key;
     }
 
-    protected function handleModel(array $condition): BaseModel
+    public function subTableHash(BaseModel $model, string $key = ''): string
     {
-        $subTable = $condition['_subTable'] ?? '';
-        return $this->getModel($subTable);
+        return $key;
     }
 
     protected function handleQuery(array $condition, array $search, array $field = ['*'], array $sort = []): Builder
     {
-        $model = $this->handleModel($condition);
+        $model = $this->getModel($condition);
         $query = $model->newQuery();
         [$query, $search, $condition, $sort] = $this->handleSearch($query, $search, $condition, $sort);
 
@@ -156,7 +161,7 @@ trait MySQLDaoTrait
             return [];
         }
 
-        $model = $this->handleModel($condition);
+        $model = $this->getModel($condition);
 
         if (ArrayHelper::isValidValue($condition, '_insert')) {
             return $this->batchInsert($model, $data);
@@ -173,7 +178,7 @@ trait MySQLDaoTrait
     public function modify(array $condition, array $search, array $data): int
     {
         $forExcludePk = boolval($condition['_exceptPk'] ?? false);
-        return $this->handleModel($condition)->updateCondition($search, $data, $forExcludePk);
+        return $this->getModel($condition)->updateCondition($search, $data, $forExcludePk);
     }
 
     public function remove(array $condition, array $search): int
@@ -182,7 +187,7 @@ trait MySQLDaoTrait
             return 0;
         }
         $forceDelete = boolval($condition['_delete'] ?? false);
-        return $this->handleModel($condition)->removeCondition($search, $forceDelete, $this->softDeleted);
+        return $this->getModel($condition)->removeCondition($search, $forceDelete, $this->softDeleted);
     }
 
     public function detail(array $condition, array $search, array $field = ['*']): array
