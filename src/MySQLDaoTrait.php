@@ -44,6 +44,9 @@ trait MySQLDaoTrait
         if (isset($condition['_subTable_hash'])) {
             $tableName = $this->subTableHash($model, $condition['_subTable_hash']);
         }
+        if (isset($condition['t_table'])) {
+            $tableName = $condition['t_table'];
+        }
         if ($tableName) {
             $model->setTable($tableName);
         }
