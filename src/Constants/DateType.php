@@ -37,6 +37,11 @@ class DateType extends AbstractEnum
     public const YEARLY = 5;
 
     /**
+     * @Message("小时")
+     */
+    public const HOURS = 6;
+
+    /**
      * 获取周期开始时间
      * @param DateType $type
      * @param int $time
