@@ -39,10 +39,10 @@ trait MySQLDaoTrait
         $model = new ($this->modelClass());
         $tableName = '';
         if (isset($condition['_subTable_date'])) {
-            $tableName = $this->getSubTableDate($model, $condition['_subTable_date']);
+            $tableName = $this->getSubTableDate($condition['_subTable_date']);
         }
         if (isset($condition['_subTable_hash'])) {
-            $tableName = $this->getSubTableHash($model, $condition['_subTable_hash']);
+            $tableName = $this->getSubTableHash($condition['_subTable_hash']);
         }
         if (isset($condition['_table'])) {
             $tableName = $condition['_table'];
@@ -53,12 +53,12 @@ trait MySQLDaoTrait
         return $model;
     }
 
-    public function getSubTableDate(BaseModel $model, string $key = ''): string
+    public function getSubTableDate(string $key = ''): string
     {
         return $key;
     }
 
-    public function getSubTableHash(BaseModel $model, string $key = ''): string
+    public function getSubTableHash(string $key = ''): string
     {
         return $key;
     }
