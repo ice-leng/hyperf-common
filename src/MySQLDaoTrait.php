@@ -39,13 +39,13 @@ trait MySQLDaoTrait
         $model = new ($this->modelClass());
         $tableName = '';
         if (isset($condition['_subTable_date'])) {
-            $tableName = $this->subTableDate($model, $condition['_subTable_date']);
+            $tableName = $this->getSubTableDate($model, $condition['_subTable_date']);
         }
         if (isset($condition['_subTable_hash'])) {
-            $tableName = $this->subTableHash($model, $condition['_subTable_hash']);
+            $tableName = $this->getSubTableHash($model, $condition['_subTable_hash']);
         }
-        if (isset($condition['t_table'])) {
-            $tableName = $condition['t_table'];
+        if (isset($condition['_table'])) {
+            $tableName = $condition['_table'];
         }
         if ($tableName) {
             $model->setTable($tableName);
@@ -53,12 +53,12 @@ trait MySQLDaoTrait
         return $model;
     }
 
-    public function subTableDate(BaseModel $model, string $key = ''): string
+    public function getSubTableDate(BaseModel $model, string $key = ''): string
     {
         return $key;
     }
 
-    public function subTableHash(BaseModel $model, string $key = ''): string
+    public function getSubTableHash(BaseModel $model, string $key = ''): string
     {
         return $key;
     }
@@ -72,9 +72,11 @@ trait MySQLDaoTrait
         $groupBy = ArrayHelper::remove($search, '_groupBy');
         if ($groupBy) {
             $query->groupBy($groupBy);
+        } else {
+            if (empty($sort[$model->getKeyName()])) {
+                $sort[$model->getKeyName()] = SortType::ASC;
+            }
         }
-
-        $sort[$model->getKeyName()] = SortType::ASC;
 
         $forExcludePk = false;
         foreach ($condition as $with => $whether) {

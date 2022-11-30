@@ -13,6 +13,7 @@ use Lengbin\Helper\Util\DateHelper;
  * @method static DateType WEEKLY()
  * @method static DateType MONTHLY()
  * @method static DateType YEARLY()
+ * @method static DateType HOURS()
  */
 class DateType extends AbstractEnum
 {
@@ -62,6 +63,9 @@ class DateType extends AbstractEnum
             case DateType::YEARLY: {
                 return strtotime(date('Y0101 00:00:00', $time));
             }
+            case DateType::HOURS: {
+                return $time;
+            }
         }
         return 0;
     }
@@ -89,6 +93,9 @@ class DateType extends AbstractEnum
             case DateType::YEARLY: {
                 $datetime = new DateTime(date('Ym01', $startAt));
                 return $datetime->modify('first day of next year')->getTimestamp();
+            }
+            case DateType::HOURS: {
+                return time();
             }
         }
         return 0;
