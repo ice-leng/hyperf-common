@@ -75,10 +75,7 @@ trait SubTableTrait
         $subTableHash = $this->_getSubTableHash()->setKey($key);
         $subTable = $subTableHash->getSubTable();
         if (!in_array($subTable, $this->_hashTable)) {
-            $connection = $this->getModel()->getConnection();
-            $pdo = $connection->getPdo();
-            $subTableHash->setTablePrefix($connection->getTablePrefix());
-            $subTableHash->createSubTable($pdo, $connection->getDatabaseName(), $subTable);
+            $this->_createSubTable($subTableHash, $subTable);
             $this->_hashTable[] = $subTable;
         }
         return $subTable;
@@ -96,11 +93,16 @@ trait SubTableTrait
         $subTable = $subTableData->getSubTable();
         $lock = $this->_getRedisLock()->lock($subTable, $this->getSubTableTimestamp());
         if ($lock) {
-            $connection = $this->getModel()->getConnection();
-            $pdo = $connection->getPdo();
-            $subTableData->setTablePrefix($connection->getTablePrefix());
-            $subTableData->createSubTable($pdo, $connection->getDatabaseName(), $subTable);
+            $this->_createSubTable($subTableData, $subTable);
         }
         return $subTable;
+    }
+
+    private function _createSubTable(AbstractSubTable $subTable, string $table): bool
+    {
+        $connection = $this->getModel()->getConnection();
+        $pdo = $connection->getPdo();
+        $subTable->setTablePrefix($connection->getTablePrefix());
+        return $subTable->createSubTable($pdo, $connection->getDatabaseName(), $table);
     }
 }
