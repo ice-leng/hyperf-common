@@ -53,12 +53,12 @@ trait MySQLDaoTrait
         return $model;
     }
 
-    public function getSubTableDate(string $key = ''): string
+    public function getSubTableDate(string $key): string
     {
         return $key;
     }
 
-    public function getSubTableHash(string $key = ''): string
+    public function getSubTableHash(string $key): string
     {
         return $key;
     }
