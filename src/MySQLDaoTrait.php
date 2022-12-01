@@ -53,16 +53,6 @@ trait MySQLDaoTrait
         return $model;
     }
 
-    public function getSubTableDate(string $key): string
-    {
-        return $key;
-    }
-
-    public function getSubTableHash(string $key): string
-    {
-        return $key;
-    }
-
     protected function handleQuery(array $condition, array $search, array $field = ['*'], array $sort = []): Builder
     {
         $model = $this->getModel($condition);
@@ -123,7 +113,7 @@ trait MySQLDaoTrait
         return $this->output($query, $page);
     }
 
-    protected function appendTime(BaseModel $model,array $data, array $columns = []): array
+    protected function appendTime(BaseModel $model, array $data, array $columns = []): array
     {
         if (empty($columns)) {
             $columns = [$model->getCreatedAtColumn(), $model->getUpdatedAtColumn()];
