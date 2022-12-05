@@ -104,7 +104,7 @@ trait MySQLDaoTrait
             $query->orderBy($column, $sortType);
         }
 
-        return $model->buildQuery($search, $query, $forExcludePk);
+        return $model->buildQuery($search, $forExcludePk, $query);
     }
 
     public function getList(array $condition, array $search, array $sort, Page $page, array $field = ['*']): array

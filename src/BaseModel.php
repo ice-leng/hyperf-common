@@ -33,10 +33,9 @@ abstract class BaseModel extends Model
      *
      * @return Builder
      */
-    public static function buildQuery(array $conditions, ?Builder $query = null, bool $forExcludePk = false): Builder
+    public function buildQuery(array $conditions, bool $forExcludePk = false, ?Builder $query = null): Builder
     {
-        $model = new static();
-        $query = $query ?? $model->newQuery();
+        $query = $query ?? $this->newQuery();
 
         if (ArrayHelper::isIndexed($conditions)) {
             $query->where($conditions);
@@ -45,7 +44,7 @@ abstract class BaseModel extends Model
                 if (is_null($value) || $value == '') {
                     continue;
                 }
-                $excludePk = $forExcludePk && $key == $model->getKeyName();
+                $excludePk = $forExcludePk && $key == $this->getKeyName();
                 if (is_array($value)) {
                     $excludePk ? $query->whereNotIn($key, $value) : $query->whereIn($key, $value);
                 } else {
@@ -63,9 +62,9 @@ abstract class BaseModel extends Model
      *
      * @return null|BaseModel|object|static
      */
-    public static function findOne(array $condition, array $field = ['*'], bool $forExcludePk = false, bool $forUpdate = false): ?self
+    public function findOne(array $condition, array $field = ['*'], bool $forExcludePk = false, bool $forUpdate = false): ?self
     {
-        $query = self::buildQuery($condition, null, $forExcludePk);
+        $query = $this->buildQuery($condition, $forExcludePk);
         if ($forUpdate) {
             $query->lockForUpdate();
         }
@@ -79,9 +78,9 @@ abstract class BaseModel extends Model
      *
      * @return int
      */
-    public static function updateCondition(array $condition, array $data, bool $forExcludePk): int
+    public function updateCondition(array $condition, array $data, bool $forExcludePk): int
     {
-        $query = static::buildQuery($condition, null, $forExcludePk);
+        $query = $this->buildQuery($condition, $forExcludePk);
         return $query->update($data);
     }
 
@@ -92,9 +91,9 @@ abstract class BaseModel extends Model
      *
      * @return int
      */
-    public static function removeCondition(array $condition, bool $forceDelete = false, string $softDeleted = 'enable'): int
+    public function removeCondition(array $condition, bool $forceDelete = false, string $softDeleted = 'enable'): int
     {
-        $query = static::buildQuery($condition);
+        $query = $this->buildQuery($condition);
         if ($forceDelete) {
             return $query->delete();
         } else {
@@ -112,7 +111,7 @@ abstract class BaseModel extends Model
      *
      * @return bool
      */
-    public static function insertOrUpdate(array $values, array $column = [])
+    public function insertOrUpdate(array $values, array $column = [])
     {
         if (empty($column)) {
             $column = array_keys(current($values));
@@ -121,18 +120,17 @@ abstract class BaseModel extends Model
         foreach ($column as $item) {
             $value[$item] = Db::raw("values(`{$item}`)");
         }
-        $model = new static();
-        $connection = $model->getConnection();   // 数据库连接
-        $builder = $model->newQuery()->getQuery();   // 查询构造器
+        $connection = $this->getConnection();   // 数据库连接
+        $builder = $this->newQuery()->getQuery();   // 查询构造器
         $grammar = $builder->getGrammar();  // 语法器
         // 编译插入语句
         $insert = $grammar->compileInsert($builder, $values);
         // 编译重复后更新列语句。
-        $update = $model->compileUpdateColumns($grammar, $value);
+        $update = $this->compileUpdateColumns($grammar, $value);
         // 构造查询语句
         $query = $insert . ' on duplicate key update ' . $update;
         // 组装sql绑定参数
-        $bindings = $model->prepareBindingsForInsertOrUpdate($values, $value);
+        $bindings = $this->prepareBindingsForInsertOrUpdate($values, $value);
         // 执行数据库查询
         return $connection->insert($query, $bindings);
     }
