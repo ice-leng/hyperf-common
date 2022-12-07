@@ -38,14 +38,17 @@ trait MySQLDaoTrait
     {
         $model = new ($this->modelClass());
         $tableName = '';
-        if (isset($condition['_subTable_date']) && method_exists($this, 'getSubTableDate') ) {
+        if (isset($condition['_subTable_date']) && method_exists($this, 'getSubTableDate')) {
             $tableName = $this->getSubTableDate($condition['_subTable_date']);
         }
-        if (isset($condition['_subTable_hash']) && method_exists($this, 'getSubTableHash') ) {
+        if (isset($condition['_subTable_hash']) && method_exists($this, 'getSubTableHash')) {
             $tableName = $this->getSubTableHash($condition['_subTable_hash']);
         }
-        if (isset($condition['_table']) && method_exists($this, 'getSubTable') ) {
-            $tableName = $this->getSubTable($condition['_table']);
+        if (isset($condition['_subTable']) && method_exists($this, 'getSubTable')) {
+            $tableName = $this->getSubTable($condition['_subTable']);
+        }
+        if (isset($condition['_table'])) {
+            $tableName = $condition['_table'];
         }
         if ($tableName) {
             $model->setTable($tableName);

@@ -36,6 +36,9 @@ class BaseCondition extends BaseObject
     #[ApiModelProperty(value: "hash分表", hidden: true)]
     public string $_subTable_hash = '';
 
+    #[ApiModelProperty(value: "自定义分表hash", hidden: true)]
+    public string $_subTable = '';
+
     #[ApiModelProperty(value: "指定表", hidden: true)]
     public string $_table = '';
 }
