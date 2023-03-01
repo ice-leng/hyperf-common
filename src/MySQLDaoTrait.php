@@ -26,8 +26,14 @@ trait MySQLDaoTrait
     {
         $result = [];
         foreach ($data as $key => $value) {
-            if (!str_contains($key, '.')) {
-                $key = "{$tableName}.{$key}";
+            if (is_array($value) && isset($value[0])) {
+                if (!str_contains($value[0], '.')) {
+                    $value[0] = "{$tableName}.{$value[0]}";
+                }
+            } else {
+                if (!str_contains($key, '.')) {
+                    $key = "{$tableName}.{$key}";
+                }
             }
             $result[$key] = $value;
         }

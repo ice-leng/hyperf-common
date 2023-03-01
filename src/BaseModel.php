@@ -117,8 +117,12 @@ abstract class BaseModel extends Model
             $column = array_keys(current($values));
         }
         $value = [];
-        foreach ($column as $item) {
-            $value[$item] = Db::raw("values(`{$item}`)");
+        foreach ($column as $key => $item) {
+            if (is_int($key)) {
+                $value[$item] = Db::raw("values(`{$item}`)");
+            } else {
+                $value[$key] = Db::raw($item);
+            }
         }
         $connection = $this->getConnection();   // 数据库连接
         $builder = $this->newQuery()->getQuery();   // 查询构造器
