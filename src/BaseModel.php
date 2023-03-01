@@ -121,7 +121,7 @@ abstract class BaseModel extends Model
             if (is_int($key)) {
                 $value[$item] = Db::raw("values(`{$item}`)");
             } else {
-                $value[$key] = Db::raw($item);
+                $value[$key] = $item instanceof Expression ? $item : Db::raw($item);
             }
         }
         $connection = $this->getConnection();   // 数据库连接
