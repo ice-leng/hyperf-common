@@ -14,6 +14,7 @@ namespace Lengbin\Hyperf\Common\Exceptions\Handler;
 
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
+use Hyperf\HttpMessage\Exception\NotFoundHttpException;
 use Lengbin\Hyperf\Common\Constants\Errors\CommonError;
 use Lengbin\Hyperf\Common\Exceptions\BusinessException;
 use Lengbin\Hyperf\Common\Http\Response;
@@ -47,7 +48,13 @@ class AppExceptionHandler extends ExceptionHandler
             $throwable->getFile(),
             $throwable->getLine()
         );
-        $this->logger->error($msg);
+
+        if (!$throwable instanceof NotFoundHttpException) {
+            $this->logger->error($msg);
+            if (config('app_env', 'dev') == 'local') {
+                $this->logger->error($throwable->getTraceAsString());
+            }
+        }
 
         $message = null;
         if (config('app_env', 'dev') === 'dev') {
