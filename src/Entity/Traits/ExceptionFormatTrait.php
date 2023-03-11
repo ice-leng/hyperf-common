@@ -9,7 +9,7 @@ use Throwable;
 
 trait ExceptionFormatTrait
 {
-    private ?FormatterInterface $_formatter;
+    private ?FormatterInterface $_formatter = null;
 
     private function getFormatter(): FormatterInterface
     {
