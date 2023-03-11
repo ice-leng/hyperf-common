@@ -16,6 +16,7 @@ use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Hyperf\HttpMessage\Exception\NotFoundHttpException;
 use Lengbin\Hyperf\Common\Constants\Errors\CommonError;
+use Lengbin\Hyperf\Common\Entity\Traits\ExceptionFormatTrait;
 use Lengbin\Hyperf\Common\Exceptions\BusinessException;
 use Lengbin\Hyperf\Common\Http\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -23,6 +24,7 @@ use Throwable;
 
 class AppExceptionHandler extends ExceptionHandler
 {
+    use ExceptionFormatTrait;
     /**
      * @var StdoutLoggerInterface
      */
@@ -50,9 +52,10 @@ class AppExceptionHandler extends ExceptionHandler
         );
 
         if (!$throwable instanceof NotFoundHttpException) {
-            $this->logger->error($msg);
             if (config('app_env', 'dev') == 'local') {
-                $this->logger->error($throwable->getTraceAsString());
+                $this->logger->error($this->formatException($throwable));
+            } else {
+                $this->logger->error($msg);
             }
         }
 
