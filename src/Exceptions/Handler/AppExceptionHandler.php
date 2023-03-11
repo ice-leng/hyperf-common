@@ -25,6 +25,7 @@ use Throwable;
 class AppExceptionHandler extends ExceptionHandler
 {
     use ExceptionFormatTrait;
+
     /**
      * @var StdoutLoggerInterface
      */
@@ -43,32 +44,15 @@ class AppExceptionHandler extends ExceptionHandler
 
     public function handle(Throwable $throwable, ResponseInterface $response)
     {
-        $msg = sprintf("%s: %s(%s) in %s:%s",
-            get_class($throwable),
-            $throwable->getMessage(),
-            $throwable->getCode(),
-            $throwable->getFile(),
-            $throwable->getLine()
-        );
-
         if (!$throwable instanceof NotFoundHttpException) {
-            if (config('app_env', 'dev') == 'local') {
-                $this->logger->error($this->formatException($throwable));
-            } else {
-                $this->logger->error($msg);
-            }
-        }
-
-        $message = null;
-        if (config('app_env', 'dev') === 'dev') {
-            $message = $msg;
+            $this->logger->error($this->formatException($throwable));
         }
 
         if ($throwable instanceof BusinessException) {
-            return $this->response->fail($throwable->getCode(), $message ?? $throwable->getMessage());
+            return $this->response->fail($throwable->getCode(), $throwable->getMessage());
         }
 
-        $systemError = new BusinessException(CommonError::SERVER_ERROR(), $message);
+        $systemError = new BusinessException(CommonError::SERVER_ERROR());
         return $this->response->fail($systemError->getCode(), $systemError->getMessage());
     }
 
