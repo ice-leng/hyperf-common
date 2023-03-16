@@ -108,7 +108,7 @@ trait SubTableTrait
 
     public function getSubTable(string $key): string
     {
-        $subTableData = $this->_getSubTableHash()->setKey($key);
+        $subTableData = $this->_getSubTableDate()->setKey($key);
         $subTable = $subTableData->getSubTable();
         if (!in_array($subTable, $this->_hashTable)) {
             $this->_createSubTable($subTableData, $subTable);
