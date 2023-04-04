@@ -27,9 +27,13 @@ class BusinessException extends ServerException
         }
 
         if (empty($message)) {
-            $config = config('errorCode', []);
-            $class = $config['classNamespace'] . '\\' . $config['classname'];
-            $message = $class::byValue($code)->getMessage($replace);
+            try {
+                $config = config('errorCode', []);
+                $class = $config['classNamespace'] . '\\' . $config['classname'];
+                $message = $class::byValue($code)->getMessage($replace);
+            } catch (Throwable $exception) {
+                $message = $exception->getMessage();
+            }
         }
         parent::__construct($message, $code, $previous);
     }
