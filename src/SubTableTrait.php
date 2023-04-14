@@ -56,6 +56,15 @@ trait SubTableTrait
         }
         return $this->_subTableDate;
     }
+
+    private function _getRedisLock(): RedisLockHelper
+    {
+        if (!$this->_redisLock) {
+            $this->_redisLock = make(RedisLockHelper::class);
+        }
+        return $this->_redisLock;
+    }
+
     public function getSubTableSlices(): int
     {
         return 16;
@@ -82,7 +91,7 @@ trait SubTableTrait
     {
         $subTableData = $this->_getSubTableDate()->setKey($key);
         $subTable = $subTableData->getSubTable();
-        $lock = make(RedisLockHelper::class)->lock($subTable, $this->getSubTableTimestamp());
+        $lock = $this->_getRedisLock()->lock($subTable, $this->getSubTableTimestamp());
         if ($lock) {
             $this->_createSubTable($subTableData, $subTable);
         }
