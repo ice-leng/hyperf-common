@@ -15,7 +15,7 @@ trait SubTableTrait
     private ?SubTableFactory $_subTableFactory = null;
     private ?AbstractSubTable $_subTableDate = null;
     private ?SubTableHash $_subTableHash = null;
-    private ?RedisLockHelper $_redisLock = null;
+    private ?Redis $_redisLock = null;
     private ?string $_tableName = null;
 
     private array $_hashTable = [];
