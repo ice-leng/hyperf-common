@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common;
 
-use Lengbin\Hyperf\Common\Helpers\RedisLockHelper;
+use Hyperf\Redis\Redis;
 use Lengbin\SubDatabase\Enums\SubTableMode;
 use Lengbin\SubDatabase\SubTable\AbstractSubTable;
 use Lengbin\SubDatabase\SubTable\Mode\SubTableHash;
@@ -57,10 +57,10 @@ trait SubTableTrait
         return $this->_subTableDate;
     }
 
-    private function _getRedisLock(): RedisLockHelper
+    private function _getRedisLock(): Redis
     {
         if (!$this->_redisLock) {
-            $this->_redisLock = make(RedisLockHelper::class);
+            $this->_redisLock = make(Redis::class);
         }
         return $this->_redisLock;
     }
@@ -91,7 +91,11 @@ trait SubTableTrait
     {
         $subTableData = $this->_getSubTableDate()->setKey($key);
         $subTable = $subTableData->getSubTable();
-        $lock = $this->_getRedisLock()->lock($subTable, $this->getSubTableTimestamp());
+        //$lock = $this->_getRedisLock()->lock($subTable, $this->getSubTableTimestamp());
+        $lock = $this->_getRedisLock()->set($subTable, $subTable, [
+            'nx',
+            'ex' => intval(bcdiv(strval($this->getSubTableTimestamp()), strval(1000)))
+        ]);
         if ($lock) {
             $this->_createSubTable($subTableData, $subTable);
         }
