@@ -31,7 +31,7 @@ class RedisCacheHelper extends AbstractRedisCache
 
     public function getConfig(): array
     {
-        $config = \Hyperf\Support\config('redis.default', []);
+        $config = \Hyperf\Config\config('redis.default', []);
         $config['mc'] = \Hyperf\Config\config('app_name', 'hyperf');
         return $config;
     }
