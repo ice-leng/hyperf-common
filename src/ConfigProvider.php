@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common;
 
-use Hyperf\Utils\Coroutine;
+use Hyperf\Coroutine\Coroutine;
 use Lengbin\Hyperf\Common\Http\Response;
 use Lengbin\Hyperf\Common\Logs\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;

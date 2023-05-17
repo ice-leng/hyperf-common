@@ -16,8 +16,9 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 
-namespace Hyperf\Utils;
+namespace Hyperf\Coroutine;
 
+use Hyperf\Context\ApplicationContext;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Engine\Coroutine as Co;
 use Hyperf\Engine\Exception\CoroutineDestroyedException;
@@ -44,7 +45,7 @@ class Coroutine
                     AppendRequestIdProcessor::REQUEST_ID,
                     ServerRequestInterface::class,
                 ]);
-                call($callable);
+                \Hyperf\Support\call($callable);
             } catch (Throwable $throwable) {
                 if (ApplicationContext::hasContainer()) {
                     $container = ApplicationContext::getContainer();

@@ -70,15 +70,15 @@ class ModelCommand extends BaseModelCommand
 
         $stms = $this->astParser->parse(file_get_contents($path));
         $traverser = new NodeTraverser();
-        $traverser->addVisitor(make(ModelUpdateVisitor::class, [
+        $traverser->addVisitor(\Hyperf\Support\make(ModelUpdateVisitor::class, [
             'class' => $class,
             'columns' => $columns,
             'option' => $option,
         ]));
-        $traverser->addVisitor(make(ModelRewriteConnectionVisitor::class, [$class, $option->getPool()]));
-        $data = make(ModelData::class, ['class' => $class, 'columns' => $columns]);
+        $traverser->addVisitor(\Hyperf\Support\make(ModelRewriteConnectionVisitor::class, [$class, $option->getPool()]));
+        $data = \Hyperf\Support\make(ModelData::class, ['class' => $class, 'columns' => $columns]);
         foreach ($option->getVisitors() as $visitorClass) {
-            $traverser->addVisitor(make($visitorClass, [$option, $data]));
+            $traverser->addVisitor(\Hyperf\Support\make($visitorClass, [$option, $data]));
         }
         $stms = $traverser->traverse($stms);
         $code = $this->printer->prettyPrintFile($stms);

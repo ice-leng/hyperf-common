@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common\Helpers;
 
+use Hyperf\Coordinator\Constants;
+use Hyperf\Coordinator\CoordinatorManager;
 use Hyperf\Redis\Pool\PoolFactory;
-use Hyperf\Utils\Coordinator\Constants;
-use Hyperf\Utils\Coordinator\CoordinatorManager;
 use Hyperf\Utils\Coroutine;
 use Lengbin\Common\AbstractRedisLock;
 

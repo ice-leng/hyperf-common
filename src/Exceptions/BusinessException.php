@@ -28,7 +28,7 @@ class BusinessException extends ServerException
 
         if (empty($message)) {
             try {
-                $config = config('errorCode', []);
+                $config = \Hyperf\Config\config('errorCode', []);
                 $class = $config['classNamespace'] . '\\' . $config['classname'];
                 $message = $class::byValue($code)->getMessage($replace);
             } catch (Throwable $exception) {

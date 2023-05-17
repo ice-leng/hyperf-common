@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Lengbin\Hyperf\Common;
 
+use Hyperf\Collection\Arr;
 use Lengbin\Helper\YiiSoft\Arrays\ArrayHelper;
 use Lengbin\Hyperf\Common\Constants\SoftDeleted;
 use Hyperf\Database\Model\Builder;
@@ -16,7 +17,6 @@ use Hyperf\Database\Query\Expression;
 use Hyperf\Database\Query\Grammars\Grammar;
 use Hyperf\DbConnection\Db;
 use Hyperf\DbConnection\Model\Model;
-use Hyperf\Utils\Arr;
 
 abstract class BaseModel extends Model
 {

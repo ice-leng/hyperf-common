@@ -14,7 +14,7 @@ trait ExceptionFormatTrait
     private function getFormatter(): FormatterInterface
     {
         if (is_null($this->_formatter)) {
-            $this->_formatter = make(FormatterInterface::class);
+            $this->_formatter = \Hyperf\Support\make(FormatterInterface::class);
         }
         return $this->_formatter;
     }

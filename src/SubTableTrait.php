@@ -23,7 +23,7 @@ trait SubTableTrait
     private function _getSubTableFactory(): SubTableFactory
     {
         if (!$this->_subTableFactory) {
-            $this->_subTableFactory = make(SubTableFactory::class);
+            $this->_subTableFactory = \Hyperf\Support\make(SubTableFactory::class);
         }
         return $this->_subTableFactory;
     }
@@ -60,7 +60,7 @@ trait SubTableTrait
     private function _getRedisLock(): Redis
     {
         if (!$this->_redisLock) {
-            $this->_redisLock = make(Redis::class);
+            $this->_redisLock = \Hyperf\Support\make(Redis::class);
         }
         return $this->_redisLock;
     }

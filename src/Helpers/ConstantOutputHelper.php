@@ -10,7 +10,7 @@ declare (strict_types=1);
 namespace Lengbin\Hyperf\Common\Helpers;
 
 use Hyperf\Di\Annotation\Inject;
-use Hyperf\Utils\Filesystem\Filesystem;
+use Hyperf\Support\Filesystem\Filesystem;
 use Lengbin\Hyperf\ErrorCode\BaseEnum;
 
 class ConstantOutputHelper

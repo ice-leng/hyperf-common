@@ -74,7 +74,7 @@ class GenerateCommand extends HyperfCommand
 
         $applications = $this->input->getOption('applications');
         if (empty($applications)) {
-            $applications = config('generate.applications');
+            $applications = \Hyperf\Config\config('generate.applications');
         }
 
         if (empty($applications)) {
@@ -92,7 +92,7 @@ class GenerateCommand extends HyperfCommand
         $table = $this->input->getOption('table');
         $ddd = $this->input->getOption('for_table_ddd');
         if (is_null($ddd)) {
-            $ddd = config('generate.for_table_ddd');
+            $ddd = \Hyperf\Config\config('generate.for_table_ddd');
         }
 
         $this->process($config, $pool, $table, $ddd);
@@ -210,7 +210,7 @@ class GenerateCommand extends HyperfCommand
     {
         // model 生成
         $models = (new ModelGenerator($this->container, $ddd))->generate($pool, $table, $this->input->getOption('force'));
-        $modules = config('generate.modules', []);
+        $modules = \Hyperf\Config\config('generate.modules', []);
         if (empty($modules)) {
             foreach ($models as $model) {
                 if (!in_array($model->module, $modules)) {

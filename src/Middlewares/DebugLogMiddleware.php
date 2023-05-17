@@ -33,14 +33,14 @@ class DebugLogMiddleware implements MiddlewareInterface
 
     public function __construct()
     {
-       $this->loggerFactory = make(LoggerFactory::class);
+       $this->loggerFactory = \Hyperf\Support\make(LoggerFactory::class);
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         Context::getOrSet(AppendRequestIdProcessor::REQUEST_ID, $this->idGenerator->generate());
 
-        if (config('logger.request_enable', true)) {
+        if (\Hyperf\Config\config('logger.request_enable', true)) {
             // 记录请求日志
             $this->loggerFactory->get('request')->info(json_encode([
                 'user-agent' => $request->getHeaderLine('user-agent'),
@@ -54,7 +54,7 @@ class DebugLogMiddleware implements MiddlewareInterface
 
         $response = $handler->handle($request);
 
-        if (config('logger.response_enable', false)) {
+        if (\Hyperf\Config\config('logger.response_enable', false)) {
             $this->loggerFactory->get('response')->info($response->getBody()->getContents());
         }
         return $response;
