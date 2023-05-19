@@ -194,9 +194,9 @@ trait MySQLDaoTrait
         return $this->getModel($condition)->removeCondition($search, $forceDelete, $this->softDeleted);
     }
 
-    public function detail(array $condition, array $search, array $field = ['*']): array
+    public function detail(array $condition, array $search, array $field = ['*'], array $sort = []): array
     {
-        $query = $this->handleQuery($condition, $search, $field);
+        $query = $this->handleQuery($condition, $search, $field, $sort);
         $model = $query->first();
         return $model ? $model->toArray() : [];
     }
