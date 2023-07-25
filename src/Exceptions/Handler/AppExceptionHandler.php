@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Lengbin\Hyperf\Common\Exceptions\Handler;
 
 use Hyperf\Contract\StdoutLoggerInterface;
+use Hyperf\Logger\LoggerFactory;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Hyperf\HttpMessage\Exception\NotFoundHttpException;
 use Lengbin\Hyperf\Common\Constants\Errors\CommonError;
@@ -36,9 +37,9 @@ class AppExceptionHandler extends ExceptionHandler
      */
     protected $response;
 
-    public function __construct(StdoutLoggerInterface $logger, Response $response)
+    public function __construct(LoggerFactory $logger, Response $response)
     {
-        $this->logger = $logger;
+        $this->logger = $loggerFactory->get('error', 'error');
         $this->response = $response;
     }
 
@@ -50,6 +51,10 @@ class AppExceptionHandler extends ExceptionHandler
 
         if ($throwable instanceof BusinessException) {
             return $this->response->fail($throwable->getCode(), $throwable->getMessage());
+        }
+
+        if(\Hyperf\Support\env("APP_ENV") != "prod"){
+            return $this->response->fail(CommonError::SERVER_ERROR, $this->formatException($throwable));
         }
 
         $systemError = new BusinessException(CommonError::SERVER_ERROR());
