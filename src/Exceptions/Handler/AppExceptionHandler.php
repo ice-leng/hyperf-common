@@ -37,7 +37,7 @@ class AppExceptionHandler extends ExceptionHandler
      */
     protected $response;
 
-    public function __construct(LoggerFactory $logger, Response $response)
+    public function __construct(LoggerFactory $loggerFactory, Response $response)
     {
         $this->logger = $loggerFactory->get('error', 'error');
         $this->response = $response;
