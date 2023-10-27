@@ -70,6 +70,13 @@ class Response extends \Hyperf\HttpServer\Response
 
         return $result;
     }
+
+    public function raw($data, string $charset = 'utf-8'): PsrResponseInterface
+    {
+        return $this->getResponse()
+//            ->withAddedHeader('content-type', 'text/plain; charset=' . $charset)
+            ->withBody(new SwooleStream((string) $data));
+    }
     public function fileFlow(string $file)
     {
         $file = new SplFileInfo($file);
