@@ -106,6 +106,7 @@ class ModelGenerator extends ModelCommand
         $builder = $this->getSchemaBuilder($option->getPool());
 
         foreach ($tables as $table) {
+            $tableName = $table;
             $classInfo = new ModelInfo();
 
             $sql = "select TABLE_COMMENT from information_schema.tables where table_name = '%s' and table_schema = '%s';";
@@ -133,7 +134,7 @@ class ModelGenerator extends ModelCommand
                 $classInfo->exist = file_exists($file);
             }
 
-            $this->createModel($table, $option);
+            $this->createModel($tableName, $option);
             $tableClass[] = $classInfo;
         }
         return $tableClass;
